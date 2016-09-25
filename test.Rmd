@@ -1,1 +1,5 @@
 #This is a Rmarkdown test file
+
+function F {
+  #this is a sample function
+}
