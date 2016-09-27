@@ -13,5 +13,9 @@ testfsdsdfsasdarwfsd
 ```{r}
 #code crunch from Justin
 ```
-
-dsffd
+asdsad
+<<<<<<< HEAD
+new change dsffd
+=======
+ksdfkdf
+>>>>>>> 142eadaef68d4a3cfd70f12a4b4202665a7c635c
