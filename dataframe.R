@@ -24,3 +24,5 @@ PlayerName <- df[,20]
 PlayerID <- df[,21]
 
 summary(df)
+
+
