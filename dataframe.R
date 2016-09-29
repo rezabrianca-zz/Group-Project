@@ -24,5 +24,5 @@ PlayerName <- df[,20] #name of the player making the shot
 PlayerID <- df[,21] #id of the player making the shot
 
 summary(df)
-
+  
 
