@@ -26,3 +26,6 @@ PlayerID <- df[,21] #id of the player making the shot
 summary(df)
   
 
+
+
+
