@@ -1,10 +1,10 @@
 
 df <- read.csv("shot_logs.csv", header = TRUE)
 
-GameID <- df[,1]
-MatchUp <- df[,2]
-Location <- df[,3]
-WinLoss <- df[,4]
+GameID <- df[,1] #Identification number of a game
+MatchUp <- df[,2] #Date of the game and names of playing teams
+Location <- df[,3] #Home or Away
+WinLoss <- df[,4] 
 FinalMargin <- df[,5]
 ShotNumber <- df[,6]
 Period <- df[,7]
