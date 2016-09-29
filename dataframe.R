@@ -17,7 +17,7 @@ PointType <- df[,13] #amount of points the shot carries (two or three)
 ShotResult <- df[,14] #result of ths shot (made/missed)
 ClosestDefenderName <- df[,15] #name of the defender closest to the player taking the shot
 ClosestDefenderID <- df[,16] #ID of the defender closest to the player taking the shot
-ClosestDefenderDistance <- df[,17] #distance to the closest defender
+ClosestDefenderDistance <- df[,17] #distance to the closest defender 
 FieldGoalMade <- df[,18] #1-shot is made/scored; 2-shot is missed
 Points <- df[,19] #number of points
 PlayerName <- df[,20] #name of the player making the shot
