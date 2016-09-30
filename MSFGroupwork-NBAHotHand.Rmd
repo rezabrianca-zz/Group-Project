@@ -1,27 +1,39 @@
 ---
-title: "MSF Groupwork"
-author: "Justin"
-date: "29 September 2016"
+title: "MSF_Groupwork-NBA_shotlog"
+author: "Team_9"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
+ 
 
-## R Markdown
+#Report structure 
 
-Report structure
-Introduction
+###Introduction
 I   What is your theme or research question?
-Theory
+
+###Theory
 I   What do you expect to find?
-Methods
+
+###Methods
 I   Describe the dataset:
+
+Data on shots taken during the 2014-2015 season, who took the shot, where on the floor was the shot taken from, who was the nearest defender, how far away was the nearest defender, time on the shot clock, and much more. The column titles are generally self-explanatory.
+Useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, etc.
+Scraped from NBA's REST API.  ##TO BE UPDATED FURTHER
+
 I   Strengths
+
 I   Limitations
-Analysis
-Discussion
+
+###Analysis
+
+###Discussion
 I   What results did you find?
+
 I   Why is this interesting?
+
 I   What would be the next steps?
