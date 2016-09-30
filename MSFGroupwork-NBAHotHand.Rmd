@@ -14,9 +14,19 @@ Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, 
 
 ###Introduction
 I   What is your theme or research question?
+a. Hot Hand Theory
+b. Defender Proximity Analysis
+c. Shot Clock Pressure
+d. Close Game Effect - Small Margin affecting the scoring rate
+e. Home Advantage
+f. Fatigue Effect (Quarter Heat Rate)
+g. Shooting Percentage
+h. Fatigue Effect (Number of Rest Day)
+i. 
 
 ###Theory
 I   What do you expect to find?
+a. 
 
 ###Methods
 I   Describe the dataset:
