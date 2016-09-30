@@ -34,3 +34,6 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 
 
 AR: changes 1 vcgfgdzds
+
+
+AR: changes made on 30/09. CAN YOU SEE THIS??
