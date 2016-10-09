@@ -51,28 +51,18 @@ df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
 attach(df) #telling R that this is the dataframe we'll be working with (eliminating the need to use df$ for variables)
 
 ```
-
+### Home Advantage analysis
 ```{r}
-
-df[,W] <- as.character(df[,W])
+# replacing W/L in column "W" with 1/0 (1 for win, 0 for loss)
+df[,"W"] <- as.character(df[,"W"])
 
 for (i in 1:nrow(df)) {
-  df[i,] <- as.character(ky[, i])
-  if (df[i,"W"]="W") df[i,"W"]<- 1
-  if (df[i,"W"]="L") df[i,"W"]<- 0
+  if (df[i,"W"]=="W") df[i,"W"]<- 1
+  if (df[i,"W"]=="L") df[i,"W"]<- 0
 }
 
-#for (i in 1:(ncol(ky) - 1)){
-#  ky[, i] <- as.character(ky[, i])
- # for (j in 1:nrow(ky)){
-  #  if (ky[j, i] == "Strongly Agree") ky[j, i] <- 5
-   # if (ky[j, i] == "Agree") ky[j, i] <- 4
-    #if (ky[j, i] == "Neither Agree nor Disagree") ky[j, i] <- 3
-#    if (ky[j, i] == "Disagree") ky[j, i] <- 2
-#    if (ky[j, i] == "Strongly Disagree") ky[j, i] <- 1
-#  }
-#  ky[, i] <- as.numeric(ky[, i])
-#}
+df[,"W"] <- as.numeric(df[,"W"])
+
 
 ```
 
