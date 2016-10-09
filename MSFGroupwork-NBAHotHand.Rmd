@@ -44,6 +44,13 @@ I   Limitations
 
 ###Analysis
 
+##Installing packages
+```{r}
+install.packages('reshape')
+
+```
+
+
 ###Data clean-up 
 
 ```{r}
@@ -62,8 +69,22 @@ for (i in 1:nrow(df)) {
 }
 
 df[,"W"] <- as.numeric(df[,"W"])
+```
+
+```{r}
+#adding columns for names of 'home' and 'away' teams
+df[,"MATCHUP"] <- as.character(df[,"MATCHUP"])
+
+for (i in 1:nrow(df)) {
+  df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[5]
+  df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[7]
+}
+```
 
 
+```{r}
+#combining columns for the analysis
+library(reshape)
 ```
 
 
