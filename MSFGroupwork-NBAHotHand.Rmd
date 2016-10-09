@@ -23,7 +23,7 @@ c. Shot Clock Pressure  (Alex)
 d. Close Game Effect - Small Margin affecting the scoring rate  
 e. Home Advantage (Alex is working in this point)  
 f. Fatigue Effect (Quarter Heat Rate)  
-g. Shooting Percentage  
+g. Shooting Percentage (James)
 h. Fatigue Effect (Number of Rest Day)  
 i. 
 
