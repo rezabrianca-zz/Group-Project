@@ -125,20 +125,96 @@ for (j in 1:nrow(df)){
   df[j, "SHOT_RESULT"] <- ifelse (df[j, "SHOT_RESULT"] == "made", 1, 0)
 }
 
-#set the value to numeric
+#set the value to numeric or integer accordingly
 df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 df[, "PTS_TYPE"] <- as.integer(df[, "PTS_TYPE"])
 df[, "CLOSE_DEF_DIS"] <- as.numeric(df[, "CLOSE_DEF_DIST"])
 
+#select data with only scored result
+#Point type (2 or 3 points) and distance
+point_type <- c()
+distance <- c()
+for (z in 1:nrow(df)){
+  if(df[z, "SHOT_RESULT"] == 1 & df[z, "PTS_TYPE"] >= 1){
+    point_type <- c(point_type, df[z, "PTS_TYPE"])
+    distance <- c(distance, df[z, "CLOSE_DEF_DIST"])
+  }
+}
+
+#combine point type and distance
+valid_distance = data.frame(point_type, distance)
+
+#calculate correlation between defender distance and points made (2 or 3 points)
+cor(point_type, distance)
+
+#plot the diagram for this correlation
+library(ggplot2)
+ggplot(data = valid_distance, aes(x = point_type, y = distance, group = point_type)) + 
+  geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 5, size = 1) + 
+  ggtitle("Points Scored based on Distance from Defender")
+
 #calculate correlation between defender distance and shot result
 cor(df[, "SHOT_RESULT"], df[, "CLOSE_DEF_DIS"])
 
-#calculate correlation between defender distance and points made (2 or 3 points)
-cor(df[, "PTS_TYPE"], df[, "CLOSE_DEF_DIS"])
+#--------------------------------------------------------------------------------#
 
-#plot the diagram
+#further analysis
+#select distance data from 2 points shot scored and the players who scored it
+distance2 <- c()
+players2 <- c()
+for (z in 1:nrow(df)){
+  if(df[z, "SHOT_RESULT"] == 1 & df[z, "PTS_TYPE"] == 2){
+    distance2 <- c(distance2, df[z, "CLOSE_DEF_DIST"])
+    players2 <- c(players2, as.character(df[z, "player_name"]))
+  }
+}
+
+#combine 2 point players and defender distance
+player2point <- data.frame(players2, distance2)
+summary(player2point)
+
+#count players who scored 2 points
+counter <- as.data.frame(table(players2))
+
+#count 5 top players
+top5Players2 <- counter[rev(order(counter$Freq)), "players2"][1:5]
+top5Counter <- counter[rev(order(counter$Freq)), "Freq"][1:5]
+
+top5_2points <- data.frame(top5players2, top5Counter)
+
+#plot the graph
 library(ggplot2)
-ggplot(data = df, aes(x = PTS_TYPE, y = CLOSE_DEF_DIST, group = PTS_TYPE)) + geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 5, size = 1) +ggtitle("Points Scored based on Distance from Defender")
+ggplot(data = top5_2points, aes(x = top5Players2)) + geom_bar(aes(x = top5players2, y = top5Counter), stat = "identity")
+
+#----------------------------------------------------------------#
+
+#select distance data from 3 points shot scored and the players who scored it
+distance3 <- c()
+players3 <- c()
+for (z in 1:nrow(df)){
+  if(df[z, "SHOT_RESULT"] == 1 & df[z, "PTS_TYPE"] == 3){
+    distance3 <- c(distance3, df[z, "CLOSE_DEF_DIST"])
+    players3 <- c(players3, as.character(df[z, "player_name"]))
+  }
+}
+
+#combine 3 point players and defender distance
+player3point <- data.frame(players3, distance3)
+summary(player3point)
+
+#count players who scored 3 points
+counter3 <- as.data.frame(table(players3))
+
+#count 5 top players
+top5Players3 <- counter3[rev(order(counter3$Freq)), "players3"][1:5]
+top5Counter3 <- counter3[rev(order(counter3$Freq)), "Freq"][1:5]
+
+top5_3points <- data.frame(top5Players3, top5Counter3)
+
+#plot the graph
+library(ggplot2)
+ggplot(data = top5_3points, aes(x = top5Players3)) + geom_bar(aes(x = top5Players3, y = top5Counter3), stat = "identity")
+
 ```
 
 
