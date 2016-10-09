@@ -18,7 +18,7 @@ Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, 
 ###Introduction
 I   What is your theme or research question?
 a. Hot Hand Theory  
-b. Defender Proximity Analysis  
+b. Defender Proximity Analysis (Reza)
 c. Shot Clock Pressure  
 d. Close Game Effect - Small Margin affecting the scoring rate  
 e. Home Advantage (Alex is working in this point)  
@@ -85,6 +85,31 @@ for (i in 1:nrow(df)) {
 ```{r}
 #combining columns for the analysis
 library(reshape)
+```
+
+###Defender Proximity Analysis
+```{r}
+#Data Preparation
+#Change the value of shot result column to numeric
+df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
+for (j in 1:nrow(df)){
+  df[j, "SHOT_RESULT"] <- ifelse (df[j, "SHOT_RESULT"] == "made", 1, 0)
+}
+
+#set the value to numeric
+df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
+df[, "PTS_TYPE"] <- as.integer(df[, "PTS_TYPE"])
+df[, "CLOSE_DEF_DIS"] <- as.numeric(df[, "CLOSE_DEF_DIST"])
+
+#calculate correlation between defender distance and shot result
+cor(df[, "SHOT_RESULT"], df[, "CLOSE_DEF_DIS"])
+
+#calculate correlation between defender distance and points made (2 or 3 points)
+cor(df[, "PTS_TYPE"], df[, "CLOSE_DEF_DIS"])
+
+#plot the diagram
+library(ggplot2)
+ggplot(data = df, aes(x = PTS_TYPE, y = CLOSE_DEF_DIST, group = PTS_TYPE)) + geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 5, size = 1) +ggtitle("Points Scored based on Distance from Defender")
 ```
 
 
