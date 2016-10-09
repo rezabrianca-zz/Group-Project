@@ -17,7 +17,7 @@ Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, 
 
 ###Introduction
 I   What is your theme or research question?
-a. Hot Hand Theory  
+a. Hot Hand Theory (Artemis)
 b. Defender Proximity Analysis (Reza)
 c. Shot Clock Pressure  (Alex)
 d. Close Game Effect - Small Margin affecting the scoring rate  
