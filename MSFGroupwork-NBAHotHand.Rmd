@@ -1,10 +1,10 @@
 ---
-title: "MSF_Groupwork-NBA_shotlog"
+title: "MSF_Groupwork-NBA_shotlog" 
 author: "Team_9"
 output: html_document  ---
   title: "MSF_Groupwork-NBA_shotlog"
 author: "Team_9"
-output: html_document
+output: html_document 
 ---
   
   ```{r setup, include=FALSE}
@@ -44,7 +44,7 @@ I   Limitations
 
 ###Analysis
 
-###Data clean-up
+###Data clean-up 
 
 ```{r}
 df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
@@ -62,17 +62,17 @@ for (i in 1:nrow(df)) {
   if (df[i,"W"]="L") df[i,"W"]<- 0
 }
 
-for (i in 1:(ncol(ky) - 1)){
-  ky[, i] <- as.character(ky[, i])
-  for (j in 1:nrow(ky)){
-    if (ky[j, i] == "Strongly Agree") ky[j, i] <- 5
-    if (ky[j, i] == "Agree") ky[j, i] <- 4
-    if (ky[j, i] == "Neither Agree nor Disagree") ky[j, i] <- 3
-    if (ky[j, i] == "Disagree") ky[j, i] <- 2
-    if (ky[j, i] == "Strongly Disagree") ky[j, i] <- 1
-  }
-  ky[, i] <- as.numeric(ky[, i])
-}
+#for (i in 1:(ncol(ky) - 1)){
+#  ky[, i] <- as.character(ky[, i])
+ # for (j in 1:nrow(ky)){
+  #  if (ky[j, i] == "Strongly Agree") ky[j, i] <- 5
+   # if (ky[j, i] == "Agree") ky[j, i] <- 4
+    #if (ky[j, i] == "Neither Agree nor Disagree") ky[j, i] <- 3
+#    if (ky[j, i] == "Disagree") ky[j, i] <- 2
+#    if (ky[j, i] == "Strongly Disagree") ky[j, i] <- 1
+#  }
+#  ky[, i] <- as.numeric(ky[, i])
+#}
 
 ```
 
