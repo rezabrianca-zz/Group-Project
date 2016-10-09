@@ -57,6 +57,8 @@ install.packages('reshape')
 df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
 attach(df) #telling R that this is the dataframe we'll be working with (eliminating the need to use df$ for variables)
 
+#we need to change the format of some of the columns to 'Character'
+
 ```
 ### Home Advantage analysis
 ```{r}
@@ -65,8 +67,7 @@ df[,"W"] <- as.character(df[,"W"])
 
 for (i in 1:nrow(df)) {
   if (df[i,"W"]=="W") df[i,"W"]<- 1
-  if (df[i,"W"]=="L") df[i,"W"]<- 0
-}
+  if (df[i,"W"]=="L") df[i,"W"]<- 0}
 
 df[,"W"] <- as.numeric(df[,"W"])
 ```
@@ -76,15 +77,43 @@ df[,"W"] <- as.numeric(df[,"W"])
 df[,"MATCHUP"] <- as.character(df[,"MATCHUP"])
 
 for (i in 1:nrow(df)) {
-  df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[5]
+  if (LOCATION[i]=="H") {df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[5]
   df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[7]
-}
+  if (W[i]==1) df$WINNER[i] <- "HOME" 
+  if (W[i]==0) df$WINNER[i] <- "AWAY"}
+  if (LOCATION[i]=="A") {df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[7] 
+  df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[5]
+  if (W[i]==0) df$WINNER[i] <- "HOME"  
+  if (W[i]==1) df$WINNER[i] <- "AWAY"}}
+
+df$BLANK<-"" #for some reason cast function does not work with last column in dataframe, so I have created this BLANK column as I need to use AWAY_TEAM colum (it was a last column). 
 ```
 
 
 ```{r}
 #combining columns for the analysis
 library(reshape)
+dfwl<- cast(df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ LOCATION)
+dfwl[,"WINNER"] <- as.character(dfwl[,"WINNER"])
+
+
+for (i in 1:nrow(dfwl)) { 
+if (dfwl$WINNER[i]=="HOME") dfwl$WINNER2[i]<-1
+if (dfwl$WINNER[i]=="AWAY") dfwl$WINNER2[i]<-2}
+```
+
+```{r}
+dfwl2<-cast(dfwl, HOME_TEAM ~ WINNER)
+dfwl2<- dfwl2[,c(1,3,2)]
+dfwl2$WIN_PCT<- round(dfwl2$HOME/(dfwl2$HOME+dfwl2$AWAY),2)
+
+for (i in 1:nrow(dfwl2)) {
+if(dfwl2$WIN_PCT[i]>0.5) dfwl2$HOMEADV[i]<- "YES" else dfwl2$HOMEADV[i]<- "NO"}
+
+dfwl2<- dfwl2[order(dfwl2$WIN_PCT),]; dfwl2
+
+library(ggplot2)
+ggplot(dfwl2, aes(x=HOME_TEAM,y=WIN_PCT,col=HOMEADV))+ geom_point()
 ```
 
 ###Defender Proximity Analysis
