@@ -120,6 +120,22 @@ ggplot(aa3,aes(x=TEAM, y= WIN_PCT_HOME, col= HOME_ADV))+ geom_point()
 #TO BE UPDATED
 ```
 
+# Shooting Percentage Analysis (James)
+
+```{r}
+# Replace "made" and "missed" with 1 and 0 respectively
+
+df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
+
+for (i in 1:nrow(df)) {
+  if (df[i, "SHOT_RESULT"] == "made") df[i, "SHOT_RESULT"] <- 1
+  if (df[i, "SHOT_RESULT"] == "missed") df[i, "SHOT_RESULT"] <- 0
+}
+
+df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
+
+
+```
 
 
 ###Defender Proximity Analysis
