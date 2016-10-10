@@ -320,6 +320,7 @@ number_of_streaks <- function(x) {
 
 number_of_streaks(shotresult)
 
+#Create a function that gives us a vector of streaks for a specific player and game
 player_and_game <- function(x, y) {
    player <- df[df[ ,'player_id'] == x & df[ ,'GAME_ID1'] == y, 'FGM']
    number_of_streaks(as.vector(player))
@@ -328,7 +329,8 @@ player_and_game(202681, 21400681)
 
 ourtable <- head(pttsum2,10)
 
-list_per_player <- list()
+#Create a list that gives us the streaks of each player and game (10 best performances)
+streak_per_player <- list()
 j <- 1
 for(i in ourtable$player_id) {
    streak_per_player[[j]] <- player_and_game(i, ourtable[ourtable[ ,'player_id'] == i, 'GAME_ID1'])
@@ -336,9 +338,27 @@ for(i in ourtable$player_id) {
 }
 streak_per_player
 
+#Create a data frame for the strikes of each one of the 10 players (cannot create a data.frame including all of them, because each list has different length)
+player1_df <- data.frame('streaks' = streak_per_player[[1]])
+player2_df <- data.frame('streaks' = streak_per_player[[2]])
+player3_df <- data.frame('streaks' = streak_per_player[[3]])
+player4_df <- data.frame('streaks' = streak_per_player[[4]])
+player5_df <- data.frame('streaks' = streak_per_player[[5]])
+player6_df <- data.frame('streaks' = streak_per_player[[6]])
+player7_df <- data.frame('streaks' = streak_per_player[[7]])
+player8_df <- data.frame('streaks' = streak_per_player[[8]])
+player9_df <- data.frame('streaks' = streak_per_player[[9]])
+player10_df <- data.frame('streaks' = streak_per_player[[10]])
+ourtable
 
-
-
+#Visualisation for 10 players
+ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
+ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
+ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
+ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
+ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
+ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
+ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
 
 ###Discussion
 I   What results did you find?
