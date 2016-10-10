@@ -5,7 +5,7 @@ output: html_document  ---
   title: "MSF_Groupwork-NBA_shotlog"
 author: "Team_9"
 output: html_document 
----
+--- 
   
   ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -62,6 +62,21 @@ attach(df) #telling R that this is the dataframe we'll be working with (eliminat
 #we need to change the format of some of the columns to 'Character'
 
 ```
+
+
+#SUMMARY OF POINTS
+```{r}
+ptssum<- cast(df, GAME_ID1+ player_id + player_name ~ PTS); head(ptssum)
+#creating "total points per player, per game" column
+ptssum$totalpts<- ptssum[,"2"]*2 + ptssum[,"3"]*3
+
+pttsum2<-ptssum[order(ptssum$totalpts,decreasing=TRUE),]
+head(pttsum2,10)
+
+
+```
+
+
 ### Home Advantage analysis
 ```{r}
 # replacing W/L in column "W" with 1/0 (1 for win, 0 for loss)
