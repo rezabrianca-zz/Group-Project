@@ -5,7 +5,7 @@ output: html_document  ---
   title: "MSF_Groupwork-NBA_shotlog"
 author: "Team_9"
 output: html_document 
---- 
+---
   
   ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -44,9 +44,16 @@ I   Limitations
 
 ###Analysis
 
-##Installing packages and calling libraries
+## Installing libraries
+
 ```{r}
 install.packages('reshape')
+
+```
+
+
+## Calling libraries
+```{r}
 library(reshape)
 library(ggplot2)
 
@@ -63,21 +70,8 @@ attach(df) #telling R that this is the dataframe we'll be working with (eliminat
 
 ```
 
-
-#SUMMARY OF POINTS
-```{r}
-ptssum<- cast(df, GAME_ID1+ player_id + player_name ~ PTS); head(ptssum)
-#creating "total points per player, per game" column
-ptssum$totalpts<- ptssum[,"2"]*2 + ptssum[,"3"]*3
-
-pttsum2<-ptssum[order(ptssum$totalpts,decreasing=TRUE),]
-head(pttsum2,10)
-
-
-```
-
-
 ### Home Advantage analysis
+
 ```{r}
 # replacing W/L in column "W" with 1/0 (1 for win, 0 for loss)
 df[,"W"] <- as.character(df[,"W"])
@@ -110,7 +104,7 @@ write.csv(df,"shot_logs1010.csv")
 ```
 
 ```{r}
-aa<- cast(df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
+aa<- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
 
 table(aa$WINNER)
 #home wins:
@@ -126,13 +120,20 @@ head(aa)
 aa1<- cast(aa, HOME_TEAM  ~ WINNER); names(aa1)[1]<-"TEAM"
 aa1$WIN_PCT_HOME<-round(aa1$HOME/(aa1$HOME+aa1$AWAY),2)
 
+<<<<<<< HEAD
 aa2<- cast(aa, AWAY_TEAM ~ WINNER); names(aa2)[1]<-"TEAM" 
+=======
+aa2<- cast(aa, AWAY_TEAM ~ WINNER); names(aa2)[1]<-"TEAM"
+>>>>>>> 961cfa1e3730130a219fb77b1874aa2800a0e664
 aa2$WIN_PCT_AWAY<-round(aa2$AWAY/(aa2$HOME+aa2$AWAY),2)
 
 aa3<- merge (aa1,aa2, by ="TEAM")
+
+
 for (i in 1:nrow(aa3)) {if(aa3$WIN_PCT_HOME[i]>aa3$WIN_PCT_AWAY[i]) aa3$HOME_ADV[i]<-"YES" else aa3$HOME_ADV[i]<-"NO"}
 head(aa3)
 
+<<<<<<< HEAD
 #aa3$WIN_PCT_HOME <- with(aa3, reorder(WIN_PCT_HOME, WIN_PCT_HOME, function(aa3) - length(aa3)))
 #ggplot(aa3) + geom_point(aes(WIN_PCT_HOME))
 
@@ -149,8 +150,65 @@ ggplot(aa3,aes(x=TEAM,y= WIN_PCT_HOME,colour = "HOME")) +geom_point() + geom_poi
 
 #ggplot(aa3,aes(x=TEAM))+ geom_point(aes(y= WIN_PCT_HOME,colour = "HOME")) + geom_point(aes(y= WIN_PCT_AWAY, colour ="AWAY"))
 #TO BE UPDATED
+=======
+aa3<- aa3[order(aa3$WIN_PCT_HOME,decreasing=TRUE),]
+rownames(aa4)<-NULL
+
+aa3$TEAM <- factor(aa5$TEAM, levels = aa5$TEAM[order(-aa5$WIN_PCT_HOME)])
+
+
+ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_point(aes( y= WIN_PCT_AWAY, col= "AWAY")) 
+#TO BE UPDATED  
 ```
 
+# Shooting Percentage Analysis (James)
+
+```{r}
+# Replace "made" and "missed" with 1 and 0 respectively
+
+df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
+ 
+for (i in 1:nrow(df)) {
+  if (df[i, "SHOT_RESULT"] == "made") df[i, "SHOT_RESULT"] <- 1
+  if (df[i, "SHOT_RESULT"] == "missed") df[i, "SHOT_RESULT"] <- 0
+}
+
+df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
+
+>>>>>>> 961cfa1e3730130a219fb77b1874aa2800a0e664
+```
+
+# 
+
+```{r}
+# Find shooting percentage of each match
+
+# Trying to reshape...
+
+library(reshape)
+game <- cast(data = df, GAME_ID1 ~ SHOT_RESULT)
+View(game)
+
+# 
+
+Team <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
+FG_Percentage <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
+for(i in 21400001:21400908){
+  j = i - 21400001 +1 # 
+  game <- df[, df[, "GAME_ID1"] == i]
+  home <- game[, game["LOCATION"] == "H"]
+  home.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / nrow(home)
+  away <- game[, game["LOCATION"] == "A"]
+  away.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / away(home)
+  FG_Percentage[j] <- home.p
+  FG_Percentage[j + 1] = away.p
+  Team[j] = "H"
+  Team[j + 1] = "A"
+}
+
+
+
+```
 
 
 ###Defender Proximity Analysis
@@ -255,9 +313,20 @@ ggplot(data = top5_3points, aes(x = top5Players3)) +
   geom_bar(aes(x = top5Players3, y = top5Counter3), stat = "identity")
 
 ```
-###Hot Hand Theory
 
 ```{r}
+#Summary of total points
+ptssum<- cast(df1, GAME_ID1+ player_id + player_name  ~ PTS); head(ptssum)
+#creating "total points per player, per game" column
+ptssum$totalpts<- ptssum[,"2"]*2 + ptssum[,"3"]*3
+
+pttsum2<-ptssum[order(ptssum$totalpts,decreasing=TRUE),]
+head(pttsum2,10)
+```
+
+```{r}
+###Hot Hand Theory
+
 #Set the value to character
 df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
 
@@ -274,10 +343,6 @@ shotresult
 df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 df[ ,'SHOT_NUMBER'] <- as.integer(df[ , 'SHOT_NUMBER'])
 
-#Create new column with shot results(1 for baskets made and 0 for baskets missed)
-df[ ,'SHOTRESULT_0_1'] <- shotresult
-
-
 #Define the length of a shooting streak to be the number of consecutive baskets made until a miss occurs
 #Create a function that gives us a vector with the number of streaks
 number_of_streaks <- function(x) {
@@ -288,8 +353,26 @@ number_of_streaks <- function(x) {
 }
 
 number_of_streaks(shotresult)
-#To be continued (probabilities- indipendence, plots, interpret results for specific players(those with higher shot_numbers))
-```
+
+player_and_game <- function(x, y) {
+   player <- df[df[ ,'player_id'] == x & df[ ,'GAME_ID1'] == y, 'FGM']
+   number_of_streaks(as.vector(player))
+}
+player_and_game(202681, 21400681)
+
+ourtable <- head(pttsum2,10)
+
+list_per_player <- list()
+j <- 1
+for(i in ourtable$player_id) {
+   streak_per_player[[j]] <- player_and_game(i, ourtable[ourtable[ ,'player_id'] == i, 'GAME_ID1'])
+   j <- j + 1
+}
+streak_per_player
+
+
+
+
 
 ###Discussion
 I   What results did you find?
