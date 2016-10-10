@@ -195,24 +195,35 @@ df[, "CLOSE_DEF_DIS"] <- as.numeric(df[, "CLOSE_DEF_DIST"])
 #Point type (2 or 3 points) and distance
 point_type <- c()
 distance <- c()
+shot_dist <- c()
 for (z in 1:nrow(df)){
   if(df[z, "SHOT_RESULT"] == 1 & df[z, "PTS_TYPE"] >= 1){
     point_type <- c(point_type, df[z, "PTS_TYPE"])
     distance <- c(distance, df[z, "CLOSE_DEF_DIST"])
+    shot_dist <- c(shot_dist, df[z, "SHOT_DIST"])
   }
 }
 
 #combine point type and distance
-valid_distance = data.frame(point_type, distance)
+valid_distance = data.frame(point_type, distance, shot_dist)
+dist_group <- c(5, 10, 15, 20, 25, Inf)
+valid_distance[, "Range Group"] <- c(findInterval(valid_distance$distance, dist_group))
 
 #calculate correlation between defender distance and points made (2 or 3 points)
 cor(point_type, distance)
+
+#calculate correlation between defender distance and shot distance (2 or 3 points)
+cor(distance, shot_dist)
 
 #plot the diagram for this correlation
 library(ggplot2)
 ggplot(data = valid_distance, aes(x = point_type, y = distance, group = point_type)) + 
   geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 5, size = 1) + 
   ggtitle("Points Scored based on Distance from Defender")
+
+ggplot(data = valid_distance, aes(x = distance, y = shot_dist)) + geom_point()
+
+ggplot(data = valid_distance, aes(x = distance) + geom_bar())
 
 #calculate correlation between defender distance and shot result
 cor(df[, "SHOT_RESULT"], df[, "CLOSE_DEF_DIS"])
@@ -232,7 +243,11 @@ for (z in 1:nrow(df)){
 
 #combine 2 point players and defender distance
 player2point <- data.frame(players2, distance2)
+
 summary(player2point)
+
+#calculate mean distance from 2-pointers
+avg_dist2 <- aggregate(distance2 ~ players2, player2point, mean)
 
 #count players who scored 2 points
 counter <- as.data.frame(table(players2))
@@ -242,6 +257,9 @@ top5Players2 <- counter[rev(order(counter$Freq)), "players2"][1:5]
 top5Counter <- counter[rev(order(counter$Freq)), "Freq"][1:5]
 
 top5_2points <- data.frame(top5players2, top5Counter)
+
+#count players who scored 2 points
+counter <- as.data.frame(table(players2))
 
 #plot the graph
 library(ggplot2)
