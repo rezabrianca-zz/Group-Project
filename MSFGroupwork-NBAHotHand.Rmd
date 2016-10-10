@@ -58,7 +58,7 @@ library(ggplot2)
 ```{r}
 df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
 attach(df) #telling R that this is the dataframe we'll be working with (eliminating the need to use df$ for variables)
-
+df1 <- read.csv('shot_logs1010.csv')
 #we need to change the format of some of the columns to 'Character'
 
 ```
@@ -66,7 +66,7 @@ attach(df) #telling R that this is the dataframe we'll be working with (eliminat
 
 #SUMMARY OF POINTS
 ```{r}
-ptssum<- cast(df, GAME_ID1+ player_id + player_name ~ PTS); head(ptssum)
+ptssum<- cast(df1, GAME_ID1+ player_id + player_name  ~ PTS); head(ptssum)
 #creating "total points per player, per game" column
 ptssum$totalpts<- ptssum[,"2"]*2 + ptssum[,"3"]*3
 
@@ -272,6 +272,24 @@ number_of_streaks <- function(x) {
 }
 
 number_of_streaks(shotresult)
+
+player_and_game <- function(x, y) {
+   player <- df[df[ ,'player_id'] == x & df[ ,'GAME_ID1'] == y, 'FGM']
+   number_of_streaks(as.vector(player))
+}
+player_and_game(202681, 21400681)
+
+ourtable <- head(pttsum2,10)
+
+list_streaks <- list()
+
+for(i in ourtable$player_id) {
+   streak_per_player <- player_and_game(i, ourtable[ourtable[ ,'player_id'] == i, 'GAME_ID1'])
+   print(streak_per_player)
+}
+
+
+
 #To be continued (probabilities- indipendence, plots, interpret results for specific players(those with higher shot_numbers))
 ```
 
