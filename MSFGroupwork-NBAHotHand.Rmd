@@ -280,6 +280,65 @@ ggplot(data = top5_3points, aes(x = top5Players3)) +
 
 ```
 
+```{r}
+#Summary of total points
+ptssum<- cast(df1, GAME_ID1+ player_id + player_name  ~ PTS); head(ptssum)
+#creating "total points per player, per game" column
+ptssum$totalpts<- ptssum[,"2"]*2 + ptssum[,"3"]*3
+
+pttsum2<-ptssum[order(ptssum$totalpts,decreasing=TRUE),]
+head(pttsum2,10)
+```
+
+```{r}
+###Hot Hand Theory
+
+#Set the value to character
+df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
+
+#Define 1 for baskets made and 0 for baskets missed. We need a vector to use it to our function below.
+shotresult <- c()
+for(i in 1:nrow(df)) {
+  if(shots[i] == 'missed') shotresult <- c(shotresult, 0)
+  else if(shots[i] == 'made') shotresult <- c(shotresult, 1)
+}
+
+shotresult
+
+#Set the value to numeric/integer
+df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
+df[ ,'SHOT_NUMBER'] <- as.integer(df[ , 'SHOT_NUMBER'])
+
+#Define the length of a shooting streak to be the number of consecutive baskets made until a miss occurs
+#Create a function that gives us a vector with the number of streaks
+number_of_streaks <- function(x) {
+  x <- c(0, x, 0)
+  which_zero <- which(x == 0)
+  streak <- diff(which_zero) - 1
+  streak
+}
+
+number_of_streaks(shotresult)
+
+player_and_game <- function(x, y) {
+   player <- df[df[ ,'player_id'] == x & df[ ,'GAME_ID1'] == y, 'FGM']
+   number_of_streaks(as.vector(player))
+}
+player_and_game(202681, 21400681)
+
+ourtable <- head(pttsum2,10)
+
+list_per_player <- list()
+j <- 1
+for(i in ourtable$player_id) {
+   streak_per_player[[j]] <- player_and_game(i, ourtable[ourtable[ ,'player_id'] == i, 'GAME_ID1'])
+   j <- j + 1
+}
+streak_per_player
+
+
+
+
 
 ###Discussion
 I   What results did you find?
