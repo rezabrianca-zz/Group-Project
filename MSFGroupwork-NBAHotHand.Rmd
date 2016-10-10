@@ -223,7 +223,29 @@ for (j in 1:nrow(df)){
 #set the value to numeric or integer accordingly
 df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 df[, "PTS_TYPE"] <- as.integer(df[, "PTS_TYPE"])
-df[, "CLOSE_DEF_DIS"] <- as.numeric(df[, "CLOSE_DEF_DIST"])
+df[, "CLOSE_DEF_DIST"] <- as.character(df[, "CLOSE_DEF_DIST"])
+
+#calculate accuracy against defender distance
+distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
+head(distance_level)
+
+#distance_level$Var1 <- as.character(distance_level$Var1)
+
+for (i in 1:nrow(distance_level)){
+  distance_level[i, "SCORED"] <- sum(df[df[, "CLOSE_DEF_DIST"] == distance_level[i, "Var1"], "FGM"])
+}
+
+#sum(df[df[, "CLOSE_DEF_DIST"] == distance_level[2, "Var1"], "FGM"])
+
+  if (df[, "CLOSE_DEF_DIS"] == i){
+    distance_level$sum_scored[i] <- sum(df[, "FGM"])
+  }
+  
+distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 2)
+
+library(ggplot2)
+ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
+  geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy))
 
 #select data with only scored result
 #Point type (2 or 3 points) and distance
@@ -240,8 +262,8 @@ for (z in 1:nrow(df)){
 
 #combine point type and distance
 valid_distance = data.frame(point_type, distance, shot_dist)
-dist_group <- c(5, 10, 15, 20, 25, Inf)
-valid_distance[, "Range Group"] <- c(findInterval(valid_distance$distance, dist_group))
+dist_group <- c(3, 6, 9, 12, 15, Inf)
+valid_distance[, "Range_Group"] <- c(findInterval(valid_distance$distance, dist_group))
 
 #calculate correlation between defender distance and points made (2 or 3 points)
 cor(point_type, distance)
@@ -255,7 +277,7 @@ ggplot(data = valid_distance, aes(x = point_type, y = distance, group = point_ty
   geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 5, size = 1) + 
   ggtitle("Points Scored based on Distance from Defender")
 
-ggplot(data = valid_distance, aes(x = distance, y = shot_dist)) + geom_point()
+ggplot(data = valid_distance, aes(x = Range_Group)) + geom_bar()
 
 ggplot(data = valid_distance, aes(x = distance) + geom_bar())
 
@@ -331,6 +353,8 @@ ggplot(data = top5_3points, aes(x = top5Players3)) +
   geom_bar(aes(x = top5Players3, y = top5Counter3), stat = "identity")
 
 ```
+
+
 
 ```{r}
 #Summary of total points
