@@ -187,12 +187,16 @@ t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
 # accuracy for Shot Clock
 
   # dealing with missing values
-df[, "SHOT_CLOCK_NONA"] <- df[, "SHOT_CLOCK"]
-is.na(df$SHOT_CLOCK_NONA) <- 99
+df[is.na(df)] <- 99
 
-acc_sec24 <- as.numeric
-acc_sec24 <- sum(df$SHOT_CLOCK > 23 & df$FGM == 1) / sum(df$SHOT_CLOCK > 23)
+acc <- data.frame()
+acc[, "SECONDS_LEFT"] <- c(1:23)
 
+#accuracy for every second
+for (i in 1:23){
+  acc[i, "Accuracy"] <- (sum(df$SHOT_CLOCK > i & df$SHOT_CLOCK <= i+1 & df$SHOT_CLOCK != 99 & df$FGM == 1)/ sum(df$SHOT_CLOCK > i & df$SHOT_CLOCK <= i+1 & df$SHOT_CLOCK != 99))}
+
+ggplot(acc, aes(x = SECONDS_LEFT, y = Accuracy)) + geom_point() + geom_smooth()
 
 
 ```
@@ -261,44 +265,7 @@ for (j in 1:nrow(df)){
 #set the value to numeric or integer accordingly
 df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 df[, "PTS_TYPE"] <- as.integer(df[, "PTS_TYPE"])
-df[, "CLOSE_DEF_DIST"] <- as.character(df[, "CLOSE_DEF_DIST"])
-
-#Calculate accuracy against defender distance
-#Group the defender distance level
-distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
-head(distance_level)
-
-#Calculate how many times players scored in every defender distance
-for (i in 1:nrow(distance_level)){
-  distance_level[i, "SCORED"] <- sum(df[df[, "CLOSE_DEF_DIST"] == distance_level[i, "Var1"], "FGM"])
-}
-
-#Calculate shooting accuracy for each distance
-distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 2)
-
-#Plotting the result
-library(ggplot2)
-ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
-  geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy))
-
-#Calculate accuracy against shooting distance
-#Group the shooting distance level
-shooting_distance_level <- as.data.frame(table(factor(ShotDistance)))
-head(shooting_distance_level)
-
-#Calculate how many times players scored in every shooting distance
-for (i in 1:nrow(shooting_distance_level)){
-  shooting_distance_level[i, "SCORED"] <- sum(df[df[, "SHOT_DIST"] == shooting_distance_level[i, "Var1"], "FGM"])
-}
-
-#Calculate shooting accuracy for each distance
-shooting_distance_level$Accuracy <- round(shooting_distance_level$SCORED / shooting_distance_level$Freq, 2)
-
-#Plotting the result
-library(ggplot2)
-ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) +
-  geom_point(aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy))
-
+df[, "CLOSE_DEF_DIS"] <- as.numeric(df[, "CLOSE_DEF_DIST"])
 
 #select data with only scored result
 #Point type (2 or 3 points) and distance
@@ -312,11 +279,6 @@ for (z in 1:nrow(df)){
 }
 
 #combine point type and distance
-
-valid_distance = data.frame(point_type, distance, shot_dist)
-dist_group <- c(3, 6, 9, 12, 15, Inf)
-valid_distance[, "Range_Group"] <- c(findInterval(valid_distance$distance, dist_group))
-
 valid_distance = data.frame(point_type, distance)
 
 #calculate correlation between defender distance and points made (2 or 3 points)
@@ -327,10 +289,6 @@ library(ggplot2)
 ggplot(data = valid_distance, aes(x = point_type, y = distance, group = point_type)) + 
   geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 5, size = 1) + 
   ggtitle("Points Scored based on Distance from Defender")
-
-ggplot(data = valid_distance, aes(x = Range_Group)) + geom_bar()
-
-ggplot(data = valid_distance, aes(x = distance) + geom_bar())
 
 #calculate correlation between defender distance and shot result
 cor(df[, "SHOT_RESULT"], df[, "CLOSE_DEF_DIS"])
@@ -398,8 +356,6 @@ ggplot(data = top5_3points, aes(x = top5Players3)) +
 
 ```
 
-
-
 ```{r}
 #Summary of total points
 ptssum<- cast(df1, GAME_ID1+ player_id + player_name  ~ PTS); head(ptssum)
@@ -457,17 +413,21 @@ for(i in ourtable$player_id) {
 streak_per_player
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
+
+
 ###Discussion
 I   What results did you find?
 
 I   Why is this interesting?
 
 I   What would be the next steps?
+---
 
-Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
  
 
 #Report structure 
