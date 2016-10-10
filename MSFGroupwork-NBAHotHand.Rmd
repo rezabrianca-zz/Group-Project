@@ -5,7 +5,7 @@ output: html_document  ---
   title: "MSF_Groupwork-NBA_shotlog"
 author: "Team_9"
 output: html_document 
---- 
+---
   
   ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -58,25 +58,10 @@ library(ggplot2)
 ```{r}
 df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
 attach(df) #telling R that this is the dataframe we'll be working with (eliminating the need to use df$ for variables)
-df1 <- read.csv('shot_logs1010.csv')
+
 #we need to change the format of some of the columns to 'Character'
 
 ```
-
-
-#SUMMARY OF POINTS
-```{r}
-ptssum<- cast(df1, GAME_ID1+ player_id + player_name  ~ PTS); head(ptssum)
-#creating "total points per player, per game" column
-ptssum$totalpts<- ptssum[,"2"]*2 + ptssum[,"3"]*3
-
-pttsum2<-ptssum[order(ptssum$totalpts,decreasing=TRUE),]
-head(pttsum2,10)
-
-
-```
-
-
 ### Home Advantage analysis
 ```{r}
 # replacing W/L in column "W" with 1/0 (1 for win, 0 for loss)
@@ -143,6 +128,53 @@ ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_po
 #TO BE UPDATED  
 ```
 
+# Shooting Percentage Analysis (James)
+
+```{r}
+# Replace "made" and "missed" with 1 and 0 respectively
+
+df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
+
+for (i in 1:nrow(df)) {
+  if (df[i, "SHOT_RESULT"] == "made") df[i, "SHOT_RESULT"] <- 1
+  if (df[i, "SHOT_RESULT"] == "missed") df[i, "SHOT_RESULT"] <- 0
+}
+
+df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
+
+```
+
+# 
+
+```{r}
+# Find shooting percentage of each match
+
+# Trying to reshape...
+
+library(reshape)
+game <- cast(data = df, GAME_ID1 ~ SHOT_RESULT)
+View(game)
+
+# 
+
+Team <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
+FG_Percentage <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
+for(i in 21400001:21400908){
+  j = i - 21400001 +1 # 
+  game <- df[, df[, "GAME_ID1"] == i]
+  home <- game[, game["LOCATION"] == "H"]
+  home.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / nrow(home)
+  away <- game[, game["LOCATION"] == "A"]
+  away.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / away(home)
+  FG_Percentage[j] <- home.p
+  FG_Percentage[j + 1] = away.p
+  Team[j] = "H"
+  Team[j + 1] = "A"
+}
+
+
+
+```
 
 
 ###Defender Proximity Analysis
@@ -247,59 +279,7 @@ ggplot(data = top5_3points, aes(x = top5Players3)) +
   geom_bar(aes(x = top5Players3, y = top5Counter3), stat = "identity")
 
 ```
-###Hot Hand Theory
 
-```{r}
-#Set the value to character
-df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
-
-#Define 1 for baskets made and 0 for baskets missed. We need a vector to use it to our function below.
-shotresult <- c()
-for(i in 1:nrow(df)) {
-  if(shots[i] == 'missed') shotresult <- c(shotresult, 0)
-  else if(shots[i] == 'made') shotresult <- c(shotresult, 1)
-}
-
-shotresult
-
-#Set the value to numeric/integer
-df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
-df[ ,'SHOT_NUMBER'] <- as.integer(df[ , 'SHOT_NUMBER'])
-
-#Create new column with shot results(1 for baskets made and 0 for baskets missed)
-df[ ,'SHOTRESULT_0_1'] <- shotresult
-
-
-#Define the length of a shooting streak to be the number of consecutive baskets made until a miss occurs
-#Create a function that gives us a vector with the number of streaks
-number_of_streaks <- function(x) {
-  x <- c(0, x, 0)
-  which_zero <- which(x == 0)
-  streak <- diff(which_zero) - 1
-  streak
-}
-
-number_of_streaks(shotresult)
-
-player_and_game <- function(x, y) {
-   player <- df[df[ ,'player_id'] == x & df[ ,'GAME_ID1'] == y, 'FGM']
-   number_of_streaks(as.vector(player))
-}
-player_and_game(202681, 21400681)
-
-ourtable <- head(pttsum2,10)
-
-list_streaks <- list()
-
-for(i in ourtable$player_id) {
-   streak_per_player <- player_and_game(i, ourtable[ourtable[ ,'player_id'] == i, 'GAME_ID1'])
-   print(streak_per_player)
-}
-
-
-
-#To be continued (probabilities- indipendence, plots, interpret results for specific players(those with higher shot_numbers))
-```
 
 ###Discussion
 I   What results did you find?
