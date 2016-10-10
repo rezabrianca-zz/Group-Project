@@ -158,28 +158,40 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 ```{r}
 # Find shooting percentage of each match
 
-# Trying to reshape...
+# Reshape the dataframe
 
-library(reshape)
-game <- cast(data = df, GAME_ID1 ~ SHOT_RESULT)
-View(game)
+game <- cast(data = df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION + player_name + W ~ FGM)
+
+# Field Goal Attempts
+
+game[, "FGA"] <- NA
+for(i in 1:nrow(game)){
+  game[i, "FGA"] <- game[i, "1"] + game[i, "0"]
+}
+
+# find Feild Goal % of each indivudual player in that match
+
+game[, "FG%"] <- NA 
+for (i in 1:nrow(game)){
+  game[i, "FG%"] <- round(((game[i, "1"]/game[i, "FGA"]) * 100), digits = 2)
+}
 
 # 
 
-Team <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
-FG_Percentage <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
-for(i in 21400001:21400908){
-  j = i - 21400001 +1 # 
-  game <- df[, df[, "GAME_ID1"] == i]
-  home <- game[, game["LOCATION"] == "H"]
-  home.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / nrow(home)
-  away <- game[, game["LOCATION"] == "A"]
-  away.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / away(home)
-  FG_Percentage[j] <- home.p
-  FG_Percentage[j + 1] = away.p
-  Team[j] = "H"
-  Team[j + 1] = "A"
-}
+#Team <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
+#FG_Percentage <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
+#for(i in 21400001:21400908){
+#  j = i - 21400001 +1 # 
+#  game <- df[, df[, "GAME_ID1"] == i]
+#  home <- game[, game["LOCATION"] == "H"]
+#  home.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / nrow(home)
+#  away <- game[, game["LOCATION"] == "A"]
+#  away.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / away(home)
+#  FG_Percentage[j] <- home.p
+#  FG_Percentage[j + 1] = away.p
+#  Team[j] = "H"
+#  Team[j + 1] = "A"
+#}
 
 
 
