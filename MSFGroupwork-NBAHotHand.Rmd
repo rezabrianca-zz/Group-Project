@@ -134,7 +134,7 @@ ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_po
 # Replace "made" and "missed" with 1 and 0 respectively
 
 df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
-
+ 
 for (i in 1:nrow(df)) {
   if (df[i, "SHOT_RESULT"] == "made") df[i, "SHOT_RESULT"] <- 1
   if (df[i, "SHOT_RESULT"] == "missed") df[i, "SHOT_RESULT"] <- 0
