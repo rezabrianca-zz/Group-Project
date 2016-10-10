@@ -44,9 +44,16 @@ I   Limitations
 
 ###Analysis
 
-##Installing packages and calling libraries
+## Installing libraries
+
 ```{r}
 install.packages('reshape')
+
+```
+
+
+## Calling libraries
+```{r}
 library(reshape)
 library(ggplot2)
 
@@ -62,7 +69,9 @@ attach(df) #telling R that this is the dataframe we'll be working with (eliminat
 #we need to change the format of some of the columns to 'Character'
 
 ```
+
 ### Home Advantage analysis
+
 ```{r}
 # replacing W/L in column "W" with 1/0 (1 for win, 0 for loss)
 df[,"W"] <- as.character(df[,"W"])
