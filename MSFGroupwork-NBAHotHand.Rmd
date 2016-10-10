@@ -20,7 +20,7 @@ I   What is your theme or research question?
 a. Hot Hand Theory (Artemis)
 b. Defender Proximity Analysis (Reza)
 c. Shot Clock Pressure  (Alex)
-d. Close Game Effect - Small Margin affecting the scoring rate  
+d. Close Game Effect - Small Margin affecting the scoring rate 
 e. Home Advantage (Alex is working in this point)  
 f. Fatigue Effect (Quarter Heat Rate)  
 g. Shooting Percentage (James)
@@ -99,14 +99,12 @@ for (i in 1:nrow(df)) {
   if (W[i]=="W") df$WINNER[i] <- "AWAY"}}
 
 df$BLANK<-"" #for some reason cast function does not work with last column in dataframe, so I have created this BLANK column as I need to use AWAY_TEAM colum (it was a last column). 
-
-write.csv(df,"shot_logs1010.csv")
 ```
 
 ```{r}
 aa<- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
 
-table(aa$WINNER)
+table(aa$WINNER) [2]
 #home wins:
 hh<-sum(aa$WINNER=="HOME")
 #Away wins:
@@ -120,11 +118,7 @@ head(aa)
 aa1<- cast(aa, HOME_TEAM  ~ WINNER); names(aa1)[1]<-"TEAM"
 aa1$WIN_PCT_HOME<-round(aa1$HOME/(aa1$HOME+aa1$AWAY),2)
 
-<<<<<<< HEAD
-aa2<- cast(aa, AWAY_TEAM ~ WINNER); names(aa2)[1]<-"TEAM" 
-=======
 aa2<- cast(aa, AWAY_TEAM ~ WINNER); names(aa2)[1]<-"TEAM"
->>>>>>> 961cfa1e3730130a219fb77b1874aa2800a0e664
 aa2$WIN_PCT_AWAY<-round(aa2$AWAY/(aa2$HOME+aa2$AWAY),2)
 
 aa3<- merge (aa1,aa2, by ="TEAM")
@@ -133,24 +127,6 @@ aa3<- merge (aa1,aa2, by ="TEAM")
 for (i in 1:nrow(aa3)) {if(aa3$WIN_PCT_HOME[i]>aa3$WIN_PCT_AWAY[i]) aa3$HOME_ADV[i]<-"YES" else aa3$HOME_ADV[i]<-"NO"}
 head(aa3)
 
-<<<<<<< HEAD
-#aa3$WIN_PCT_HOME <- with(aa3, reorder(WIN_PCT_HOME, WIN_PCT_HOME, function(aa3) - length(aa3)))
-#ggplot(aa3) + geom_point(aes(WIN_PCT_HOME))
-
-aa3<-aa3[order(aa3$WIN_PCT_HOME,decreasing=TRUE),]
-head(aa3)
-
-#home_pct <- table(aa3$WIN_PCT_HOME)
-#home_pct_level <- names(home_pct)[order(home_pct)]
-#aa3$WIN_PCT_HOME2 <- factor(aa3$WIN_PCT_HOME, levels = home_pct_level)
-head(aa3)
-
-ggplot(aa3,aes(x=TEAM,y= WIN_PCT_HOME,colour = "HOME")) +geom_point() + geom_point(aes(y= WIN_PCT_AWAY, colour ="AWAY"))
-
-
-#ggplot(aa3,aes(x=TEAM))+ geom_point(aes(y= WIN_PCT_HOME,colour = "HOME")) + geom_point(aes(y= WIN_PCT_AWAY, colour ="AWAY"))
-#TO BE UPDATED
-=======
 aa3<- aa3[order(aa3$WIN_PCT_HOME,decreasing=TRUE),]
 rownames(aa4)<-NULL
 
@@ -160,6 +136,69 @@ aa3$TEAM <- factor(aa5$TEAM, levels = aa5$TEAM[order(-aa5$WIN_PCT_HOME)])
 ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_point(aes( y= WIN_PCT_AWAY, col= "AWAY")) 
 #TO BE UPDATED  
 ```
+
+#Close Game Effect (Justin)
+
+```{r}
+# create new variable to seperate overtime
+
+df[, "OVERTIME"] <- as.numeric()
+
+for (i in 1:nrow(df)) {
+  if (df[i, "PERIOD"] >= 5) df[i, "OVERTIME"] <- 1
+  if (df[i, "PERIOD"] <= 4) df[i, "OVERTIME"] <- 0
+}
+
+# accuracy 
+acc_ot <- as.numeric
+acc_ot <- sum(df$OVERTIME == 1 & df$FGM == 1)/sum(df$OVERTIME == 1)
+
+acc_qrt1 <- as.numeric
+acc_qrt1 <- sum(df$PERIOD == 1 & df$FGM == 1)/sum(df$PERIOD == 1)
+
+acc_qrt2 <- as.numeric
+acc_qrt2 <- sum(df$PERIOD == 2 & df$FGM == 1)/sum(df$PERIOD == 2)
+
+acc_qrt3 <- as.numeric
+acc_qrt3 <- sum(df$PERIOD == 3 & df$FGM == 1)/sum(df$PERIOD == 3)
+
+acc_qrt4 <- as.numeric
+acc_qrt4 <- sum(df$PERIOD == 4 & df$FGM == 1)/sum(df$PERIOD == 4)
+
+acc_qrt5 <- as.numeric
+acc_qrt5 <- sum(df$PERIOD == 5 & df$FGM == 1)/sum(df$PERIOD == 5)
+
+acc_qrt6 <- as.numeric
+acc_qrt6 <- sum(df$PERIOD == 6 & df$FGM == 1)/sum(df$PERIOD == 6)
+
+acc_qrt7 <- as.numeric
+acc_qrt7 <- sum(df$PERIOD == 7 & df$FGM == 1)/sum(df$PERIOD == 7)
+
+acc_qrt1_4 <- as.numeric
+acc_qrt1_4 <- sum(df$PERIOD <= 4 & df$FGM == 1) / sum(df$PERIOD <= 4)
+
+t.test(df$FGM[df$PERIOD <= 4], df$FGM[df$PERIOD >= 5])
+t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 2])
+t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 3])
+t.test(df$FGM[df$PERIOD == 3], df$FGM[df$PERIOD == 4])
+t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
+t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
+
+# accuracy for Shot Clock
+
+  # dealing with missing values
+df[, "SHOT_CLOCK_NONA"] <- df[, "SHOT_CLOCK"]
+is.na(df$SHOT_CLOCK_NONA) <- 99
+
+acc_sec24 <- as.numeric
+acc_sec24 <- sum(df$SHOT_CLOCK > 23 & df$FGM == 1) / sum(df$SHOT_CLOCK > 23)
+
+
+
+```
+
+
+
 
 # Shooting Percentage Analysis (James)
 
@@ -175,7 +214,6 @@ for (i in 1:nrow(df)) {
 
 df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 
->>>>>>> 961cfa1e3730130a219fb77b1874aa2800a0e664
 ```
 
 # 
@@ -251,25 +289,24 @@ ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Ac
 #Point type (2 or 3 points) and distance
 point_type <- c()
 distance <- c()
-shot_dist <- c()
 for (z in 1:nrow(df)){
   if(df[z, "SHOT_RESULT"] == 1 & df[z, "PTS_TYPE"] >= 1){
     point_type <- c(point_type, df[z, "PTS_TYPE"])
     distance <- c(distance, df[z, "CLOSE_DEF_DIST"])
-    shot_dist <- c(shot_dist, df[z, "SHOT_DIST"])
   }
 }
 
 #combine point type and distance
+<<<<<<< HEAD
 valid_distance = data.frame(point_type, distance, shot_dist)
 dist_group <- c(3, 6, 9, 12, 15, Inf)
 valid_distance[, "Range_Group"] <- c(findInterval(valid_distance$distance, dist_group))
+=======
+valid_distance = data.frame(point_type, distance)
+>>>>>>> e982bfd9f4a1e3a1ea8059f5def6aa304f99f0ec
 
 #calculate correlation between defender distance and points made (2 or 3 points)
 cor(point_type, distance)
-
-#calculate correlation between defender distance and shot distance (2 or 3 points)
-cor(distance, shot_dist)
 
 #plot the diagram for this correlation
 library(ggplot2)
@@ -277,10 +314,13 @@ ggplot(data = valid_distance, aes(x = point_type, y = distance, group = point_ty
   geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 5, size = 1) + 
   ggtitle("Points Scored based on Distance from Defender")
 
+<<<<<<< HEAD
 ggplot(data = valid_distance, aes(x = Range_Group)) + geom_bar()
 
 ggplot(data = valid_distance, aes(x = distance) + geom_bar())
 
+=======
+>>>>>>> e982bfd9f4a1e3a1ea8059f5def6aa304f99f0ec
 #calculate correlation between defender distance and shot result
 cor(df[, "SHOT_RESULT"], df[, "CLOSE_DEF_DIS"])
 
@@ -299,11 +339,7 @@ for (z in 1:nrow(df)){
 
 #combine 2 point players and defender distance
 player2point <- data.frame(players2, distance2)
-
 summary(player2point)
-
-#calculate mean distance from 2-pointers
-avg_dist2 <- aggregate(distance2 ~ players2, player2point, mean)
 
 #count players who scored 2 points
 counter <- as.data.frame(table(players2))
@@ -313,9 +349,6 @@ top5Players2 <- counter[rev(order(counter$Freq)), "players2"][1:5]
 top5Counter <- counter[rev(order(counter$Freq)), "Freq"][1:5]
 
 top5_2points <- data.frame(top5players2, top5Counter)
-
-#count players who scored 2 points
-counter <- as.data.frame(table(players2))
 
 #plot the graph
 library(ggplot2)
