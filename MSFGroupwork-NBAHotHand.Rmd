@@ -325,8 +325,8 @@ player_and_game <- function(x, y) {
    player <- df[df[ ,'player_id'] == x & df[ ,'GAME_ID1'] == y, 'FGM']
    number_of_streaks(as.vector(player))
 }
-player_and_game(202681, 21400681)
 
+#Set a new data.frame for the 10 players with best performances(higher points)
 ourtable <- head(pttsum2,10)
 
 #Create a list that gives us the streaks of each player and game (10 best performances)
@@ -351,14 +351,24 @@ player9_df <- data.frame('streaks' = streak_per_player[[9]])
 player10_df <- data.frame('streaks' = streak_per_player[[10]])
 ourtable
 
-#Visualisation for 10 players
-ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
-ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
-ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
-ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
-ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
-ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
-ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = 'Kyrie Irving')
+#Visualisation for 10 players - distribution of each players' streaklengths
+ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[1,'player_name'])
+ggplot(data = player2_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[2,'player_name'])
+ggplot(data = player3_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[3,'player_name'])
+ggplot(data = player4_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[4,'player_name'])
+ggplot(data = player5_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[5,'player_name'])
+ggplot(data = player6_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[6,'player_name'])
+ggplot(data = player7_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[7,'player_name'])
+ggplot(data = player8_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[8,'player_name'])
+ggplot(data = player9_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[9,'player_name'])
+ggplot(data = player10_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[10,'player_name'])
+
+#We can see that the distribution of all players is right skewed and that all of them (especially player3) have some long shooting streaks. To prove/disprove the hot hand theory we need to examine the indipendence of the shots. If each shot that a player takes is independent of the next shot, then a missed/made shot will not affect the propability of succesfulness of the next shot. So, if consecutive shots are independent, we disprove hot hand theory, while if consecutive shots are dependent, we prove the hot hand theory.
+#Simulation
+shot_results <- c('made', 'missed')
+simul_shooter <- sample(shot_results, size = nrow(player1_df), replace = TRUE, prob = c(0.45, 0.55))
+simul_shooter
+```
 
 ###Discussion
 I   What results did you find?
