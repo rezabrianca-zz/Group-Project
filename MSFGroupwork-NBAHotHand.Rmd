@@ -184,6 +184,11 @@ t.test(df$FGM[df$PERIOD == 3], df$FGM[df$PERIOD == 4])
 t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
 
+# accuracy for Top 10 scoring players
+
+
+
+
 # accuracy for Shot Clock
 
   # dealing with missing values
@@ -197,6 +202,21 @@ for (i in 1:23){
   acc[i, "Accuracy"] <- (sum(df$SHOT_CLOCK > i & df$SHOT_CLOCK <= i+1 & df$SHOT_CLOCK != 99 & df$FGM == 1)/ sum(df$SHOT_CLOCK > i & df$SHOT_CLOCK <= i+1 & df$SHOT_CLOCK != 99))}
 
 ggplot(acc, aes(x = SECONDS_LEFT, y = Accuracy)) + geom_point() + geom_smooth()
+
+df[, "ACC_P_SEC"] <- as.numeric()
+
+#Assign accuracy per second to main dataframe
+for (i in 1:nrow(df)){
+  for (j in 1:23){
+    if (df$SHOT_CLOCK[i] >j & df$SHOT_CLOCK[i] <= j+1 & df$SHOT_CLOCK[i] != 99) df[i, "ACC_P_SEC"] <- acc[j, "Accuracy"]
+  }
+}
+
+
+cov(df$ACC_P_SEC, df$SHOT_CLOCK)
+cor.test(df$ACC_P_SEC, df$SHOT_CLOCK)
+
+
 
 
 ```
