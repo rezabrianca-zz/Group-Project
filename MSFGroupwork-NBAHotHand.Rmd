@@ -286,14 +286,10 @@ for (i in 1:nrow(game)){
 # Impact of Super Star Players
 
 ```{r}
-
 # Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
 super.star.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "klay thompson", "lamarcus aldridge") # players picked out
 super.star <- game[game$player_name %in% super.star.list, c("player_name", "W", "FGA", "FG.percentage")] # create a subset for these players
-
-ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W))
 
 # Replace "W" and "L" with 1 and 0 respectively, 
 super.star[, "W"] <- as.character(super.star[, "W"])
@@ -303,12 +299,16 @@ for (i in 1:nrow(super.star)) {
 }
 super.star[, "W"] <- as.numeric(super.star[, "W"])
 
+ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W))
+
 # Correlation test
-t.test(super.star[, "W"], super.star[, "FGA"]) # this makes no sense...
+chisq.test(super.star[, "W"], super.star[, "FGA"]) 
 
 # Linear regression
 summary(lm(W ~ player_name + FGA, data = super.star))
 summary(lm(W ~ player_name + FG.percentage, data = super.star))
+summary(lm(W ~ player_name + FG.percentage + FGA, data = super.star))
 
 ```
 
