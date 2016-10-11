@@ -15,6 +15,19 @@ Date submitted: 16/10/2016
 
 #Report structure 
 
+<<<<<<< HEAD
+##Introduction
+###What is your theme or research question?
+    a. Hot Hand Theory (Artemis)
+    b. Defender Proximity Analysis (Reza)
+    c. Shot Clock Pressure  (Alex)
+    d. Close Game Effect - Small Margin affecting the scoring rate 
+    e. Home Advantage (Alex is working in this point)  
+    f. Fatigue Effect (Quarter Heat Rate)  
+    g. Shooting Percentage (James)
+    h. Fatigue Effect (Number of Rest Day)  
+    i. Regression Analysis (Alex)
+=======
 ###Introduction/Summary
 
 The purpose of this report is to analyse a chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focus on analysis of a number of areas, demonstrate how the analysis has been conducted (including 'clean-up' of the data), discuss theory used, demonstrate and evaluate produced results. In addition, this report will highlight potential areas of future research. 
@@ -27,23 +40,37 @@ The chosen dataset for this report is a summary of shots made during NBA season 
 a. Hot Hand Theory (Artemis)
 b. Defender Proximity Analysis (Reza)
 c. Shot Clock Pressure  (Alex)
-d. Close Game Effect - Small Margin affecting the scoring rate 
+d. Late Game Effect - Tiredness affecting the accuracy
 e. Home Advantage (Alex is working in this point)  
 f. Fatigue Effect (Quarter Heat Rate)  
 g. Shooting Percentage (James)
 h. Fatigue Effect (Number of Rest Day)  
 i. Regression Analysis (Alex)
+>>>>>>> 55c718a381bf6c1f8659c54b51903d2b25b3ca28
 
 ##Theory
-I   What do you expect to find?
-a. 
+###What do you expect to find?
+    a. 
 
 ##Methods
 I   Describe the dataset:
   
-    Data on shots taken during the 2014-2015 season, who took the shot, where on the floor was the shot taken from, who was the nearest defender, how far away was the nearest defender, time on the shot clock, and much more. The column titles are generally self-explanatory.
-Useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, etc.
-Scraped from NBA's REST API.  It has 128,609 rows and 22 columns with 16 MB data size. ##TO BE UPDATED FURTHER
+    Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. This comprehensive data comprise of 128,609 rows and 22 columns with 16 MB data size with only several value in a column is missing (shot clock). The column titles are generally self-explanatory. It has the following data:  
+    1.  Match ID  
+    2.  Match date  
+    3.  Which team plays as home and away  
+    4.  Match result  
+    5.  Final score difference  
+    6.  Every shots per game for each player  
+    7.  Shot result whether it is success or not  
+    8.  Shot attempt for 2 points or 3 points  
+    9.  What is the game clock  
+    10. How much time left for a shot (shot clock)  
+    11. Who took the shot  
+    12. Shot distance from basket  
+    13. Who was the nearest defender  
+    14. Distance from the nearest defender  
+    The dataset is useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, affect of home playing team, close game effect, shooting accuracy from best players, and defender distance effect on shooting accuracy. Data was taken from NBA's REST API provided by [Kaggle](https://www.kaggle.com/dansbecker/nba-shot-logs) and acquired at 30 September 2016.
 
 I   Strengths
     
@@ -58,7 +85,7 @@ I   Limitations
 
 During the research the following librares have been installed:
 ```{r}
-#install.packages('reshape')
+install.packages('reshape')
 
 ```
 
@@ -125,17 +152,18 @@ df$BLANK<-"" #for some reason cast function does not work with last column in da
 ```{r}
 aa<- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
 
-table(aa$WINNER) [2]
+table(aa$WINNER) 
 #home wins:
 hh<-sum(aa$WINNER=="HOME")
 #Away wins:
 aw<-sum(aa$WINNER=="AWAY")
 #percentage of home team winning: 
 round(hh/(hh+aw),2)
+round(aw/(hh+aw),2)
 ```
 
 ```{r}
-head(aa)
+
 aa1<- cast(aa, HOME_TEAM  ~ WINNER); names(aa1)[1]<-"TEAM"
 aa1$WIN_PCT_HOME<-round(aa1$HOME/(aa1$HOME+aa1$AWAY),2)
 
@@ -151,14 +179,20 @@ head(aa3)
 aa3<- aa3[order(aa3$WIN_PCT_HOME,decreasing=TRUE),]
 rownames(aa4)<-NULL
 
-aa3$TEAM <- factor(aa5$TEAM, levels = aa5$TEAM[order(-aa5$WIN_PCT_HOME)])
+aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
 
 
 ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_point(aes( y= WIN_PCT_AWAY, col= "AWAY")) 
-#TO BE UPDATED  
+
 ```
 
-#Close Game Effect (Justin)
+#Late Game Effect (Justin)
+
+In this part the analysis focuses on a couple of potential effects on the accuracy. Therefore, the starting point is to compare the overall accuracy per period as well as the accuracy in regular game time to the accuracy in overtime. Assumption was that the later the period the lower the accuracy in general, especially for overtime. The accuracy rates for the different quarters as well as for overtime can be seen in table X. 
+
+
+
+
 
 ```{r}
 # create new variable to seperate overtime
@@ -206,8 +240,6 @@ t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
 
 # accuracy for Top 10 scoring players
-
-
 
 
 # accuracy for Shot Clock
@@ -342,7 +374,7 @@ for (z in 1:nrow(df)){
 valid_distance = data.frame(point_type, distance)
 
 #calculate correlation between defender distance and points made (2 or 3 points)
-cor(point_type, distance)
+cor.test(point_type, distance)
 
 #plot the diagram for this correlation
 library(ggplot2)
@@ -351,7 +383,7 @@ ggplot(data = valid_distance, aes(x = point_type, y = distance, group = point_ty
   ggtitle("Points Scored based on Distance from Defender")
 
 #calculate correlation between defender distance and shot result
-cor(df[, "SHOT_RESULT"], df[, "CLOSE_DEF_DIS"])
+cor.test(df[, "SHOT_RESULT"], df[, "CLOSE_DEF_DIS"])
 
 #--------------------------------------------------------------------------------#
 
@@ -414,6 +446,44 @@ library(ggplot2)
 ggplot(data = top5_3points, aes(x = top5Players3)) +
   geom_bar(aes(x = top5Players3, y = top5Counter3), stat = "identity")
 
+#Calculate accuracy against defender distance
+#Group the defender distance level
+
+distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
+head(distance_level)
+
+#Calculate how many times players scored in every defender distance
+for (i in 1:nrow(distance_level)){
+  distance_level[i, "SCORED"] <- sum(df[df[, "CLOSE_DEF_DIST"] == distance_level[i, "Var1"], "FGM"])
+}
+
+#Calculate shooting accuracy for each distance
+distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 2)
+
+#Plotting the result
+library(ggplot2)
+ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
+  geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy))
+
+#----------------------------------------------------------------#
+
+#Calculate accuracy against shooting distance
+#Group the shooting distance level
+shooting_distance_level <- as.data.frame(table(factor(ShotDistance)))
+head(shooting_distance_level)
+
+#Calculate how many times players scored in every shooting distance
+for (i in 1:nrow(shooting_distance_level)){
+  shooting_distance_level[i, "SCORED"] <- sum(df[df[, "SHOT_DIST"] == shooting_distance_level[i, "Var1"], "FGM"])
+}
+
+#Calculate shooting accuracy for each distance
+shooting_distance_level$Accuracy <- round(shooting_distance_level$SCORED / shooting_distance_level$Freq, 2)
+
+#Plotting the result
+library(ggplot2)
+ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) +
+  geom_point(aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy))
 ```
 
 ```{r}
@@ -462,8 +532,6 @@ for(i in best_players_df$player_id) {
 }
 streak_per_player
 
-<<<<<<< HEAD
-=======
 #Create a data frame for the strikes of each one of the 10 players (cannot create a data frame including all of them, because each list has different length)
 player1_df <- data.frame('streaks' = streak_per_player[[1]])
 player2_df <- data.frame('streaks' = streak_per_player[[2]])
@@ -546,6 +614,9 @@ linreg_fgm2 <-lm(FGM ~ FINAL_MARGIN+SHOT_NUMBER+ PERIOD +  SHOT_CLOCK+  DRIBBLES
 
 summary(linreg_fgm2)
 
+
+
+
 ```
 
 
@@ -558,7 +629,6 @@ I   What would be the next steps?
 ---
 
 ```{r setup, include=FALSE}
->>>>>>> a80106d2b5b1471987f10907dbb273f0ce271dd8
 knitr::opts_chunk$set(echo = TRUE)
 ```
 Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
