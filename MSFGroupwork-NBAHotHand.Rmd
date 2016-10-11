@@ -27,7 +27,7 @@ The chosen dataset for this report is a summary of shots made during NBA season 
 a. Hot Hand Theory (Artemis)
 b. Defender Proximity Analysis (Reza)
 c. Shot Clock Pressure  (Alex)
-d. Close Game Effect - Small Margin affecting the scoring rate 
+d. Late Game Effect - Tiredness affecting the accuracy
 e. Home Advantage (Alex is working in this point)  
 f. Fatigue Effect (Quarter Heat Rate)  
 g. Shooting Percentage (James)
@@ -159,7 +159,13 @@ ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_po
 
 ```
 
-#Close Game Effect (Justin)
+#Late Game Effect (Justin)
+
+In this part the analysis focuses on a couple of potential effects on the accuracy. Therefore, the starting point is to compare the overall accuracy per period as well as the accuracy in regular game time to the accuracy in overtime. Assumption was that the later the period the lower the accuracy in general, especially for overtime. The accuracy rates for the different quarters as well as for overtime can be seen in table X. 
+
+
+
+
 
 ```{r}
 # create new variable to seperate overtime
@@ -207,8 +213,6 @@ t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
 
 # accuracy for Top 10 scoring players
-
-
 
 
 # accuracy for Shot Clock
