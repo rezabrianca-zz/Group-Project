@@ -25,7 +25,7 @@ e. Home Advantage (Alex is working in this point)
 f. Fatigue Effect (Quarter Heat Rate)  
 g. Shooting Percentage (James)
 h. Fatigue Effect (Number of Rest Day)  
-i. 
+i. Regression Analysis (Alex)
 
 ###Theory
 I   What do you expect to find?
@@ -66,7 +66,11 @@ library(ggplot2)
 df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
 attach(df) #telling R that this is the dataframe we'll be working with (eliminating the need to use df$ for variables)
 
+df2<- read.csv("shot_logs1010.csv")
+
 #we need to change the format of some of the columns to 'Character'
+#get rid off 'attach()'
+#get rid off column X in shot logs1010 file
 
 ```
 
@@ -486,6 +490,22 @@ ggplot(data = simulshooter_df, aes(x = streaks)) + geom_bar()
 ggplot(data = player1_df, aes(x = streaks)) + geom_bar()
 #
 ```
+
+```{r}
+#Regression Analysis
+colnames(df2)
+
+linreg_fgm <-lm(FGM ~ GAME_ID1 + MATCHUP+LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ SHOT_RESULT+ CLOSEST_DEFENDER + CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST +PTS+player_name+ player_id+HOME_TEAM+AWAY_TEAM+WINNER, df2 )
+
+summary(linreg_fgm)
+
+linreg_fgm2 <-lm(FGM ~ GAME_ID1 + MATCHUP+LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ SHOT_RESULT+ CLOSEST_DEFENDER + CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST +PTS+player_name+ player_id+HOME_TEAM+AWAY_TEAM+WINNER, df2 )
+
+
+summary(linreg_fgm)
+
+```
+
 
 ###Discussion
 I   What results did you find?
