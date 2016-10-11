@@ -9,10 +9,13 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
+<<<<<<< HEAD
+Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
+Date submitted: 16/10/2016
 
 #Report structure 
 
+<<<<<<< HEAD
 ##Introduction
 ###What is your theme or research question?
     a. Hot Hand Theory (Artemis)
@@ -24,6 +27,26 @@ Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, 
     g. Shooting Percentage (James)
     h. Fatigue Effect (Number of Rest Day)  
     i. Regression Analysis (Alex)
+=======
+###Introduction/Summary
+
+The purpose of this report is to analyse a chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focus on analysis of a number of areas, demonstrate how the analysis has been conducted (including 'clean-up' of the data), discuss theory used, demonstrate and evaluate produced results. In addition, this report will highlight potential areas of future research. 
+
+The chosen dataset for this report is a summary of shots made during NBA season 2015-2016. The following areas of research have been selected:
+
+###TO BE UPDATED when we know final areas
+=======
+
+a. Hot Hand Theory (Artemis)
+b. Defender Proximity Analysis (Reza)
+c. Shot Clock Pressure  (Alex)
+d. Late Game Effect - Tiredness affecting the accuracy
+e. Home Advantage (Alex is working in this point)  
+f. Fatigue Effect (Quarter Heat Rate)  
+g. Shooting Percentage (James)
+h. Fatigue Effect (Number of Rest Day)  
+i. Regression Analysis (Alex)
+>>>>>>> 55c718a381bf6c1f8659c54b51903d2b25b3ca28
 
 ##Theory
 ###What do you expect to find?
@@ -60,13 +83,16 @@ I   Limitations
 
 ### Installing libraries
 
+During the research the following librares have been installed:
 ```{r}
-#install.packages('reshape')
+install.packages('reshape')
 
 ```
 
 
 ### Calling libraries
+
+During the research the following libraries have been used:
 ```{r}
 library(reshape)
 library(ggplot2)
@@ -75,6 +101,7 @@ library(ggplot2)
 
 
 ###Data clean-up 
+This section describes exercises that had to be performed in order to prepare the raw data for the required analysis. 
 
 ```{r}
 df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
@@ -87,6 +114,9 @@ df1<- read.csv("shot_logs1010.csv")
 #get rid off column X in shot logs1010 file
 
 ```
+
+For convenience of using the report, the 'post data clean-up' csv file have been produced.
+**add 'latest'clean CSV file**
 
 ### Home Advantage analysis
 
@@ -122,17 +152,18 @@ df$BLANK<-"" #for some reason cast function does not work with last column in da
 ```{r}
 aa<- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
 
-table(aa$WINNER) [2]
+table(aa$WINNER) 
 #home wins:
 hh<-sum(aa$WINNER=="HOME")
 #Away wins:
 aw<-sum(aa$WINNER=="AWAY")
 #percentage of home team winning: 
 round(hh/(hh+aw),2)
+round(aw/(hh+aw),2)
 ```
 
 ```{r}
-head(aa)
+
 aa1<- cast(aa, HOME_TEAM  ~ WINNER); names(aa1)[1]<-"TEAM"
 aa1$WIN_PCT_HOME<-round(aa1$HOME/(aa1$HOME+aa1$AWAY),2)
 
@@ -148,14 +179,20 @@ head(aa3)
 aa3<- aa3[order(aa3$WIN_PCT_HOME,decreasing=TRUE),]
 rownames(aa4)<-NULL
 
-aa3$TEAM <- factor(aa5$TEAM, levels = aa5$TEAM[order(-aa5$WIN_PCT_HOME)])
+aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
 
 
 ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_point(aes( y= WIN_PCT_AWAY, col= "AWAY")) 
-#TO BE UPDATED  
+
 ```
 
-#Close Game Effect (Justin)
+#Late Game Effect (Justin)
+
+In this part the analysis focuses on a couple of potential effects on the accuracy. Therefore, the starting point is to compare the overall accuracy per period as well as the accuracy in regular game time to the accuracy in overtime. Assumption was that the later the period the lower the accuracy in general, especially for overtime. The accuracy rates for the different quarters as well as for overtime can be seen in table X. 
+
+
+
+
 
 ```{r}
 # create new variable to seperate overtime
@@ -203,8 +240,6 @@ t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
 
 # accuracy for Top 10 scoring players
-
-
 
 
 # accuracy for Shot Clock
@@ -565,16 +600,22 @@ ggplot(data = player1_df, aes(x = streaks)) + geom_bar()
 
 ```{r}
 #Regression Analysis
-colnames(df2)
 
-linreg_fgm <-lm(FGM ~ GAME_ID1 + MATCHUP+LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ SHOT_RESULT+ CLOSEST_DEFENDER + CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST +PTS+player_name+ player_id+HOME_TEAM+AWAY_TEAM+WINNER, df2 )
+df1$GAME_CLOCK <-as.numeric(df1$GAME_CLOCK)
 
-summary(linreg_fgm)
+df1$AWAY_TEAM <- as.character(df1$AWAY_TEAM)
 
-linreg_fgm2 <-lm(FGM ~ GAME_ID1 + MATCHUP+LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ SHOT_RESULT+ CLOSEST_DEFENDER + CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST +PTS+player_name+ player_id+HOME_TEAM+AWAY_TEAM+WINNER, df2 )
-
+linreg_fgm <-lm(FGM ~ LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST+ player_id+ WINNER, df1 )
 
 summary(linreg_fgm)
+
+linreg_fgm2 <-lm(FGM ~ FINAL_MARGIN+SHOT_NUMBER+ PERIOD +  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ CLOSE_DEF_DIST+ player_id, df1 )
+
+
+summary(linreg_fgm2)
+
+
+
 
 ```
 
