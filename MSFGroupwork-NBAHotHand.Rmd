@@ -1,15 +1,15 @@
 ---
 title: "MSF_Groupwork-NBA_shotlog" 
 author: "Team_9"
-output: html_document  ---
-  title: "MSF_Groupwork-NBA_shotlog"
-author: "Team_9"
-output: html_document 
+output:
+  pdf_document: default
+  html_document: default
 ---
-  
-  ```{r setup, include=FALSE}
+
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+<<<<<<< HEAD
 Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
 Date submitted: 16/10/2016
 
@@ -22,6 +22,14 @@ The purpose of this report is to analyse a chosen dataset and to produce meaning
 The chosen dataset for this report is a summary of shots made during NBA season 2015-2016. The following areas of research have been selected:
 
 #TO BE UPDATED when we know final areas
+=======
+Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
+
+#Report structure 
+
+##Introduction
+I   What is your theme or research question?
+>>>>>>> e886b4bc6d1f0f9e0cddd3b631ecbf124c44b7bc
 a. Hot Hand Theory (Artemis)
 b. Defender Proximity Analysis (Reza)
 c. Shot Clock Pressure  (Alex)
@@ -32,32 +40,35 @@ g. Shooting Percentage (James)
 h. Fatigue Effect (Number of Rest Day)  
 i. Regression Analysis (Alex)
 
-###Theory
+##Theory
 I   What do you expect to find?
 a. 
 
-###Methods
+##Methods
 I   Describe the dataset:
   
-  Data on shots taken during the 2014-2015 season, who took the shot, where on the floor was the shot taken from, who was the nearest defender, how far away was the nearest defender, time on the shot clock, and much more. The column titles are generally self-explanatory.
+    Data on shots taken during the 2014-2015 season, who took the shot, where on the floor was the shot taken from, who was the nearest defender, how far away was the nearest defender, time on the shot clock, and much more. The column titles are generally self-explanatory.
 Useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, etc.
-Scraped from NBA's REST API.  ##TO BE UPDATED FURTHER
+Scraped from NBA's REST API.  It has 128,609 rows and 22 columns with 16 MB data size. ##TO BE UPDATED FURTHER
 
 I   Strengths
+    
+    The dataset comprise of comprehensive observational data to start to work with. 
 
 I   Limitations
+    The dataset consists only for 1 year NBA season with regular match (82 matches per team for both home and away matches). The playoff and other matches during the year is not included.
 
-###Analysis
+##Analysis
 
-## Installing libraries
+### Installing libraries
 
 ```{r}
-install.packages('reshape')
+#install.packages('reshape')
 
 ```
 
 
-## Calling libraries
+### Calling libraries
 ```{r}
 library(reshape)
 library(ggplot2)
@@ -193,6 +204,11 @@ t.test(df$FGM[df$PERIOD == 3], df$FGM[df$PERIOD == 4])
 t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
 
+# accuracy for Top 10 scoring players
+
+
+
+
 # accuracy for Shot Clock
 
   # dealing with missing values
@@ -206,6 +222,21 @@ for (i in 1:23){
   acc[i, "Accuracy"] <- (sum(df$SHOT_CLOCK > i & df$SHOT_CLOCK <= i+1 & df$SHOT_CLOCK != 99 & df$FGM == 1)/ sum(df$SHOT_CLOCK > i & df$SHOT_CLOCK <= i+1 & df$SHOT_CLOCK != 99))}
 
 ggplot(acc, aes(x = SECONDS_LEFT, y = Accuracy)) + geom_point() + geom_smooth()
+
+df[, "ACC_P_SEC"] <- as.numeric()
+
+#Assign accuracy per second to main dataframe
+for (i in 1:nrow(df)){
+  for (j in 1:23){
+    if (df$SHOT_CLOCK[i] >j & df$SHOT_CLOCK[i] <= j+1 & df$SHOT_CLOCK[i] != 99) df[i, "ACC_P_SEC"] <- acc[j, "Accuracy"]
+  }
+}
+
+
+cov(df$ACC_P_SEC, df$SHOT_CLOCK)
+cor.test(df$ACC_P_SEC, df$SHOT_CLOCK)
+
+
 
 
 ```
@@ -430,6 +461,8 @@ for(i in best_players_df$player_id) {
 }
 streak_per_player
 
+<<<<<<< HEAD
+=======
 #Create a data frame for the strikes of each one of the 10 players (cannot create a data frame including all of them, because each list has different length)
 player1_df <- data.frame('streaks' = streak_per_player[[1]])
 player2_df <- data.frame('streaks' = streak_per_player[[2]])
@@ -524,6 +557,7 @@ I   What would be the next steps?
 ---
 
 ```{r setup, include=FALSE}
+>>>>>>> a80106d2b5b1471987f10907dbb273f0ce271dd8
 knitr::opts_chunk$set(echo = TRUE)
 ```
 Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
