@@ -20,7 +20,7 @@ I   What is your theme or research question?
 a. Hot Hand Theory (Artemis)
 b. Defender Proximity Analysis (Reza)
 c. Shot Clock Pressure  (Alex)
-d. Close Game Effect - Small Margin affecting the scoring rate  
+d. Close Game Effect - Small Margin affecting the scoring rate 
 e. Home Advantage (Alex is working in this point)  
 f. Fatigue Effect (Quarter Heat Rate)  
 g. Shooting Percentage (James)
@@ -44,9 +44,16 @@ I   Limitations
 
 ###Analysis
 
-##Installing packages and calling libraries
+## Installing libraries
+
 ```{r}
 install.packages('reshape')
+
+```
+
+
+## Calling libraries
+```{r}
 library(reshape)
 library(ggplot2)
 
@@ -62,7 +69,9 @@ attach(df) #telling R that this is the dataframe we'll be working with (eliminat
 #we need to change the format of some of the columns to 'Character'
 
 ```
+
 ### Home Advantage analysis
+
 ```{r}
 # replacing W/L in column "W" with 1/0 (1 for win, 0 for loss)
 df[,"W"] <- as.character(df[,"W"])
@@ -128,6 +137,73 @@ ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_po
 #TO BE UPDATED  
 ```
 
+#Close Game Effect (Justin)
+
+```{r}
+# create new variable to seperate overtime
+
+df[, "OVERTIME"] <- as.numeric()
+
+for (i in 1:nrow(df)) {
+  if (df[i, "PERIOD"] >= 5) df[i, "OVERTIME"] <- 1
+  if (df[i, "PERIOD"] <= 4) df[i, "OVERTIME"] <- 0
+}
+
+# accuracy 
+acc_ot <- as.numeric
+acc_ot <- sum(df$OVERTIME == 1 & df$FGM == 1)/sum(df$OVERTIME == 1)
+
+acc_qrt1 <- as.numeric
+acc_qrt1 <- sum(df$PERIOD == 1 & df$FGM == 1)/sum(df$PERIOD == 1)
+
+acc_qrt2 <- as.numeric
+acc_qrt2 <- sum(df$PERIOD == 2 & df$FGM == 1)/sum(df$PERIOD == 2)
+
+acc_qrt3 <- as.numeric
+acc_qrt3 <- sum(df$PERIOD == 3 & df$FGM == 1)/sum(df$PERIOD == 3)
+
+acc_qrt4 <- as.numeric
+acc_qrt4 <- sum(df$PERIOD == 4 & df$FGM == 1)/sum(df$PERIOD == 4)
+
+acc_qrt5 <- as.numeric
+acc_qrt5 <- sum(df$PERIOD == 5 & df$FGM == 1)/sum(df$PERIOD == 5)
+
+acc_qrt6 <- as.numeric
+acc_qrt6 <- sum(df$PERIOD == 6 & df$FGM == 1)/sum(df$PERIOD == 6)
+
+acc_qrt7 <- as.numeric
+acc_qrt7 <- sum(df$PERIOD == 7 & df$FGM == 1)/sum(df$PERIOD == 7)
+
+acc_qrt1_4 <- as.numeric
+acc_qrt1_4 <- sum(df$PERIOD <= 4 & df$FGM == 1) / sum(df$PERIOD <= 4)
+
+t.test(df$FGM[df$PERIOD <= 4], df$FGM[df$PERIOD >= 5])
+t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 2])
+t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 3])
+t.test(df$FGM[df$PERIOD == 3], df$FGM[df$PERIOD == 4])
+t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
+t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
+
+# accuracy for Shot Clock
+
+  # dealing with missing values
+df[is.na(df)] <- 99
+
+acc <- data.frame()
+acc[, "SECONDS_LEFT"] <- c(1:23)
+
+#accuracy for every second
+for (i in 1:23){
+  acc[i, "Accuracy"] <- (sum(df$SHOT_CLOCK > i & df$SHOT_CLOCK <= i+1 & df$SHOT_CLOCK != 99 & df$FGM == 1)/ sum(df$SHOT_CLOCK > i & df$SHOT_CLOCK <= i+1 & df$SHOT_CLOCK != 99))}
+
+ggplot(acc, aes(x = SECONDS_LEFT, y = Accuracy)) + geom_point() + geom_smooth()
+
+
+```
+
+
+
+
 # Shooting Percentage Analysis (James)
 
 ```{r}
@@ -144,35 +220,54 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 
 ```
 
-# 
-
-```{r}
 # Find shooting percentage of each match
 
-# Trying to reshape...
+```{r}
+# Reshape the dataframe
 
-library(reshape)
-game <- cast(data = df, GAME_ID1 ~ SHOT_RESULT)
-View(game)
+game <- cast(data = df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION + player_name + W ~ FGM)
 
-# 
+# Field Goal Attempts
 
-Team <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
-FG_Percentage <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
-for(i in 21400001:21400908){
-  j = i - 21400001 +1 # 
-  game <- df[, df[, "GAME_ID1"] == i]
-  home <- game[, game["LOCATION"] == "H"]
-  home.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / nrow(home)
-  away <- game[, game["LOCATION"] == "A"]
-  away.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / away(home)
-  FG_Percentage[j] <- home.p
-  FG_Percentage[j + 1] = away.p
-  Team[j] = "H"
-  Team[j + 1] = "A"
+game[, "FGA"] <- NA
+for(i in 1:nrow(game)){
+  game[i, "FGA"] <- game[i, "1"] + game[i, "0"]
 }
 
+# Find Feild Goal Percentage of each indivudual player in that match
 
+game[, "FG.percentage"] <- NA 
+for (i in 1:nrow(game)){
+  game[i, "FG.percentage"] <- round(((game[i, "1"]/game[i, "FGA"]) * 100), digits = 2)
+}
+```
+
+# Impact of Super Star Players
+
+```{r}
+
+# Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
+
+super.star.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "klay thompson", "lamarcus aldridge") # players picked out
+super.star <- game[game$player_name %in% super.star.list, c("player_name", "W", "FGA", "FG.percentage")] # create a subset for these players
+
+ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W))
+
+# Replace "W" and "L" with 1 and 0 respectively, 
+super.star[, "W"] <- as.character(super.star[, "W"])
+for (i in 1:nrow(super.star)) {
+  if (super.star[i, "W"] == "W") super.star[i, "W"] <- 1
+  if (super.star[i, "W"] == "L") super.star[i, "W"] <- 0
+}
+super.star[, "W"] <- as.numeric(super.star[, "W"])
+
+# Correlation test
+t.test(super.star[, "W"], super.star[, "FGA"]) # this makes no sense...
+
+# Linear regression
+summary(lm(W ~ player_name + FGA, data = super.star))
+summary(lm(W ~ player_name + FG.percentage, data = super.star))
 
 ```
 
