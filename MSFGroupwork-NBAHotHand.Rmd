@@ -67,7 +67,7 @@ library(ggplot2)
 df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
 attach(df) #telling R that this is the dataframe we'll be working with (eliminating the need to use df$ for variables)
 
-df2<- read.csv("shot_logs1010.csv")
+df1<- read.csv("shot_logs1010.csv")
 
 #we need to change the format of some of the columns to 'Character'
 #get rid off 'attach()'
