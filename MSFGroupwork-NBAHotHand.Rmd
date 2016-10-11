@@ -10,12 +10,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 <<<<<<< HEAD
-Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
+Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
 Date submitted: 16/10/2016
 
 #Report structure 
 
-<<<<<<< HEAD
 ##Introduction
 ###What is your theme or research question?
     a. Hot Hand Theory (Artemis)
@@ -27,7 +26,7 @@ Date submitted: 16/10/2016
     g. Shooting Percentage (James)
     h. Fatigue Effect (Number of Rest Day)  
     i. Regression Analysis (Alex)
-=======
+
 ###Introduction/Summary
 
 The purpose of this report is to analyse a chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focus on analysis of a number of areas, demonstrate how the analysis has been conducted (including 'clean-up' of the data), discuss theory used, demonstrate and evaluate produced results. In addition, this report will highlight potential areas of future research. 
@@ -35,7 +34,6 @@ The purpose of this report is to analyse a chosen dataset and to produce meaning
 The chosen dataset for this report is a summary of shots made during NBA season 2015-2016. The following areas of research have been selected:
 
 ###TO BE UPDATED when we know final areas
-=======
 
 a. Hot Hand Theory (Artemis)
 b. Defender Proximity Analysis (Reza)
@@ -46,38 +44,42 @@ f. Fatigue Effect (Quarter Heat Rate)
 g. Shooting Percentage (James)
 h. Fatigue Effect (Number of Rest Day)  
 i. Regression Analysis (Alex)
->>>>>>> 55c718a381bf6c1f8659c54b51903d2b25b3ca28
 
 ##Theory
 ###What do you expect to find?
     a. 
 
 ##Methods
-I   Describe the dataset:
+###Dataset Description:
   
-    Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. This comprehensive data comprise of 128,609 rows and 22 columns with 16 MB data size with only several value in a column is missing (shot clock). The column titles are generally self-explanatory. It has the following data:  
+    Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. The data comprise of 128,609 rows and 22 columns with 16 MB data size with several value in some column is missing. The column titles are generally self-explanatory. It has the following data:   
     1.  Match ID  
     2.  Match date  
     3.  Which team plays as home and away  
     4.  Match result  
     5.  Final score difference  
-    6.  Every shots per game for each player  
+    6.  Every shots attempt per game for each player  
     7.  Shot result whether it is success or not  
-    8.  Shot attempt for 2 points or 3 points  
-    9.  What is the game clock  
-    10. How much time left for a shot (shot clock)  
-    11. Who took the shot  
-    12. Shot distance from basket  
-    13. Who was the nearest defender  
-    14. Distance from the nearest defender  
-    The dataset is useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, affect of home playing team, close game effect, shooting accuracy from best players, and defender distance effect on shooting accuracy. Data was taken from NBA's REST API provided by [Kaggle](https://www.kaggle.com/dansbecker/nba-shot-logs) and acquired at 30 September 2016.
+    8.  Type of shoot attempt (2 points or 3 points)  
+    9.  Quarter number data (1 to 4)  
+    10. Game clock for each quarter  
+    11. Time left for a shot (shot clock)  
+    12. Who took the shot  
+    13. Shot distance from basket  
+    14. Who was the nearest defender  
+    15. Distance from the nearest defender  
+  
+  The dataset is useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, affect of home playing team, close game effect, shooting accuracy from best players, and defender distance effect on shooting accuracy. Data was taken from NBA's REST API provided by [Kaggle](https://www.kaggle.com/dansbecker/nba-shot-logs) and acquired at 30 September 2016.  
 
-I   Strengths
+###Dataset Strengths  
     
-    The dataset comprise of comprehensive observational data to start to work with. 
+    The dataset comprise of comprehensive observational data to start to work with. In general, the dataset only have small percentage of missing value (0.19%) so we do not need to remove or assign many data points to default values. And since the column name is not ambiguous it really helps us to understand dataset from the beginning. 
 
-I   Limitations
-    The dataset consists only for 1 year NBA season with regular match (82 matches per team for both home and away matches). The playoff and other matches during the year is not included.
+###Dataset Limitations  
+  There are several constraints we need to mentioned in order to provide same understandings for this group work analysis as follows:  
+    1. The dataset consists only for 1 year NBA season (2014-2015)  
+    2. The dataset comprise only with regular match (82 matches per team for both home and away matches)  
+    3. The playoff and other matches during the year is not included
 
 ##Analysis
 
@@ -349,8 +351,91 @@ summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data= super.star))
 ```
 
 
-###Defender Proximity Analysis
+##Defender Proximity Analysis  
+###Closest Defender Distance vs Shot Accuracy
+This analysis wants to calculate whether is there any significant effect from closest defender distance from a shooter with the shot outcome. The hypothesis is the further a defender from the shooter, then it will be more likely to increase the chance of scoring. This is because the shooter is practically in "free" condition without any physical interference.  
+The steps to calculate this measurement are as follows:  
+  1. Assign shot result to determine whether the shot is succeed (1) or missed (0)  
+  2. Select distinct of **all** closest defender distance  
+  3. Count the occurence fOr every distance  
+  4. Calculate how many succesfull shot scored from every distance point  
+  5. Calculate accuracy by dividing successfull shot scored with distance occurence for every distance point  
+  
 ```{r}
+#Calculate accuracy against defender distance
+#Group the defender distance level
+
+distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
+head(distance_level)
+
+#Calculate how many times players scored in every defender distance
+for (i in 1:nrow(distance_level)){
+  distance_level[i, "SCORED"] <- sum(df[df[, "CLOSE_DEF_DIST"] == distance_level[i, "Var1"], "FGM"])
+}
+
+#Calculate shooting accuracy for each distance
+distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 4)
+
+#Plotting the result
+library(ggplot2)
+library(scales)
+ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
+  geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
+  scale_y_continuous(labels = percent) +
+  scale_x_discrete("Closest Defender Distance", breaks=c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24)) +
+  ylab("Shooting Accuracy (%)") +
+  ggtitle("Closest Defender Distance vs Shooting Accuracy")
+```
+  As it turns out, the accuracy rate of every player in the last season was somehow unaffected by the defender distance. if the defender distance range from 0 (zero) to 8 (eight) feet. Further explanations for each range are as follows:  
+  1. If the defender distance range from 0 (zero) to 8 (eight) feet, the accuracy rate for this distance range from 37.5% to 50%  
+  2. However, additional distance range does not automatically reflect to shooting accuracy enhancement. For defender distance more than 8 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from 35% to 60%.  
+  3. For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance). Since the data point do not show any pattern for this range, it can be concluded that these data points are just noise and can not be considered as a good indicator
+  
+```{r}
+#Calculate accuracy against defender distance
+#Group the defender distance level
+
+distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
+head(distance_level)
+
+#Calculate how many times players scored in every defender distance
+for (i in 1:nrow(distance_level)){
+  distance_level[i, "SCORED"] <- sum(df[df[, "CLOSE_DEF_DIST"] == distance_level[i, "Var1"], "FGM"])
+}
+
+#Calculate shooting accuracy for each distance
+distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 4)
+
+#Plotting the result
+library(ggplot2)
+library(scales)
+ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
+  geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
+  scale_y_continuous(labels = percent) +
+  scale_x_discrete("Closest Defender Distance", breaks=c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, Inf)) +
+  ylab("Shooting Accuracy (%)") +
+  ggtitle("Closest Defender Distance vs Shooting Accuracy")
+
+#----------------------------------------------------------------#
+
+#Calculate accuracy against shooting distance
+#Group the shooting distance level
+shooting_distance_level <- as.data.frame(table(factor(ShotDistance)))
+head(shooting_distance_level)
+
+#Calculate how many times players scored in every shooting distance
+for (i in 1:nrow(shooting_distance_level)){
+  shooting_distance_level[i, "SCORED"] <- sum(df[df[, "SHOT_DIST"] == shooting_distance_level[i, "Var1"], "FGM"])
+}
+
+#Calculate shooting accuracy for each distance
+shooting_distance_level$Accuracy <- round(shooting_distance_level$SCORED / shooting_distance_level$Freq, 2)
+
+#Plotting the result
+library(ggplot2)
+ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) +
+  geom_point(aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy))
+
 #Data Preparation
 #Change the value of shot result column to numeric
 df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
@@ -450,44 +535,8 @@ library(ggplot2)
 ggplot(data = top5_3points, aes(x = top5Players3)) +
   geom_bar(aes(x = top5Players3, y = top5Counter3), stat = "identity")
 
-#Calculate accuracy against defender distance
-#Group the defender distance level
-
-distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
-head(distance_level)
-
-#Calculate how many times players scored in every defender distance
-for (i in 1:nrow(distance_level)){
-  distance_level[i, "SCORED"] <- sum(df[df[, "CLOSE_DEF_DIST"] == distance_level[i, "Var1"], "FGM"])
-}
-
-#Calculate shooting accuracy for each distance
-distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 2)
-
-#Plotting the result
-library(ggplot2)
-ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
-  geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy))
-
 #----------------------------------------------------------------#
 
-#Calculate accuracy against shooting distance
-#Group the shooting distance level
-shooting_distance_level <- as.data.frame(table(factor(ShotDistance)))
-head(shooting_distance_level)
-
-#Calculate how many times players scored in every shooting distance
-for (i in 1:nrow(shooting_distance_level)){
-  shooting_distance_level[i, "SCORED"] <- sum(df[df[, "SHOT_DIST"] == shooting_distance_level[i, "Var1"], "FGM"])
-}
-
-#Calculate shooting accuracy for each distance
-shooting_distance_level$Accuracy <- round(shooting_distance_level$SCORED / shooting_distance_level$Freq, 2)
-
-#Plotting the result
-library(ggplot2)
-ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) +
-  geom_point(aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy))
 ```
 
 ```{r}
@@ -635,7 +684,7 @@ I   What would be the next steps?
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
+Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
  
 
 #Report structure 
