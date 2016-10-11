@@ -25,7 +25,7 @@ e. Home Advantage (Alex is working in this point)
 f. Fatigue Effect (Quarter Heat Rate)  
 g. Shooting Percentage (James)
 h. Fatigue Effect (Number of Rest Day)  
-i. 
+i. Regression Analysis (Alex)
 
 ###Theory
 I   What do you expect to find?
@@ -66,7 +66,11 @@ library(ggplot2)
 df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
 attach(df) #telling R that this is the dataframe we'll be working with (eliminating the need to use df$ for variables)
 
+df2<- read.csv("shot_logs1010.csv")
+
 #we need to change the format of some of the columns to 'Character'
+#get rid off 'attach()'
+#get rid off column X in shot logs1010 file
 
 ```
 
@@ -240,35 +244,54 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 
 ```
 
-# 
-
-```{r}
 # Find shooting percentage of each match
 
-# Trying to reshape...
+```{r}
+# Reshape the dataframe
 
-library(reshape)
-game <- cast(data = df, GAME_ID1 ~ SHOT_RESULT)
-View(game)
+game <- cast(data = df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION + player_name + W ~ FGM)
 
-# 
+# Field Goal Attempts
 
-Team <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
-FG_Percentage <- rep(NA, (lastGamesID - firstGamesID + 1) * 2)
-for(i in 21400001:21400908){
-  j = i - 21400001 +1 # 
-  game <- df[, df[, "GAME_ID1"] == i]
-  home <- game[, game["LOCATION"] == "H"]
-  home.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / nrow(home)
-  away <- game[, game["LOCATION"] == "A"]
-  away.p <- count(home[, home[, "SHOT_RESULT"] == 1]) / away(home)
-  FG_Percentage[j] <- home.p
-  FG_Percentage[j + 1] = away.p
-  Team[j] = "H"
-  Team[j + 1] = "A"
+game[, "FGA"] <- NA
+for(i in 1:nrow(game)){
+  game[i, "FGA"] <- game[i, "1"] + game[i, "0"]
 }
 
+# Find Feild Goal Percentage of each indivudual player in that match
 
+game[, "FG.percentage"] <- NA 
+for (i in 1:nrow(game)){
+  game[i, "FG.percentage"] <- round(((game[i, "1"]/game[i, "FGA"]) * 100), digits = 2)
+}
+```
+
+# Impact of Super Star Players
+
+```{r}
+
+# Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
+
+super.star.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "klay thompson", "lamarcus aldridge") # players picked out
+super.star <- game[game$player_name %in% super.star.list, c("player_name", "W", "FGA", "FG.percentage")] # create a subset for these players
+
+ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W))
+
+# Replace "W" and "L" with 1 and 0 respectively, 
+super.star[, "W"] <- as.character(super.star[, "W"])
+for (i in 1:nrow(super.star)) {
+  if (super.star[i, "W"] == "W") super.star[i, "W"] <- 1
+  if (super.star[i, "W"] == "L") super.star[i, "W"] <- 0
+}
+super.star[, "W"] <- as.numeric(super.star[, "W"])
+
+# Correlation test
+t.test(super.star[, "W"], super.star[, "FGA"]) # this makes no sense...
+
+# Linear regression
+summary(lm(W ~ player_name + FGA, data = super.star))
+summary(lm(W ~ player_name + FG.percentage, data = super.star))
 
 ```
 
@@ -389,24 +412,9 @@ head(pttsum2,10)
 ```{r}
 ###Hot Hand Theory
 
-#Set the value to character
-df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
-
-#Define 1 for baskets made and 0 for baskets missed. We need a vector to use it to our function below.
-shotresult <- c()
-for(i in 1:nrow(df)) {
-  if(shots[i] == 'missed') shotresult <- c(shotresult, 0)
-  else if(shots[i] == 'made') shotresult <- c(shotresult, 1)
-}
-
-shotresult
-
-#Set the value to numeric/integer
-df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
-df[ ,'SHOT_NUMBER'] <- as.integer(df[ , 'SHOT_NUMBER'])
-
+#From 'FGM' column we have that 1 represents a basket made and 0 represents a basket missed
 #Define the length of a shooting streak to be the number of consecutive baskets made until a miss occurs
-#Create a function that gives us a vector with the number of streaks
+#Create a function that gives us a vector with the number of total streaks(from all players and all games)
 number_of_streaks <- function(x) {
   x <- c(0, x, 0)
   which_zero <- which(x == 0)
@@ -414,26 +422,109 @@ number_of_streaks <- function(x) {
   streak
 }
 
-number_of_streaks(shotresult)
+number_of_streaks(df$FGM)
 
+#Set a new data frame for the 5 players with best performances(higher points)
+best_players_df <- head(pttsum2,5)
+
+#Create a function that gives us a vector of streaks for a specific player and game
 player_and_game <- function(x, y) {
    player <- df[df[ ,'player_id'] == x & df[ ,'GAME_ID1'] == y, 'FGM']
    number_of_streaks(as.vector(player))
 }
-player_and_game(202681, 21400681)
+#For the first player and game try:
+#player_and_game('202681', '21400681')
 
-ourtable <- head(pttsum2,10)
 
-list_per_player <- list()
+#Create a list that gives us the streaks of each player and game (5 best performances)
+streak_per_player <- list()
 j <- 1
-for(i in ourtable$player_id) {
-   streak_per_player[[j]] <- player_and_game(i, ourtable[ourtable[ ,'player_id'] == i, 'GAME_ID1'])
+for(i in best_players_df$player_id) {
+   streak_per_player[[j]] <- player_and_game(i, best_players_df[ourtable[ ,'player_id'] == i, 'GAME_ID1'])
    j <- j + 1
 }
 streak_per_player
 
+#Create a data frame for the strikes of each one of the 10 players (cannot create a data frame including all of them, because each list has different length)
+player1_df <- data.frame('streaks' = streak_per_player[[1]])
+player2_df <- data.frame('streaks' = streak_per_player[[2]])
+player3_df <- data.frame('streaks' = streak_per_player[[3]])
+player4_df <- data.frame('streaks' = streak_per_player[[4]])
+player5_df <- data.frame('streaks' = streak_per_player[[5]])
+
+#Show distribution for each player's streak lengths
+ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[1,'player_name'])
+ggplot(data = player2_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[2,'player_name'])
+ggplot(data = player3_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[3,'player_name'])
+ggplot(data = player4_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[4,'player_name'])
+ggplot(data = player5_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[5,'player_name'])
+
+#Create a boxplot for each player's streak lengths
+boxplot(player1_df$streaks) 
+summary(player1_df$streaks) #Check that boxplot is valid
+IQR(player1_df$streaks) #Check that boxplot is valid
+#The typical length of a streak is 0 (median = 0) - The Interquartile Range is 1 - Streak lengths of 3 and 6 are unusually high compared to the rest of the distribution
+boxplot(player2_df$streaks)
+summary(player2_df$streaks)
+IQR(player2_df$streaks)
+#The typical length of a streak is 1 (median = 1) - The Interquartile Range is 2 - There are some high streak lengths (max = 4)
+boxplot(player3_df$streaks)
+summary(player3_df$streaks)
+IQR(player3_df$streaks)
+#The typical length of a streak is 0 (median = 0) - The Interquartile Range is 0 - Streak lengths of 3 and 13 (!!!) are unusually high compared to the rest of the distribution
+boxplot(player4_df$streaks)
+summary(player4_df$streaks)
+IQR(player4_df$streaks)
+#The typical length of a streak is 1 (median = 1) - The Interquartile Range is 2 - Streak length of 6 is unusually high compared to the rest of the distribution
+boxplot(player5_df$streaks)
+summary(player5_df$streaks)
+IQR(player5_df$streaks)
+#The typical length of a streak is 1 (median = 1) - The Interquartile Range is 2 - There are some high streak lengths (max = 5)
+
+#We can see that the distribution of all players is right skewed and that all of them (especially player3) have some long shooting streaks. To prove/disprove the hot hand theory we need to examine the indipendence of the shots. If each shot that a player takes is independent of the next shot, then a missed/made shot will not affect the propability that the next shot will be missed/made. So, if consecutive shots are independent, we disprove hot hand theory, while if consecutive shots are dependent, we prove the hot hand theory.
+#Simulation - create a vector of shots('made', 'missed') for a sample shooter
+set.seed(23)
+shot_results <- c('made', 'missed')
+simul_shooter <- sample(shot_results, size = nrow(player1_df), replace = TRUE, prob = c(0.45, 0.55))
+simul_shooter
+
+#Set 1 for baskets made and 0 for baskets missed
+simul_shooter <- as.list(simul_shooter)
+for(i in 1:length(simul_shooter)) {
+   if(simul_shooter[i] == 'made') simul_shooter[i] <- 1
+   else if(simul_shooter[i] == 'missed') simul_shooter[i] <- 0
+}
+simul_shooter
+
+#Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
+streaks_of_simulshooter <- number_of_streaks(simul_shooter)
+simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
+
+#Comparisons of data between sample shooter and real shooters
+summary(streaks_of_simulshooter)
+summary(player1_df$streaks)
+
+#Compare barplots of sample shooter and real shooter1
+#If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
+ggplot(data = simulshooter_df, aes(x = streaks)) + geom_bar() 
+ggplot(data = player1_df, aes(x = streaks)) + geom_bar()
+#
+```
+
+```{r}
+#Regression Analysis
+colnames(df2)
+
+linreg_fgm <-lm(FGM ~ GAME_ID1 + MATCHUP+LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ SHOT_RESULT+ CLOSEST_DEFENDER + CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST +PTS+player_name+ player_id+HOME_TEAM+AWAY_TEAM+WINNER, df2 )
+
+summary(linreg_fgm)
+
+linreg_fgm2 <-lm(FGM ~ GAME_ID1 + MATCHUP+LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ SHOT_RESULT+ CLOSEST_DEFENDER + CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST +PTS+player_name+ player_id+HOME_TEAM+AWAY_TEAM+WINNER, df2 )
 
 
+summary(linreg_fgm)
+
+```
 
 
 ###Discussion
