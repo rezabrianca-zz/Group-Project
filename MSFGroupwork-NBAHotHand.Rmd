@@ -58,7 +58,7 @@ I   Limitations
 
 During the research the following librares have been installed:
 ```{r}
-#install.packages('reshape')
+install.packages('reshape')
 
 ```
 
@@ -125,17 +125,18 @@ df$BLANK<-"" #for some reason cast function does not work with last column in da
 ```{r}
 aa<- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
 
-table(aa$WINNER) [2]
+table(aa$WINNER) 
 #home wins:
 hh<-sum(aa$WINNER=="HOME")
 #Away wins:
 aw<-sum(aa$WINNER=="AWAY")
 #percentage of home team winning: 
 round(hh/(hh+aw),2)
+round(aw/(hh+aw),2)
 ```
 
 ```{r}
-head(aa)
+
 aa1<- cast(aa, HOME_TEAM  ~ WINNER); names(aa1)[1]<-"TEAM"
 aa1$WIN_PCT_HOME<-round(aa1$HOME/(aa1$HOME+aa1$AWAY),2)
 
@@ -151,11 +152,11 @@ head(aa3)
 aa3<- aa3[order(aa3$WIN_PCT_HOME,decreasing=TRUE),]
 rownames(aa4)<-NULL
 
-aa3$TEAM <- factor(aa5$TEAM, levels = aa5$TEAM[order(-aa5$WIN_PCT_HOME)])
+aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
 
 
 ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_point(aes( y= WIN_PCT_AWAY, col= "AWAY")) 
-#TO BE UPDATED  
+
 ```
 
 #Close Game Effect (Justin)
@@ -545,6 +546,9 @@ linreg_fgm2 <-lm(FGM ~ FINAL_MARGIN+SHOT_NUMBER+ PERIOD +  SHOT_CLOCK+  DRIBBLES
 
 
 summary(linreg_fgm2)
+
+
+
 
 ```
 
