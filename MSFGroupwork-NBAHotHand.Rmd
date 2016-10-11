@@ -10,13 +10,18 @@ output: html_document
   ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
-
+Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
+Date submitted: 16/10/2016
 
 #Report structure 
 
-###Introduction
-I   What is your theme or research question?
+###Introduction/Summary
+
+The purpose of this report is to analyse a chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focused on analysis of a number of areas, demonstrate how the analysis has been conducted, discusses theory used, demonstrate and evaluate produced results. In addition this report will highlight potential areas of future research. 
+
+The chosen dataset for this report is a summary of shots made during NBA season 2015-2016. The following areas of research have been selected:
+
+#TO BE UPDATED when we know final areas
 a. Hot Hand Theory (Artemis)
 b. Defender Proximity Analysis (Reza)
 c. Shot Clock Pressure  (Alex)
@@ -66,7 +71,7 @@ library(ggplot2)
 df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
 attach(df) #telling R that this is the dataframe we'll be working with (eliminating the need to use df$ for variables)
 
-df2<- read.csv("shot_logs1010.csv")
+df1<- read.csv("shot_logs1010.csv")
 
 #we need to change the format of some of the columns to 'Character'
 #get rid off 'attach()'
@@ -493,16 +498,19 @@ ggplot(data = player1_df, aes(x = streaks)) + geom_bar()
 
 ```{r}
 #Regression Analysis
-colnames(df2)
 
-linreg_fgm <-lm(FGM ~ GAME_ID1 + MATCHUP+LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ SHOT_RESULT+ CLOSEST_DEFENDER + CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST +PTS+player_name+ player_id+HOME_TEAM+AWAY_TEAM+WINNER, df2 )
+df1$GAME_CLOCK <-as.numeric(df1$GAME_CLOCK)
 
-summary(linreg_fgm)
+df1$AWAY_TEAM <- as.character(df1$AWAY_TEAM)
 
-linreg_fgm2 <-lm(FGM ~ GAME_ID1 + MATCHUP+LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ SHOT_RESULT+ CLOSEST_DEFENDER + CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST +PTS+player_name+ player_id+HOME_TEAM+AWAY_TEAM+WINNER, df2 )
-
+linreg_fgm <-lm(FGM ~ LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST+ player_id+ WINNER, df1 )
 
 summary(linreg_fgm)
+
+linreg_fgm2 <-lm(FGM ~ FINAL_MARGIN+SHOT_NUMBER+ PERIOD +  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ CLOSE_DEF_DIST+ player_id, df1 )
+
+
+summary(linreg_fgm2)
 
 ```
 
