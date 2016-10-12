@@ -142,12 +142,13 @@ for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$M
 
 restdays<-cast(df1, DATE+ HOME_TEAM + AWAY_TEAM + WINNER ~ FGM)
 
-for i in aa3$TEAM {
-  for (j in 1:nrow(restdays)) {aa3$DATES<- as.list(aa3$DATES)
-    if (restdays$HOME_TEAM[j]=="LAL" ) aa3$DATES[aa3$TEAM=="LAL"]<- c(aa3$DATES[aa3$TEAM=="LAL"], restdays$DATE[j])}
-}
+#this code is supposed to produce a list of dates when teams play at HOME in DATES column. for some reason it is not working.
 
-#| restdays$AWAY_TEAM[j])=="LAL"
+for (i in aa3$TEAM) {
+  for (j in 1:nrow(restdays)) {
+    aa3$DATES<- as.list(aa3$DATES)
+    if (restdays$HOME_TEAM[j]==i) aa3$DATES[aa3$TEAM==i]<- c(aa3$DATES[aa3$TEAM==i], restdays$DATE[j])}}
+
 
 ```
 
