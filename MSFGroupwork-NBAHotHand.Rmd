@@ -346,6 +346,8 @@ summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = super.star)) # Final margin ~ F
 summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = super.star)) # Final margin ~ FG% and location
 summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data= super.star)) 
 
+summary(lm(FINAL_MARGIN ~ LOCATION, data = super.star)) # Final margin ~ FGA and location
+
 ```
 
 
