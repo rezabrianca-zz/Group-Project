@@ -573,8 +573,22 @@ pttsum2<-ptssum[order(ptssum$totalpts,decreasing=TRUE),]
 head(pttsum2,10)
 ```
 
+##Hot Hand Theory
+###Introduction
+The analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is based on the hypothesis that a shooter with a hot hand will have shots that are not independent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
+
+###Methods
+The steps to approximate this question are as follows:
+1. Calculate streaks achieved in all games and from all players
+2. Categorize streaks per player and game, focusing on the 3 players with the top 3 performances in terms of points
+3. Extract zeros and keep only streaks above 1
+4. Visualise streaks' length distribution - barrplots
+5. Visualise streaks' length via boxplot
+6. Calculate the shooting percentage of the 3 players 
+7. Create a sample independent shooter setting as shooting percentage the real player's shooting percentage
+8. Compare distributions of sample and real player 
+
 ```{r}
-###Hot Hand Theory
 
 #From 'FGM' column we have that 1 represents a basket made and 0 represents a basket missed
 #Define the length of a shooting streak to be the number of consecutive baskets made until a miss occurs
@@ -615,35 +629,65 @@ for(i in 1:length(streak_per_player)) {
   streak_per_player[[i]] <- streak_per_player[[i]][streak_per_player[[i]] != 0]
 }
 streak_per_player
+```
+
+###Barplots
+```{r}
 
 #Create a data frame for the strikes of each one of the 3 players (cannot create a data frame including all of them, because each list has different length)
 player1_df <- data.frame('streaks' = streak_per_player[[1]])
 player2_df <- data.frame('streaks' = streak_per_player[[2]])
 player3_df <- data.frame('streaks' = streak_per_player[[3]])
-
-
+best_players_df
 #Show distribution for each player's streak lengths
-gg1 <- ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[1,'player_name'])
-gg2 <- ggplot(data = player2_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[2,'player_name'])
-gg3 <- ggplot(data = player3_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[3,'player_name'])
+gg1 <- ggplot(data = player1_df, aes(x = streaks)) + geom_bar(fill = 'brown') + labs(title = 'Kyrie Irnving')
+gg2 <- ggplot(data = player2_df, aes(x = streaks)) + geom_bar(fill = 'red') + labs(title = 'Mo Williams')
+gg3 <- ggplot(data = player3_df, aes(x = streaks)) + geom_bar(fill = 'blue') + labs(title = 'Klay Thompson')
 grid.arrange(gg1, gg2, gg3, ncol = 3)
+```
 
-#Create a boxplot for each player's streak lengths
+The distribution of the three players is unimodal and left skewed. There are shown some extremely long shooting streaks made(i.e. Klay Thompson with 13 shots in a row).  
+
+###Boxplots
+####Boxplot for Kyrie Irnving
+```{r}
+#Create a boxplot for each player's streak lengths 
 boxplot(player1_df$streaks) 
 summary(player1_df$streaks) #Check that boxplot is valid
 IQR(player1_df$streaks) #Check that boxplot is valid
-#The typical length of a streak is 1 (median = 1) - The Interquartile Range is 1 - Streak length of 6 is unusually high compared to the rest of the distribution
+```
+
+1. The typical length of a streak is 1 (median = 1)
+2. The Interquartile Range is 1 
+3. Streak length of 6 is unusually high compared to the rest of the distribution
+
+####Boxplot for Mo Williams
+```{r}
 boxplot(player2_df$streaks)
 summary(player2_df$streaks)
 IQR(player2_df$streaks)
-#The typical length of a streak is 1.5 (median = 1.5) - The Interquartile Range is 1 - Streak length of 4 is unusually high compared to the rest of the distribution
+```
+
+1. The typical length of a streak is 1.5 (median = 1.5)
+2. The Interquartile Range is 1
+3. Streak length of 4 is unusually high compared to the rest of the distribution
+
+####Boxplot for Klay Thompson
+```{r}
 boxplot(player3_df$streaks)
 summary(player3_df$streaks)
 IQR(player3_df$streaks)
-#The typical length of a streak is 8 (median = 8) - The Interquartile Range is 5 - There is a streak lengths of 13(!!!)
+```
 
-#We can see that the distribution of all players is right skewed and that all of them (especially player3) have some long shooting streaks. To prove/disprove the hot hand theory we need to examine the indipendence of the shots. If each shot that a player takes is independent of the next shot, then a missed/made shot will not affect the propability that the next shot will be missed/made. So, if consecutive shots are independent, we disprove hot hand theory, while if consecutive shots are dependent, we prove the hot hand theory.
+1. The typical length of a streak is 8 (median = 8)
+2. The Interquartile Range is 5
+3. Streak length of 13 is unsually high compared to the rest of the distribution
 
+### Plots Result
+
+The distribution of all players is left skewed and all of them (especially player3) have some long shooting streaks. In order to prove/disprove the hot hand theory,  the examination of the indipendence of the shots is required. If each shot that a player takes is independent of the next shot, then the player has the same probability of hitting each shot regardless of the previous shot. If each shot that a player takes is dependent of the next shot, then the probability of making the next shot is higher - hot hand. Sampling an independent shooter having the same shooting percentage with the real one and comparing his distribution with real player's distribution gives further insight in the specific aera. 
+
+```{r}
 #Find the shooting percentage for each of the 3 players
 j <- 1
 shooting_percentage <- list()
@@ -652,7 +696,10 @@ for(i in best_players_df$player_id) {
   j <- j+1
 }
 shooting_percentage
+```
 
+###Kyrie Irving
+```{r}
 ###PLAYER 1 VS SAMPLE PLAYER###
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(974)
@@ -684,9 +731,13 @@ summary(realshooter_df$streaks)
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
 g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Kyrie Irving')
-grid.arrange(g1, g2, ncol = 2)
-#We can see that streak length distributions are quite similar, so we can conclude that Kyrie Irving doesn't have a hot hand.
+grid.arrange(g1, g2, ncol = 2
+```
 
+The streak length distributions are quite similar, so we can conclude that Kyrie Irving doesn't have a hot hand.
+
+### Mo Williams
+```{r}
 ###PLAYER 2 VS SAMPLE PLAYER###
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(572)
@@ -719,8 +770,12 @@ summary(realshooter_df$streaks)
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
 g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Mo Williams')
 grid.arrange(g1, g2, ncol = 2)
+```
 
+The streak length distributions are quite similar, so we can conclude that Mo Williams doesn't have a hot hand.
 
+###Klay Thompson
+```{r}
 ###PLAYER 3 VS SAMPLE PLAYER###
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(57)
@@ -753,8 +808,10 @@ summary(realshooter_df$streaks)
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
 g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Klay Thompson')
 grid.arrange(g1, g2, ncol = 2)
-#Klay Thompson is an exception, had 13 streaks in a row! We cannot find a similar distribution in our sample, so we can assume that he is likely to have a hot hand. Fearther statistical analysis (logistic regression) should be done in order to reach a conclusion.
 ```
+
+Klay Thompson is an exception making 13 shots in a row. There is no such distribution in our sample, so it coulb be assumed that he is likely to have a hot hand. Further statistical analysis (logistic regression) should be done in order to reach a conclusion.
+
 
 ```{r}
 #Regression Analysis
