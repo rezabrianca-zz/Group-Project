@@ -705,7 +705,7 @@ grid.arrange(g1, g2, ncol = 2)
 ###PLAYER 3 VS SAMPLE PLAYER###
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(57)
-shot_results <- c('made', 'missed')
+shot_results <- c('made', 'missed')javascript:;
 simul_shooter <- sample(shot_results, size = length(streak_per_player[[3]]), replace = TRUE, prob = c(shooting_percentage[[3]], 1 - shooting_percentage[[3]]))
 simul_shooter
 
