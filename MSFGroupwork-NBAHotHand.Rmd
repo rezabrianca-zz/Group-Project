@@ -705,7 +705,7 @@ grid.arrange(g1, g2, ncol = 2)
 ###PLAYER 3 VS SAMPLE PLAYER###
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(57)
-shot_results <- c('made', 'missed')javascript:;
+shot_results <- c('made', 'missed')
 simul_shooter <- sample(shot_results, size = length(streak_per_player[[3]]), replace = TRUE, prob = c(shooting_percentage[[3]], 1 - shooting_percentage[[3]]))
 simul_shooter
 
@@ -734,11 +734,7 @@ summary(realshooter_df$streaks)
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
 g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Klay Thompson')
 grid.arrange(g1, g2, ncol = 2)
-#Klay Thompson is an exception, had 13 streaks in a row! We cannot find a similar distribution in our sample, so we can assume that he is likely to have a hot hand.
-
-best_players_df
-
-
+#Klay Thompson is an exception, had 13 streaks in a row! We cannot find a similar distribution in our sample, so we can assume that he is likely to have a hot hand. Fearther statistical analysis (logistic regression) should be done in order to reach a conclusion.
 ```
 
 ```{r}
