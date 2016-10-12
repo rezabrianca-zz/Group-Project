@@ -144,19 +144,21 @@ for (i in 1:nrow(df)) {
   if (W[i]=="L") df$WINNER[i] <- "HOME"  
   if (W[i]=="W") df$WINNER[i] <- "AWAY"}}
 
-df$BLANK<-"" #for some reason cast function does not work with last column in dataframe, so I have created this BLANK column as I need to use AWAY_TEAM colum (it was a last column). 
+
 ```
 
 ```{r}
 aa<- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
 
-table(aa$WINNER) [2]
+table(aa$WINNER)
 #home wins:
 hh<-sum(aa$WINNER=="HOME")
 #Away wins:
 aw<-sum(aa$WINNER=="AWAY")
 #percentage of home team winning: 
 round(hh/(hh+aw),2)
+round(aw/(hh+aw),2)
+
 ```
 
 ```{r}
@@ -176,11 +178,11 @@ head(aa3)
 aa3<- aa3[order(aa3$WIN_PCT_HOME,decreasing=TRUE),]
 rownames(aa4)<-NULL
 
-aa3$TEAM <- factor(aa5$TEAM, levels = aa5$TEAM[order(-aa5$WIN_PCT_HOME)])
+aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
 
 
 ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_point(aes( y= WIN_PCT_AWAY, col= "AWAY")) 
-#TO BE UPDATED  
+ 
 ```
 
 #Close Game Effect (Justin)
