@@ -650,10 +650,11 @@ for(i in best_players_df$player_id) {
 }
 shooting_percentage
 
+###PLAYER 1 VS SAMPLE PLAYER###
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
-set.seed(785)
+set.seed(21)
 shot_results <- c('made', 'missed')
-simul_shooter <- sample(shot_results, size = nrow(player1_df), replace = TRUE, prob = c(shooting_percentage[[1]], 1 - shooting_percentage[[1]]))
+simul_shooter <- sample(shot_results, size = length(streak_per_player[[1]]), replace = TRUE, prob = c(shooting_percentage[[1]], 1 - shooting_percentage[[1]]))
 simul_shooter
 
 
@@ -667,16 +668,81 @@ simul_shooter
 
 #Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
 streaks_of_simulshooter <- number_of_streaks(simul_shooter)
-simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
+
+#Remove zeros
+true_streaks_of_simulshooter <- list()
+j <- 1
+for(i in 1:length(streaks_of_simulshooter)) {
+  if(streaks_of_simulshooter[[i]] != 0){
+    true_streaks_of_simulshooter[j] <- streaks_of_simulshooter[[i]]
+    j <- j + 1
+  }
+}
+true_streaks_of_simulshooter
+true_streaks_of_simulshooter <- unlist(true_streaks_of_simulshooter)
+
+#Create a data frame 
+simulshooter_df <- data.frame('streaks' = true_streaks_of_simulshooter)
+simulshooter_df
 
 #Comparisons of data between sample shooter and real shooters
-summary(streaks_of_simulshooter)
+summary(simulshooter_df$streaks)
 summary(player1_df$streaks)
 
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 ggplot(data = simulshooter_df, aes(x = streaks)) + geom_bar() 
 ggplot(data = player1_df, aes(x = streaks)) + geom_bar()
+#We can see that streak length distributions are quite similar, so we can conclude that Kyrie Irving doesn't have a hot hand.
+
+###PLAYER 2 VS SAMPLE PLAYER###
+#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter2 
+set.seed(154)
+shot_results <- c('made', 'missed')
+simul_shooter <- sample(shot_results, size = length(streak_per_player[[2]]), replace = TRUE, prob = c(shooting_percentage[[2]], 1 - shooting_percentage[[2]]))
+simul_shooter
+
+
+#Set 1 for baskets made and 0 for baskets missed
+simul_shooter <- as.list(simul_shooter)
+for(i in 1:length(simul_shooter)) {
+   if(simul_shooter[i] == 'made') simul_shooter[i] <- 1
+   else if(simul_shooter[i] == 'missed') simul_shooter[i] <- 0
+}
+simul_shooter
+
+#Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
+streaks_of_simulshooter <- number_of_streaks(simul_shooter)
+
+#Remove zeros
+true_streaks_of_simulshooter <- list()
+j <- 1
+for(i in 1:length(streaks_of_simulshooter)) {
+  if(streaks_of_simulshooter[[i]] != 0){
+    true_streaks_of_simulshooter[j] <- streaks_of_simulshooter[[i]]
+    j <- j + 1
+  }
+}
+true_streaks_of_simulshooter
+true_streaks_of_simulshooter <- unlist(true_streaks_of_simulshooter)
+
+#Create a data frame 
+simulshooter_df <- data.frame('streaks' = true_streaks_of_simulshooter)
+
+#Comparisons of data between sample shooter and real shooters
+summary(simulshooter_df$streaks)
+summary(player2_df$streaks)
+
+#Compare barplots of sample shooter and real shooter1
+#If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
+ggplot(data = simulshooter_df, aes(x = streaks)) + geom_bar() 
+ggplot(data = player2_df, aes(x = streaks)) + geom_bar()
+#We can see that the sample shooter with the same shooting percentage can have extremely high streak lengths, which means that Mo Williams does not have a hot hand.
+
+###PLAYER 3###
+
+best_players_df
+#logistic regression
 
 ```
 
