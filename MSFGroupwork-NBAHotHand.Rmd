@@ -90,7 +90,7 @@ a.
 
 ```{r}
 #install.packages('reshape')
-
+#install.packages('gridExtra')
 ```
 
 
@@ -98,7 +98,7 @@ a.
 ```{r}
 library(reshape)
 library(ggplot2)
-
+library(gridExtra)
 ```
 
 
@@ -362,7 +362,7 @@ summary(lm(FINAL_MARGIN ~ LOCATION, data = super.star)) # Final margin ~ FGA and
 ##Defender Proximity Analysis  
 ###Closest Defender Distance vs Shot Accuracy
 ####Introduction  
-This analysis wants to calculate whether is there any significant effect from closest defender distance from a shooter with the shot outcome. The hypothesis is the further a defender from the shooter, then it will be more likely to increase the chance of scoring. This is because the shooter is practically in "free" condition without any physical interference.  
+This analysis wants to calculate whether there was any significant effect from closest defender distance from a shooter with the shot outcome. The hypothesis is the further a defender from the shooter, then it will be more likely to increase the chance of scoring. This is because the shooter is practically in "free" condition without any physical interference.  
 
 ###Methods  
 The steps to calculate this measurement are as follows:  
@@ -395,6 +395,7 @@ ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Ac
   scale_x_discrete("Closest Defender Distance", breaks = c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24)) +
   ylab("Shooting Accuracy (%)") +
   ggtitle("Closest Defender Distance vs Shooting Accuracy")
+
 ```
 ###Plot Result
   The explanation from the plot above are as follows:   
@@ -405,39 +406,57 @@ ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Ac
   5. If the defender distance range from 8 (eight) to 10 (ten) feet, the accuracy rate for this distance range from **37%** to **54%**
   6. For defender distance more than 10 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from **33%** to **60%**.  
   7. For the distance greater than 16 feet, the data varies between **0%** (no shots scored from that distance) to **100%** (certain successfull shot from that distance)  
-  
-###Findings  
-  As the analysis shown, the accuracy rate of every player in the last season was somehow **unaffected** by the defender distance. For defender distance starting from 0 (zero) to For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance). It is also shown from the dataset that only small attempt of shots were made from further defender distance affecting the accuracy calculation result. This was arguably because further defender distance did not implied shooter distance from the basket is nearer to improve the accuracy.  
 
-###Limitations  
-  As the dataset did not hold many data points for more than 20 feet defender distance, the accuracy analysis for these distances are limited. The analysis could be enhanced further by including additional season data. That way, there will be more data point for further distance and possibly would produce stronger pattern as the short distance shown.
+  Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:
 ```{r}
-#Calculate accuracy against defender distance
-#Group the defender distance level
+distance_level$Var1 <- as.numeric(distance_level$Var1)
+distance_level$Var1 <- distance_level$Var1 * 0.1 - 0.1
 
-distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
-head(distance_level)
-
-#Calculate how many times players scored in every defender distance
-for (i in 1:nrow(distance_level)){
-  distance_level[i, "SCORED"] <- sum(df[df[, "CLOSE_DEF_DIST"] == distance_level[i, "Var1"], "FGM"])
+distanceZerotoAll <- c()
+accuracyDist1 <- c()
+for (i in 0:nrow(distance_level)){
+  distanceZerotoAll <- c(distanceZerotoAll, distance_level[i, "Var1"])
+  accuracyDist1 <- c(accuracyDist1, distance_level[i, "Accuracy"])
 }
 
-#Calculate shooting accuracy for each distance
-distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 4)
+dfZerotoAll <- data.frame(distanceZerotoAll, accuracyDist1)
+cor.test(dfZerotoFive$distanceZerotoAll, dfZerotoFive$accuracyDist1)
+```
+###Correlation Test Result  
+  The correlation test result produced slightly high number of correlation between defender distance with shooting accuracy for all shot distance attempt in the last seasons's NBA (0.59). If the findings made only based on this number only, there would be obvious that further defender distance will **automatically** increase shooting accuracy. However, after the analysis went into smaller piece of distance, ther result will be difference. For example, for distance range between 0 (zero) to 8 feet, the correlation measurement will be as follows:  
+  
+```{r}
+distanceZerotoEight <- c()
+accuracyDist2 <- c()
+for (i in 0:80){
+  distanceZerotoEight <- c(distanceZerotoEight, distance_level[i, "Var1"])
+  accuracyDist2 <- c(accuracyDist2, distance_level[i, "Accuracy"])
+}
 
-#Plotting the result
-library(ggplot2)
-library(scales)
-ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
-  geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
-  scale_y_continuous(labels = percent) +
-  scale_x_discrete("Closest Defender Distance", breaks=c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, Inf)) +
-  ylab("Shooting Accuracy (%)") +
-  ggtitle("Closest Defender Distance vs Shooting Accuracy")
+dfZerotoEight <- data.frame(distanceZerotoEight, accuracyDist2)
+cor.test(dfZerotoEight$distanceZerotoEight, dfZerotoEight$accuracyDist2)
+```
+  Therefore, 
+  
+###Discussion  
+  As the analysis shown, the accuracy rate of every player in the last season was somehow **affected** by the defender distance for certain range. For defender distance starting from 0 (zero) to 8 (eight) feet For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance). It is also shown from the dataset that only small attempt of shots were made from further defender distance affecting the accuracy calculation result. This was arguably because further defender distance did not implied shooter distance from the basket is nearer to improve the accuracy.  
 
-#----------------------------------------------------------------#
+###Limitations  
+  As the dataset did not hold many data points for more than 20 feet defender distance, the accuracy analysis for these distances are limited. The analysis could be enhanced further by including additional season data. That way, there will be more data point for further distance and possibly would produce stronger pattern as the short distance shown.  
+  
+###Shooting Distance vs Shot Accuracy
+####Introduction  
+This analysis wants to calculate whether is there any significant effect from closest defender distance from a shooter with the shot outcome. The hypothesis is the further a defender from the shooter, then it will be more likely to increase the chance of scoring. This is because the shooter is practically in "free" condition without any physical interference.  
 
+###Methods  
+The steps to calculate this measurement are as follows:  
+  1. Assign shot result to determine whether the shot is succeed (1) or missed (0)  
+  2. Select distinct of **all** closest defender distance  
+  3. Count the occurence fOr every distance  
+  4. Calculate how many succesfull shot scored from every distance point  
+  5. Calculate accuracy by dividing successfull shot scored with distance occurence for every distance point  
+  6. Plot the result
+```{r}
 #Calculate accuracy against shooting distance
 #Group the shooting distance level
 shooting_distance_level <- as.data.frame(table(factor(ShotDistance)))
@@ -582,8 +601,8 @@ number_of_streaks <- function(x) {
 
 number_of_streaks(df$FGM)
 
-#Set a new data frame for the 5 players with best performances(higher points)
-best_players_df <- head(pttsum2,5)
+#Set a new data frame for the 3 players with best performances(higher points)
+best_players_df <- head(pttsum2,3)
 
 #Create a function that gives us a vector of streaks for a specific player and game
 player_and_game <- function(x, y) {
@@ -610,19 +629,17 @@ for(i in 1:length(streak_per_player)) {
 }
 streak_per_player
 
-#Create a data frame for the strikes of each one of the 10 players (cannot create a data frame including all of them, because each list has different length)
+#Create a data frame for the strikes of each one of the 3 players (cannot create a data frame including all of them, because each list has different length)
 player1_df <- data.frame('streaks' = streak_per_player[[1]])
 player2_df <- data.frame('streaks' = streak_per_player[[2]])
 player3_df <- data.frame('streaks' = streak_per_player[[3]])
-player4_df <- data.frame('streaks' = streak_per_player[[4]])
-player5_df <- data.frame('streaks' = streak_per_player[[5]])
+
 
 #Show distribution for each player's streak lengths
-ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[1,'player_name'])
-ggplot(data = player2_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[2,'player_name'])
-ggplot(data = player3_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[3,'player_name'])
-ggplot(data = player4_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[4,'player_name'])
-ggplot(data = player5_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[5,'player_name'])
+gg1 <- ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[1,'player_name'])
+gg2 <- ggplot(data = player2_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[2,'player_name'])
+gg3 <- ggplot(data = player3_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[3,'player_name'])
+grid.arrange(gg1, gg2, gg3, ncol = 3)
 
 #Create a boxplot for each player's streak lengths
 boxplot(player1_df$streaks) 
@@ -637,18 +654,10 @@ boxplot(player3_df$streaks)
 summary(player3_df$streaks)
 IQR(player3_df$streaks)
 #The typical length of a streak is 8 (median = 8) - The Interquartile Range is 5 - There is a streak lengths of 13(!!!)
-boxplot(player4_df$streaks)
-summary(player4_df$streaks)
-IQR(player4_df$streaks)
-#The typical length of a streak is 2 (median = 2) - The Interquartile Range is 1.5 - Streak length of 6 is unusually high compared to the rest of the distribution
-boxplot(player5_df$streaks)
-summary(player5_df$streaks)
-IQR(player5_df$streaks)
-#The typical length of a streak is 2 (median = 2) - The Interquartile Range is 2 - There are some high streak lengths (max = 5)
 
 #We can see that the distribution of all players is right skewed and that all of them (especially player3) have some long shooting streaks. To prove/disprove the hot hand theory we need to examine the indipendence of the shots. If each shot that a player takes is independent of the next shot, then a missed/made shot will not affect the propability that the next shot will be missed/made. So, if consecutive shots are independent, we disprove hot hand theory, while if consecutive shots are dependent, we prove the hot hand theory.
 
-#Find the shooting percentage for each of the 5 players
+#Find the shooting percentage for each of the 3 players
 j <- 1
 shooting_percentage <- list()
 for(i in best_players_df$player_id) {
@@ -659,7 +668,7 @@ shooting_percentage
 
 ###PLAYER 1 VS SAMPLE PLAYER###
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
-set.seed(21)
+set.seed(974)
 shot_results <- c('made', 'missed')
 simul_shooter <- sample(shot_results, size = length(streak_per_player[[1]]), replace = TRUE, prob = c(shooting_percentage[[1]], 1 - shooting_percentage[[1]]))
 simul_shooter
@@ -676,35 +685,24 @@ simul_shooter
 #Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
 streaks_of_simulshooter <- number_of_streaks(simul_shooter)
 
-#Remove zeros
-true_streaks_of_simulshooter <- list()
-j <- 1
-for(i in 1:length(streaks_of_simulshooter)) {
-  if(streaks_of_simulshooter[[i]] != 0){
-    true_streaks_of_simulshooter[j] <- streaks_of_simulshooter[[i]]
-    j <- j + 1
-  }
-}
-true_streaks_of_simulshooter
-true_streaks_of_simulshooter <- unlist(true_streaks_of_simulshooter)
-
-#Create a data frame 
-simulshooter_df <- data.frame('streaks' = true_streaks_of_simulshooter)
-simulshooter_df
+#Create new data frames for the graphs 
+simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
+realshooter_df <- data.frame('streaks' = streak_per_player[[1]])
 
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
-summary(player1_df$streaks)
+summary(realshooter_df$streaks)
 
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
-ggplot(data = simulshooter_df, aes(x = streaks)) + geom_bar() 
-ggplot(data = player1_df, aes(x = streaks)) + geom_bar()
+g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
+g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Kyrie Irving')
+grid.arrange(g1, g2, ncol = 2)
 #We can see that streak length distributions are quite similar, so we can conclude that Kyrie Irving doesn't have a hot hand.
 
 ###PLAYER 2 VS SAMPLE PLAYER###
-#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter2 
-set.seed(154)
+#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
+set.seed(572)
 shot_results <- c('made', 'missed')
 simul_shooter <- sample(shot_results, size = length(streak_per_player[[2]]), replace = TRUE, prob = c(shooting_percentage[[2]], 1 - shooting_percentage[[2]]))
 simul_shooter
@@ -721,36 +719,54 @@ simul_shooter
 #Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
 streaks_of_simulshooter <- number_of_streaks(simul_shooter)
 
-#Remove zeros
-true_streaks_of_simulshooter <- list()
-j <- 1
-for(i in 1:length(streaks_of_simulshooter)) {
-  if(streaks_of_simulshooter[[i]] != 0){
-    true_streaks_of_simulshooter[j] <- streaks_of_simulshooter[[i]]
-    j <- j + 1
-  }
-}
-true_streaks_of_simulshooter
-true_streaks_of_simulshooter <- unlist(true_streaks_of_simulshooter)
-
-#Create a data frame 
-simulshooter_df <- data.frame('streaks' = true_streaks_of_simulshooter)
+#Create new data frames for the graphs 
+simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
+realshooter_df <- data.frame('streaks' = streak_per_player[[2]])
 
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
-summary(player2_df$streaks)
+summary(realshooter_df$streaks)
 
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
-ggplot(data = simulshooter_df, aes(x = streaks)) + geom_bar() 
-ggplot(data = player2_df, aes(x = streaks)) + geom_bar()
-#We can see that the sample shooter with the same shooting percentage can have extremely high streak lengths, which means that Mo Williams does not have a hot hand.
+g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
+g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Mo Williams')
+grid.arrange(g1, g2, ncol = 2)
 
-###PLAYER 3###
 
-best_players_df
-#logistic regression
+###PLAYER 3 VS SAMPLE PLAYER###
+#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
+set.seed(57)
+shot_results <- c('made', 'missed')
+simul_shooter <- sample(shot_results, size = length(streak_per_player[[3]]), replace = TRUE, prob = c(shooting_percentage[[3]], 1 - shooting_percentage[[3]]))
+simul_shooter
 
+
+#Set 1 for baskets made and 0 for baskets missed
+simul_shooter <- as.list(simul_shooter)
+for(i in 1:length(simul_shooter)) {
+   if(simul_shooter[i] == 'made') simul_shooter[i] <- 1
+   else if(simul_shooter[i] == 'missed') simul_shooter[i] <- 0
+}
+simul_shooter
+
+#Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
+streaks_of_simulshooter <- number_of_streaks(simul_shooter)
+
+#Create new data frames for the graphs 
+simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
+realshooter_df <- data.frame('streaks' = streak_per_player[[3]])
+
+#Comparisons of data between sample shooter and real shooters
+summary(simulshooter_df$streaks)
+summary(realshooter_df$streaks)
+
+#Compare barplots of sample shooter and real shooter1
+#If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
+g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
+g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Klay Thompson')
+grid.arrange(g1, g2, ncol = 2)
+#Klay Thompson is an exception, had 13 streaks in a row! We cannot find a similar distribution in our sample, so we can assume that he is likely to have a hot hand. Fearther statistical analysis (logistic regression) should be done in order to reach a conclusion.
 ```
 
 ```{r}
