@@ -107,7 +107,7 @@ Scraped from NBA's REST API.  It has 128,609 rows and 22 columns with 16 MB data
 
 ```{r}
 #install.packages('reshape')
-
+#install.packages('gridExtra')
 ```
 
 
@@ -115,7 +115,7 @@ Scraped from NBA's REST API.  It has 128,609 rows and 22 columns with 16 MB data
 ```{r}
 library(reshape)
 library(ggplot2)
-
+library(gridExtra)
 ```
 
 
@@ -575,8 +575,8 @@ number_of_streaks <- function(x) {
 
 number_of_streaks(df$FGM)
 
-#Set a new data frame for the 5 players with best performances(higher points)
-best_players_df <- head(pttsum2,5)
+#Set a new data frame for the 3 players with best performances(higher points)
+best_players_df <- head(pttsum2,3)
 
 #Create a function that gives us a vector of streaks for a specific player and game
 player_and_game <- function(x, y) {
@@ -603,19 +603,17 @@ for(i in 1:length(streak_per_player)) {
 }
 streak_per_player
 
-#Create a data frame for the strikes of each one of the 10 players (cannot create a data frame including all of them, because each list has different length)
+#Create a data frame for the strikes of each one of the 3 players (cannot create a data frame including all of them, because each list has different length)
 player1_df <- data.frame('streaks' = streak_per_player[[1]])
 player2_df <- data.frame('streaks' = streak_per_player[[2]])
 player3_df <- data.frame('streaks' = streak_per_player[[3]])
-player4_df <- data.frame('streaks' = streak_per_player[[4]])
-player5_df <- data.frame('streaks' = streak_per_player[[5]])
+
 
 #Show distribution for each player's streak lengths
-ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[1,'player_name'])
-ggplot(data = player2_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[2,'player_name'])
-ggplot(data = player3_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[3,'player_name'])
-ggplot(data = player4_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[4,'player_name'])
-ggplot(data = player5_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[5,'player_name'])
+gg1 <- ggplot(data = player1_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[1,'player_name'])
+gg2 <- ggplot(data = player2_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[2,'player_name'])
+gg3 <- ggplot(data = player3_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + labs(title = ourtable[3,'player_name'])
+grid.arrange(gg1, gg2, gg3, ncol = 3)
 
 #Create a boxplot for each player's streak lengths
 boxplot(player1_df$streaks) 
@@ -630,18 +628,10 @@ boxplot(player3_df$streaks)
 summary(player3_df$streaks)
 IQR(player3_df$streaks)
 #The typical length of a streak is 8 (median = 8) - The Interquartile Range is 5 - There is a streak lengths of 13(!!!)
-boxplot(player4_df$streaks)
-summary(player4_df$streaks)
-IQR(player4_df$streaks)
-#The typical length of a streak is 2 (median = 2) - The Interquartile Range is 1.5 - Streak length of 6 is unusually high compared to the rest of the distribution
-boxplot(player5_df$streaks)
-summary(player5_df$streaks)
-IQR(player5_df$streaks)
-#The typical length of a streak is 2 (median = 2) - The Interquartile Range is 2 - There are some high streak lengths (max = 5)
 
 #We can see that the distribution of all players is right skewed and that all of them (especially player3) have some long shooting streaks. To prove/disprove the hot hand theory we need to examine the indipendence of the shots. If each shot that a player takes is independent of the next shot, then a missed/made shot will not affect the propability that the next shot will be missed/made. So, if consecutive shots are independent, we disprove hot hand theory, while if consecutive shots are dependent, we prove the hot hand theory.
 
-#Find the shooting percentage for each of the 5 players
+#Find the shooting percentage for each of the 3 players
 j <- 1
 shooting_percentage <- list()
 for(i in best_players_df$player_id) {
@@ -652,7 +642,7 @@ shooting_percentage
 
 ###PLAYER 1 VS SAMPLE PLAYER###
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
-set.seed(21)
+set.seed(974)
 shot_results <- c('made', 'missed')
 simul_shooter <- sample(shot_results, size = length(streak_per_player[[1]]), replace = TRUE, prob = c(shooting_percentage[[1]], 1 - shooting_percentage[[1]]))
 simul_shooter
@@ -669,35 +659,24 @@ simul_shooter
 #Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
 streaks_of_simulshooter <- number_of_streaks(simul_shooter)
 
-#Remove zeros
-true_streaks_of_simulshooter <- list()
-j <- 1
-for(i in 1:length(streaks_of_simulshooter)) {
-  if(streaks_of_simulshooter[[i]] != 0){
-    true_streaks_of_simulshooter[j] <- streaks_of_simulshooter[[i]]
-    j <- j + 1
-  }
-}
-true_streaks_of_simulshooter
-true_streaks_of_simulshooter <- unlist(true_streaks_of_simulshooter)
-
-#Create a data frame 
-simulshooter_df <- data.frame('streaks' = true_streaks_of_simulshooter)
-simulshooter_df
+#Create new data frames for the graphs 
+simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
+realshooter_df <- data.frame('streaks' = streak_per_player[[1]])
 
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
-summary(player1_df$streaks)
+summary(realshooter_df$streaks)
 
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
-ggplot(data = simulshooter_df, aes(x = streaks)) + geom_bar() 
-ggplot(data = player1_df, aes(x = streaks)) + geom_bar()
+g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
+g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Kyrie Irving')
+grid.arrange(g1, g2, ncol = 2)
 #We can see that streak length distributions are quite similar, so we can conclude that Kyrie Irving doesn't have a hot hand.
 
 ###PLAYER 2 VS SAMPLE PLAYER###
-#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter2 
-set.seed(154)
+#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
+set.seed(572)
 shot_results <- c('made', 'missed')
 simul_shooter <- sample(shot_results, size = length(streak_per_player[[2]]), replace = TRUE, prob = c(shooting_percentage[[2]], 1 - shooting_percentage[[2]]))
 simul_shooter
@@ -714,35 +693,57 @@ simul_shooter
 #Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
 streaks_of_simulshooter <- number_of_streaks(simul_shooter)
 
-#Remove zeros
-true_streaks_of_simulshooter <- list()
-j <- 1
-for(i in 1:length(streaks_of_simulshooter)) {
-  if(streaks_of_simulshooter[[i]] != 0){
-    true_streaks_of_simulshooter[j] <- streaks_of_simulshooter[[i]]
-    j <- j + 1
-  }
-}
-true_streaks_of_simulshooter
-true_streaks_of_simulshooter <- unlist(true_streaks_of_simulshooter)
-
-#Create a data frame 
-simulshooter_df <- data.frame('streaks' = true_streaks_of_simulshooter)
+#Create new data frames for the graphs 
+simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
+realshooter_df <- data.frame('streaks' = streak_per_player[[2]])
 
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
-summary(player2_df$streaks)
+summary(realshooter_df$streaks)
 
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
-ggplot(data = simulshooter_df, aes(x = streaks)) + geom_bar() 
-ggplot(data = player2_df, aes(x = streaks)) + geom_bar()
-#We can see that the sample shooter with the same shooting percentage can have extremely high streak lengths, which means that Mo Williams does not have a hot hand.
+g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
+g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Mo Williams')
+grid.arrange(g1, g2, ncol = 2)
 
-###PLAYER 3###
+
+###PLAYER 3 VS SAMPLE PLAYER###
+#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
+set.seed(57)
+shot_results <- c('made', 'missed')
+simul_shooter <- sample(shot_results, size = length(streak_per_player[[3]]), replace = TRUE, prob = c(shooting_percentage[[3]], 1 - shooting_percentage[[3]]))
+simul_shooter
+
+
+#Set 1 for baskets made and 0 for baskets missed
+simul_shooter <- as.list(simul_shooter)
+for(i in 1:length(simul_shooter)) {
+   if(simul_shooter[i] == 'made') simul_shooter[i] <- 1
+   else if(simul_shooter[i] == 'missed') simul_shooter[i] <- 0
+}
+simul_shooter
+
+#Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
+streaks_of_simulshooter <- number_of_streaks(simul_shooter)
+
+#Create new data frames for the graphs 
+simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
+realshooter_df <- data.frame('streaks' = streak_per_player[[3]])
+
+#Comparisons of data between sample shooter and real shooters
+summary(simulshooter_df$streaks)
+summary(realshooter_df$streaks)
+
+#Compare barplots of sample shooter and real shooter1
+#If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
+g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
+g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Klay Thompson')
+grid.arrange(g1, g2, ncol = 2)
+#Klay Thompson is an exception, had 13 streaks in a row! We cannot find a similar distribution in our sample, so we can assume that he is likely to have a hot hand.
 
 best_players_df
-#logistic regression
+
 
 ```
 
