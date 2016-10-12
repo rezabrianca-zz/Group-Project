@@ -10,12 +10,13 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 <<<<<<< HEAD
-Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
+Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
 Date submitted: 16/10/2016
 
 #Report structure 
 
 <<<<<<< HEAD
+=======
 ##Introduction
 ###What is your theme or research question?
     a. Hot Hand Theory (Artemis)
@@ -27,72 +28,90 @@ Date submitted: 16/10/2016
     g. Shooting Percentage (James)
     h. Fatigue Effect (Number of Rest Day)  
     i. Regression Analysis (Alex)
-=======
+
+>>>>>>> ffa732d5e8e2f51ae1f136d3572f36becfcf2f39
 ###Introduction/Summary
 
-The purpose of this report is to analyse a chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focus on analysis of a number of areas, demonstrate how the analysis has been conducted (including 'clean-up' of the data), discuss theory used, demonstrate and evaluate produced results. In addition, this report will highlight potential areas of future research. 
+The purpose of this report is to analyse a chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focused on analysis of a number of areas, demonstrate how the analysis has been conducted, discusses theory used, demonstrate and evaluate produced results. In addition this report will highlight potential areas of future research. 
 
 The chosen dataset for this report is a summary of shots made during NBA season 2015-2016. The following areas of research have been selected:
 
-###TO BE UPDATED when we know final areas
+<<<<<<< HEAD
+#TO BE UPDATED when we know final areas
 =======
+Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
+=======
+###TO BE UPDATED when we know final areas
+>>>>>>> ffa732d5e8e2f51ae1f136d3572f36becfcf2f39
 
+#Report structure 
+
+##Introduction
+I   What is your theme or research question?
+>>>>>>> e886b4bc6d1f0f9e0cddd3b631ecbf124c44b7bc
 a. Hot Hand Theory (Artemis)
 b. Defender Proximity Analysis (Reza)
 c. Shot Clock Pressure  (Alex)
-d. Late Game Effect - Tiredness affecting the accuracy
+d. Close Game Effect - Small Margin affecting the scoring rate 
 e. Home Advantage (Alex is working in this point)  
 f. Fatigue Effect (Quarter Heat Rate)  
 g. Shooting Percentage (James)
 h. Fatigue Effect (Number of Rest Day)  
 i. Regression Analysis (Alex)
->>>>>>> 55c718a381bf6c1f8659c54b51903d2b25b3ca28
 
 ##Theory
-###What do you expect to find?
-    a. 
+I   What do you expect to find?
+a. 
 
 ##Methods
-I   Describe the dataset:
+###Dataset Description:
   
-    Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. This comprehensive data comprise of 128,609 rows and 22 columns with 16 MB data size with only several value in a column is missing (shot clock). The column titles are generally self-explanatory. It has the following data:  
+<<<<<<< HEAD
+    Data on shots taken during the 2014-2015 season, who took the shot, where on the floor was the shot taken from, who was the nearest defender, how far away was the nearest defender, time on the shot clock, and much more. The column titles are generally self-explanatory.
+Useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, etc.
+Scraped from NBA's REST API.  It has 128,609 rows and 22 columns with 16 MB data size. ##TO BE UPDATED FURTHER
+=======
+    Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. The data comprise of 128,609 rows and 22 columns with 16 MB data size with several value in some column is missing. The column titles are generally self-explanatory. It has the following data:   
     1.  Match ID  
     2.  Match date  
     3.  Which team plays as home and away  
     4.  Match result  
     5.  Final score difference  
-    6.  Every shots per game for each player  
+    6.  Every shots attempt per game for each player  
     7.  Shot result whether it is success or not  
-    8.  Shot attempt for 2 points or 3 points  
-    9.  What is the game clock  
-    10. How much time left for a shot (shot clock)  
-    11. Who took the shot  
-    12. Shot distance from basket  
-    13. Who was the nearest defender  
-    14. Distance from the nearest defender  
-    The dataset is useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, affect of home playing team, close game effect, shooting accuracy from best players, and defender distance effect on shooting accuracy. Data was taken from NBA's REST API provided by [Kaggle](https://www.kaggle.com/dansbecker/nba-shot-logs) and acquired at 30 September 2016.
+    8.  Type of shoot attempt (2 points or 3 points)  
+    9.  Quarter number data (1 to 4)  
+    10. Game clock for each quarter  
+    11. Time left for a shot (shot clock)  
+    12. Who took the shot  
+    13. Shot distance from basket  
+    14. Who was the nearest defender  
+    15. Distance from the nearest defender  
+  
+  The dataset is useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, affect of home playing team, close game effect, shooting accuracy from best players, and defender distance effect on shooting accuracy. Data was taken from NBA's REST API provided by [Kaggle](https://www.kaggle.com/dansbecker/nba-shot-logs) and acquired at 30 September 2016.  
+>>>>>>> ffa732d5e8e2f51ae1f136d3572f36becfcf2f39
 
-I   Strengths
+###Dataset Strengths  
     
-    The dataset comprise of comprehensive observational data to start to work with. 
+    The dataset comprise of comprehensive observational data to start to work with. In general, the dataset only have small percentage of missing value (0.19%) so we do not need to remove or assign many data points to default values. And since the column name is not ambiguous it really helps us to understand dataset from the beginning. 
 
-I   Limitations
-    The dataset consists only for 1 year NBA season with regular match (82 matches per team for both home and away matches). The playoff and other matches during the year is not included.
+###Dataset Limitations  
+  There are several constraints we need to mentioned in order to provide same understandings for this group work analysis as follows:  
+    1. The dataset consists only for 1 year NBA season (2014-2015)  
+    2. The dataset comprise only with regular match (82 matches per team for both home and away matches)  
+    3. The playoff and other matches during the year is not included
 
 ##Analysis
 
 ### Installing libraries
 
-During the research the following librares have been installed:
 ```{r}
-install.packages('reshape')
+#install.packages('reshape')
 
 ```
 
 
 ### Calling libraries
-
-During the research the following libraries have been used:
 ```{r}
 library(reshape)
 library(ggplot2)
@@ -101,7 +120,6 @@ library(ggplot2)
 
 
 ###Data clean-up 
-This section describes exercises that had to be performed in order to prepare the raw data for the required analysis. 
 
 ```{r}
 df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
@@ -114,9 +132,6 @@ df1<- read.csv("shot_logs1010.csv")
 #get rid off column X in shot logs1010 file
 
 ```
-
-For convenience of using the report, the 'post data clean-up' csv file have been produced.
-**add 'latest'clean CSV file**
 
 ### Home Advantage analysis
 
@@ -152,18 +167,17 @@ df$BLANK<-"" #for some reason cast function does not work with last column in da
 ```{r}
 aa<- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
 
-table(aa$WINNER) 
+table(aa$WINNER) [2]
 #home wins:
 hh<-sum(aa$WINNER=="HOME")
 #Away wins:
 aw<-sum(aa$WINNER=="AWAY")
 #percentage of home team winning: 
 round(hh/(hh+aw),2)
-round(aw/(hh+aw),2)
 ```
 
 ```{r}
-
+head(aa)
 aa1<- cast(aa, HOME_TEAM  ~ WINNER); names(aa1)[1]<-"TEAM"
 aa1$WIN_PCT_HOME<-round(aa1$HOME/(aa1$HOME+aa1$AWAY),2)
 
@@ -179,20 +193,14 @@ head(aa3)
 aa3<- aa3[order(aa3$WIN_PCT_HOME,decreasing=TRUE),]
 rownames(aa4)<-NULL
 
-aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
+aa3$TEAM <- factor(aa5$TEAM, levels = aa5$TEAM[order(-aa5$WIN_PCT_HOME)])
 
 
 ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_point(aes( y= WIN_PCT_AWAY, col= "AWAY")) 
-
+#TO BE UPDATED  
 ```
 
-#Late Game Effect (Justin)
-
-In this part the analysis focuses on a couple of potential effects on the accuracy. Therefore, the starting point is to compare the overall accuracy per period as well as the accuracy in regular game time to the accuracy in overtime. Assumption was that the later the period the lower the accuracy in general, especially for overtime. The accuracy rates for the different quarters as well as for overtime can be seen in table X. 
-
-
-
-
+#Close Game Effect (Justin)
 
 ```{r}
 # create new variable to seperate overtime
@@ -241,6 +249,8 @@ t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
 
 
 # accuracy for Top 10 scoring players
+
+
 
 
 # accuracy for Shot Clock
@@ -351,8 +361,91 @@ summary(lm(FINAL_MARGIN ~ LOCATION, data = super.star)) # Final margin ~ FGA and
 ```
 
 
-###Defender Proximity Analysis
+##Defender Proximity Analysis  
+###Closest Defender Distance vs Shot Accuracy
+This analysis wants to calculate whether is there any significant effect from closest defender distance from a shooter with the shot outcome. The hypothesis is the further a defender from the shooter, then it will be more likely to increase the chance of scoring. This is because the shooter is practically in "free" condition without any physical interference.  
+The steps to calculate this measurement are as follows:  
+  1. Assign shot result to determine whether the shot is succeed (1) or missed (0)  
+  2. Select distinct of **all** closest defender distance  
+  3. Count the occurence fOr every distance  
+  4. Calculate how many succesfull shot scored from every distance point  
+  5. Calculate accuracy by dividing successfull shot scored with distance occurence for every distance point  
+  
 ```{r}
+#Calculate accuracy against defender distance
+#Group the defender distance level
+
+distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
+head(distance_level)
+
+#Calculate how many times players scored in every defender distance
+for (i in 1:nrow(distance_level)){
+  distance_level[i, "SCORED"] <- sum(df[df[, "CLOSE_DEF_DIST"] == distance_level[i, "Var1"], "FGM"])
+}
+
+#Calculate shooting accuracy for each distance
+distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 4)
+
+#Plotting the result
+library(ggplot2)
+library(scales)
+ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
+  geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
+  scale_y_continuous(labels = percent) +
+  scale_x_discrete("Closest Defender Distance", breaks=c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24)) +
+  ylab("Shooting Accuracy (%)") +
+  ggtitle("Closest Defender Distance vs Shooting Accuracy")
+```
+  As it turns out, the accuracy rate of every player in the last season was somehow unaffected by the defender distance. if the defender distance range from 0 (zero) to 8 (eight) feet. Further explanations for each range are as follows:  
+  1. If the defender distance range from 0 (zero) to 8 (eight) feet, the accuracy rate for this distance range from 37.5% to 50%  
+  2. However, additional distance range does not automatically reflect to shooting accuracy enhancement. For defender distance more than 8 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from 35% to 60%.  
+  3. For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance). Since the data point do not show any pattern for this range, it can be concluded that these data points are just noise and can not be considered as a good indicator
+  
+```{r}
+#Calculate accuracy against defender distance
+#Group the defender distance level
+
+distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
+head(distance_level)
+
+#Calculate how many times players scored in every defender distance
+for (i in 1:nrow(distance_level)){
+  distance_level[i, "SCORED"] <- sum(df[df[, "CLOSE_DEF_DIST"] == distance_level[i, "Var1"], "FGM"])
+}
+
+#Calculate shooting accuracy for each distance
+distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 4)
+
+#Plotting the result
+library(ggplot2)
+library(scales)
+ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
+  geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
+  scale_y_continuous(labels = percent) +
+  scale_x_discrete("Closest Defender Distance", breaks=c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, Inf)) +
+  ylab("Shooting Accuracy (%)") +
+  ggtitle("Closest Defender Distance vs Shooting Accuracy")
+
+#----------------------------------------------------------------#
+
+#Calculate accuracy against shooting distance
+#Group the shooting distance level
+shooting_distance_level <- as.data.frame(table(factor(ShotDistance)))
+head(shooting_distance_level)
+
+#Calculate how many times players scored in every shooting distance
+for (i in 1:nrow(shooting_distance_level)){
+  shooting_distance_level[i, "SCORED"] <- sum(df[df[, "SHOT_DIST"] == shooting_distance_level[i, "Var1"], "FGM"])
+}
+
+#Calculate shooting accuracy for each distance
+shooting_distance_level$Accuracy <- round(shooting_distance_level$SCORED / shooting_distance_level$Freq, 2)
+
+#Plotting the result
+library(ggplot2)
+ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) +
+  geom_point(aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy))
+
 #Data Preparation
 #Change the value of shot result column to numeric
 df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
@@ -380,7 +473,7 @@ for (z in 1:nrow(df)){
 valid_distance = data.frame(point_type, distance)
 
 #calculate correlation between defender distance and points made (2 or 3 points)
-cor.test(point_type, distance)
+cor(point_type, distance)
 
 #plot the diagram for this correlation
 library(ggplot2)
@@ -389,7 +482,7 @@ ggplot(data = valid_distance, aes(x = point_type, y = distance, group = point_ty
   ggtitle("Points Scored based on Distance from Defender")
 
 #calculate correlation between defender distance and shot result
-cor.test(df[, "SHOT_RESULT"], df[, "CLOSE_DEF_DIS"])
+cor(df[, "SHOT_RESULT"], df[, "CLOSE_DEF_DIS"])
 
 #--------------------------------------------------------------------------------#
 
@@ -452,44 +545,11 @@ library(ggplot2)
 ggplot(data = top5_3points, aes(x = top5Players3)) +
   geom_bar(aes(x = top5Players3, y = top5Counter3), stat = "identity")
 
-#Calculate accuracy against defender distance
-#Group the defender distance level
-
-distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
-head(distance_level)
-
-#Calculate how many times players scored in every defender distance
-for (i in 1:nrow(distance_level)){
-  distance_level[i, "SCORED"] <- sum(df[df[, "CLOSE_DEF_DIST"] == distance_level[i, "Var1"], "FGM"])
-}
-
-#Calculate shooting accuracy for each distance
-distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 2)
-
-#Plotting the result
-library(ggplot2)
-ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
-  geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy))
-
+<<<<<<< HEAD
+=======
 #----------------------------------------------------------------#
 
-#Calculate accuracy against shooting distance
-#Group the shooting distance level
-shooting_distance_level <- as.data.frame(table(factor(ShotDistance)))
-head(shooting_distance_level)
-
-#Calculate how many times players scored in every shooting distance
-for (i in 1:nrow(shooting_distance_level)){
-  shooting_distance_level[i, "SCORED"] <- sum(df[df[, "SHOT_DIST"] == shooting_distance_level[i, "Var1"], "FGM"])
-}
-
-#Calculate shooting accuracy for each distance
-shooting_distance_level$Accuracy <- round(shooting_distance_level$SCORED / shooting_distance_level$Freq, 2)
-
-#Plotting the result
-library(ggplot2)
-ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) +
-  geom_point(aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy))
+>>>>>>> ffa732d5e8e2f51ae1f136d3572f36becfcf2f39
 ```
 
 ```{r}
@@ -538,6 +598,13 @@ for(i in best_players_df$player_id) {
 }
 streak_per_player
 
+#Remove 0 from streak_per_player in order to show only the streaks achieved
+streak_per_player[[1]] <- streak_per_player[[1]][streak_per_player[[1]] != 0]
+for(i in 1:length(streak_per_player)) {
+  streak_per_player[[i]] <- streak_per_player[[i]][streak_per_player[[i]] != 0]
+}
+streak_per_player
+
 #Create a data frame for the strikes of each one of the 10 players (cannot create a data frame including all of them, because each list has different length)
 player1_df <- data.frame('streaks' = streak_per_player[[1]])
 player2_df <- data.frame('streaks' = streak_per_player[[2]])
@@ -556,30 +623,42 @@ ggplot(data = player5_df, aes(x = streaks)) + geom_histogram(binwidth = 1) + lab
 boxplot(player1_df$streaks) 
 summary(player1_df$streaks) #Check that boxplot is valid
 IQR(player1_df$streaks) #Check that boxplot is valid
-#The typical length of a streak is 0 (median = 0) - The Interquartile Range is 1 - Streak lengths of 3 and 6 are unusually high compared to the rest of the distribution
+#The typical length of a streak is 1 (median = 1) - The Interquartile Range is 1 - Streak length of 6 is unusually high compared to the rest of the distribution
 boxplot(player2_df$streaks)
 summary(player2_df$streaks)
 IQR(player2_df$streaks)
-#The typical length of a streak is 1 (median = 1) - The Interquartile Range is 2 - There are some high streak lengths (max = 4)
+#The typical length of a streak is 1.5 (median = 1.5) - The Interquartile Range is 1 - Streak length of 4 is unusually high compared to the rest of the distribution
 boxplot(player3_df$streaks)
 summary(player3_df$streaks)
 IQR(player3_df$streaks)
-#The typical length of a streak is 0 (median = 0) - The Interquartile Range is 0 - Streak lengths of 3 and 13 (!!!) are unusually high compared to the rest of the distribution
+#The typical length of a streak is 8 (median = 8) - The Interquartile Range is 5 - There is a streak lengths of 13(!!!)
 boxplot(player4_df$streaks)
 summary(player4_df$streaks)
 IQR(player4_df$streaks)
-#The typical length of a streak is 1 (median = 1) - The Interquartile Range is 2 - Streak length of 6 is unusually high compared to the rest of the distribution
+#The typical length of a streak is 2 (median = 2) - The Interquartile Range is 1.5 - Streak length of 6 is unusually high compared to the rest of the distribution
 boxplot(player5_df$streaks)
 summary(player5_df$streaks)
 IQR(player5_df$streaks)
-#The typical length of a streak is 1 (median = 1) - The Interquartile Range is 2 - There are some high streak lengths (max = 5)
+#The typical length of a streak is 2 (median = 2) - The Interquartile Range is 2 - There are some high streak lengths (max = 5)
 
 #We can see that the distribution of all players is right skewed and that all of them (especially player3) have some long shooting streaks. To prove/disprove the hot hand theory we need to examine the indipendence of the shots. If each shot that a player takes is independent of the next shot, then a missed/made shot will not affect the propability that the next shot will be missed/made. So, if consecutive shots are independent, we disprove hot hand theory, while if consecutive shots are dependent, we prove the hot hand theory.
-#Simulation - create a vector of shots('made', 'missed') for a sample shooter
-set.seed(23)
+
+#Find the shooting percentage for each of the 5 players
+j <- 1
+shooting_percentage <- list()
+for(i in best_players_df$player_id) {
+  shooting_percentage[j] <- sum(df[df[ ,'player_id'] == i, 'FGM'])/ nrow(df[df[ ,'player_id'] == i, ])
+  j <- j+1
+}
+shooting_percentage
+
+###PLAYER 1 VS SAMPLE PLAYER###
+#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
+set.seed(21)
 shot_results <- c('made', 'missed')
-simul_shooter <- sample(shot_results, size = nrow(player1_df), replace = TRUE, prob = c(0.45, 0.55))
+simul_shooter <- sample(shot_results, size = length(streak_per_player[[1]]), replace = TRUE, prob = c(shooting_percentage[[1]], 1 - shooting_percentage[[1]]))
 simul_shooter
+
 
 #Set 1 for baskets made and 0 for baskets missed
 simul_shooter <- as.list(simul_shooter)
@@ -591,17 +670,82 @@ simul_shooter
 
 #Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
 streaks_of_simulshooter <- number_of_streaks(simul_shooter)
-simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
+
+#Remove zeros
+true_streaks_of_simulshooter <- list()
+j <- 1
+for(i in 1:length(streaks_of_simulshooter)) {
+  if(streaks_of_simulshooter[[i]] != 0){
+    true_streaks_of_simulshooter[j] <- streaks_of_simulshooter[[i]]
+    j <- j + 1
+  }
+}
+true_streaks_of_simulshooter
+true_streaks_of_simulshooter <- unlist(true_streaks_of_simulshooter)
+
+#Create a data frame 
+simulshooter_df <- data.frame('streaks' = true_streaks_of_simulshooter)
+simulshooter_df
 
 #Comparisons of data between sample shooter and real shooters
-summary(streaks_of_simulshooter)
+summary(simulshooter_df$streaks)
 summary(player1_df$streaks)
 
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 ggplot(data = simulshooter_df, aes(x = streaks)) + geom_bar() 
 ggplot(data = player1_df, aes(x = streaks)) + geom_bar()
-#
+#We can see that streak length distributions are quite similar, so we can conclude that Kyrie Irving doesn't have a hot hand.
+
+###PLAYER 2 VS SAMPLE PLAYER###
+#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter2 
+set.seed(154)
+shot_results <- c('made', 'missed')
+simul_shooter <- sample(shot_results, size = length(streak_per_player[[2]]), replace = TRUE, prob = c(shooting_percentage[[2]], 1 - shooting_percentage[[2]]))
+simul_shooter
+
+
+#Set 1 for baskets made and 0 for baskets missed
+simul_shooter <- as.list(simul_shooter)
+for(i in 1:length(simul_shooter)) {
+   if(simul_shooter[i] == 'made') simul_shooter[i] <- 1
+   else if(simul_shooter[i] == 'missed') simul_shooter[i] <- 0
+}
+simul_shooter
+
+#Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
+streaks_of_simulshooter <- number_of_streaks(simul_shooter)
+
+#Remove zeros
+true_streaks_of_simulshooter <- list()
+j <- 1
+for(i in 1:length(streaks_of_simulshooter)) {
+  if(streaks_of_simulshooter[[i]] != 0){
+    true_streaks_of_simulshooter[j] <- streaks_of_simulshooter[[i]]
+    j <- j + 1
+  }
+}
+true_streaks_of_simulshooter
+true_streaks_of_simulshooter <- unlist(true_streaks_of_simulshooter)
+
+#Create a data frame 
+simulshooter_df <- data.frame('streaks' = true_streaks_of_simulshooter)
+
+#Comparisons of data between sample shooter and real shooters
+summary(simulshooter_df$streaks)
+summary(player2_df$streaks)
+
+#Compare barplots of sample shooter and real shooter1
+#If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
+ggplot(data = simulshooter_df, aes(x = streaks)) + geom_bar() 
+ggplot(data = player2_df, aes(x = streaks)) + geom_bar()
+#We can see that the sample shooter with the same shooting percentage can have extremely high streak lengths, which means that Mo Williams does not have a hot hand.
+
+###PLAYER 3###
+
+best_players_df
+#logistic regression
+
 ```
 
 ```{r}
@@ -620,9 +764,6 @@ linreg_fgm2 <-lm(FGM ~ FINAL_MARGIN+SHOT_NUMBER+ PERIOD +  SHOT_CLOCK+  DRIBBLES
 
 summary(linreg_fgm2)
 
-
-
-
 ```
 
 
@@ -635,9 +776,10 @@ I   What would be the next steps?
 ---
 
 ```{r setup, include=FALSE}
+>>>>>>> a80106d2b5b1471987f10907dbb273f0ce271dd8
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
+Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
  
 
 #Report structure 
