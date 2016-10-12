@@ -9,14 +9,11 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-<<<<<<< HEAD
 Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
 Date submitted: 16/10/2016
 
 #Report structure 
 
-<<<<<<< HEAD
-=======
 ##Introduction
 ###What is your theme or research question?
     a. Hot Hand Theory (Artemis)
@@ -29,26 +26,16 @@ Date submitted: 16/10/2016
     h. Fatigue Effect (Number of Rest Day)  
     i. Regression Analysis (Alex)
 
->>>>>>> ffa732d5e8e2f51ae1f136d3572f36becfcf2f39
 ###Introduction/Summary
 
 The purpose of this report is to analyse a chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focused on analysis of a number of areas, demonstrate how the analysis has been conducted, discusses theory used, demonstrate and evaluate produced results. In addition this report will highlight potential areas of future research. 
 
 The chosen dataset for this report is a summary of shots made during NBA season 2015-2016. The following areas of research have been selected:
 
-<<<<<<< HEAD
-#TO BE UPDATED when we know final areas
-=======
-Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Widodo  
-=======
-###TO BE UPDATED when we know final areas
->>>>>>> ffa732d5e8e2f51ae1f136d3572f36becfcf2f39
-
 #Report structure 
 
 ##Introduction
 I   What is your theme or research question?
->>>>>>> e886b4bc6d1f0f9e0cddd3b631ecbf124c44b7bc
 a. Hot Hand Theory (Artemis)
 b. Defender Proximity Analysis (Reza)
 c. Shot Clock Pressure  (Alex)
@@ -64,13 +51,8 @@ I   What do you expect to find?
 a. 
 
 ##Methods
-###Dataset Description:
+###Dataset Description:  
   
-<<<<<<< HEAD
-    Data on shots taken during the 2014-2015 season, who took the shot, where on the floor was the shot taken from, who was the nearest defender, how far away was the nearest defender, time on the shot clock, and much more. The column titles are generally self-explanatory.
-Useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, etc.
-Scraped from NBA's REST API.  It has 128,609 rows and 22 columns with 16 MB data size. ##TO BE UPDATED FURTHER
-=======
     Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. The data comprise of 128,609 rows and 22 columns with 16 MB data size with several value in some column is missing. The column titles are generally self-explanatory. It has the following data:   
     1.  Match ID  
     2.  Match date  
@@ -100,6 +82,7 @@ Scraped from NBA's REST API.  It has 128,609 rows and 22 columns with 16 MB data
     1. The dataset consists only for 1 year NBA season (2014-2015)  
     2. The dataset comprise only with regular match (82 matches per team for both home and away matches)  
     3. The playoff and other matches during the year is not included
+    4. The dataset does not include free throw shot and results
 
 ##Analysis
 
@@ -363,18 +346,20 @@ summary(lm(FINAL_MARGIN ~ LOCATION, data = super.star)) # Final margin ~ FGA and
 
 ##Defender Proximity Analysis  
 ###Closest Defender Distance vs Shot Accuracy
+####Introduction  
 This analysis wants to calculate whether is there any significant effect from closest defender distance from a shooter with the shot outcome. The hypothesis is the further a defender from the shooter, then it will be more likely to increase the chance of scoring. This is because the shooter is practically in "free" condition without any physical interference.  
+
+###Methods  
 The steps to calculate this measurement are as follows:  
   1. Assign shot result to determine whether the shot is succeed (1) or missed (0)  
   2. Select distinct of **all** closest defender distance  
   3. Count the occurence fOr every distance  
   4. Calculate how many succesfull shot scored from every distance point  
   5. Calculate accuracy by dividing successfull shot scored with distance occurence for every distance point  
-  
+  6. Plot the result
 ```{r}
 #Calculate accuracy against defender distance
 #Group the defender distance level
-
 distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
 head(distance_level)
 
@@ -391,16 +376,26 @@ library(ggplot2)
 library(scales)
 ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
   geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
-  scale_y_continuous(labels = percent) +
-  scale_x_discrete("Closest Defender Distance", breaks=c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24)) +
+  scale_y_continuous(labels = percent, breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0), limits = c(0, 1)) +
+  scale_x_discrete("Closest Defender Distance", breaks = c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24)) +
   ylab("Shooting Accuracy (%)") +
   ggtitle("Closest Defender Distance vs Shooting Accuracy")
 ```
-  As it turns out, the accuracy rate of every player in the last season was somehow unaffected by the defender distance. if the defender distance range from 0 (zero) to 8 (eight) feet. Further explanations for each range are as follows:  
-  1. If the defender distance range from 0 (zero) to 8 (eight) feet, the accuracy rate for this distance range from 37.5% to 50%  
-  2. However, additional distance range does not automatically reflect to shooting accuracy enhancement. For defender distance more than 8 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from 35% to 60%.  
-  3. For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance). Since the data point do not show any pattern for this range, it can be concluded that these data points are just noise and can not be considered as a good indicator
+###Plot Result
+  The explanation from the plot above are as follows:   
+  1. If the defender stands really close to the shooter (0 to 2 feet), the accuracy varied between **42%** to **50%**  
+  2. If the defender distance range from 2 (two) to 4 (four) feet, the accuracy rate for this distance range from **44%** to **49%**  
+  3. If the defender distance range from 4 (four) to 6 (six) feet, the accuracy rate for this distance range from **41%** to **46%**
+  4. If the defender distance range from 6 (six) to 8 (eight) feet, the accuracy rate for this distance range from **37%** to **42%**
+  5. If the defender distance range from 8 (eight) to 10 (ten) feet, the accuracy rate for this distance range from **37%** to **54%**
+  6. For defender distance more than 10 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from **33%** to **60%**.  
+  7. For the distance greater than 16 feet, the data varies between **0%** (no shots scored from that distance) to **100%** (certain successfull shot from that distance)  
   
+###Findings  
+  As the analysis shown, the accuracy rate of every player in the last season was somehow **unaffected** by the defender distance. For defender distance starting from 0 (zero) to For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance). It is also shown from the dataset that only small attempt of shots were made from further defender distance affecting the accuracy calculation result. This was arguably because further defender distance did not implied shooter distance from the basket is nearer to improve the accuracy.  
+
+###Limitations  
+  As the dataset did not hold many data points for more than 20 feet defender distance, the accuracy analysis for these distances are limited. The analysis could be enhanced further by including additional season data. That way, there will be more data point for further distance and possibly would produce stronger pattern as the short distance shown.
 ```{r}
 #Calculate accuracy against defender distance
 #Group the defender distance level
@@ -545,11 +540,6 @@ library(ggplot2)
 ggplot(data = top5_3points, aes(x = top5Players3)) +
   geom_bar(aes(x = top5Players3, y = top5Counter3), stat = "identity")
 
-<<<<<<< HEAD
-=======
-#----------------------------------------------------------------#
-
->>>>>>> ffa732d5e8e2f51ae1f136d3572f36becfcf2f39
 ```
 
 ```{r}
@@ -767,16 +757,16 @@ summary(linreg_fgm2)
 ```
 
 
-###Discussion
-I   What results did you find?
+##Discussion  
+###What results did you find?  
 
-I   Why is this interesting?
+###Why is this interesting?
 
-I   What would be the next steps?
+###What would be the next steps?
 ---
 
 ```{r setup, include=FALSE}
->>>>>>> a80106d2b5b1471987f10907dbb273f0ce271dd8
+
 knitr::opts_chunk$set(echo = TRUE)
 ```
 Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
