@@ -110,14 +110,6 @@ attach(df) #telling R that this is the dataframe we'll be working with (eliminat
 
 df1<- read.csv("shot_logs1010.csv")
 
-#we need to change the format of some of the columns to 'Character'
-#get rid off 'attach()'
-#get rid off column X in shot logs1010 file
-
-```
-
-### Home Advantage analysis
-
 ```{r}
 # replacing W/L in column "W" with 1/0 (1 for win, 0 for loss)
 df[,"W"] <- as.character(df[,"W"])
@@ -144,8 +136,29 @@ for (i in 1:nrow(df)) {
   if (W[i]=="L") df$WINNER[i] <- "HOME"  
   if (W[i]=="W") df$WINNER[i] <- "AWAY"}}
 
+#adding a column 'DATE'
+df1[,"MATCHUP"] <- as.character(df1[,"MATCHUP"])
+for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$MATCHUP[i]," -"))[1], format= "%B %d, %Y"))
+
+restdays<-cast(df1, DATE+ HOME_TEAM + AWAY_TEAM + WINNER ~ FGM)
+```
+
+
+#we need to change the format of some of the columns to 'Character'
+#get rid off 'attach()'
+#get rid off column X in shot logs1010 file
 
 ```
+
+## Home Advantage analysis
+###Introduction
+
+This area of anlysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
+
+Literature review demonstrates that 
+
+The NULL Hypothesis is: 
+
 
 ```{r}
 aa<- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
@@ -724,11 +737,7 @@ summary(realshooter_df$streaks)
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
 g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Klay Thompson')
 grid.arrange(g1, g2, ncol = 2)
-#Klay Thompson is an exception, had 13 streaks in a row! We cannot find a similar distribution in our sample, so we can assume that he is likely to have a hot hand.
-
-best_players_df
-
-
+#Klay Thompson is an exception, had 13 streaks in a row! We cannot find a similar distribution in our sample, so we can assume that he is likely to have a hot hand. Fearther statistical analysis (logistic regression) should be done in order to reach a conclusion.
 ```
 
 ```{r}
