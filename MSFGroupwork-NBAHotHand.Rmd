@@ -110,7 +110,6 @@ attach(df) #telling R that this is the dataframe we'll be working with (eliminat
 
 df1<- read.csv("shot_logs1010.csv")
 
-```{r}
 # replacing W/L in column "W" with 1/0 (1 for win, 0 for loss)
 df[,"W"] <- as.character(df[,"W"])
 
@@ -203,42 +202,25 @@ ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_po
 ```{r}
 # create new variable to seperate overtime
 
-df[, "OVERTIME"] <- as.numeric()
+df[, "overtime"] <- as.numeric()
 
 for (i in 1:nrow(df)) {
-  if (df[i, "PERIOD"] >= 5) df[i, "OVERTIME"] <- 1
-  if (df[i, "PERIOD"] <= 4) df[i, "OVERTIME"] <- 0
+  if (df[i, "PERIOD"] >= 5) df[i, "overtime"] <- 1
+  if (df[i, "PERIOD"] <= 4) df[i, "overtime"] <- 0
 }
 
 # accuracy 
-acc_ot <- as.numeric
-acc_ot <- sum(df$OVERTIME == 1 & df$FGM == 1)/sum(df$OVERTIME == 1)
 
-acc_qrt1 <- as.numeric
-acc_qrt1 <- sum(df$PERIOD == 1 & df$FGM == 1)/sum(df$PERIOD == 1)
+df.acc <- data.frame()
+  
+for (i in (1:7)){
+  df.acc[i, "accuracy"] <- sum(df$PERIOD == i & df$FGM == 1)/sum(df$PERIOD == i)
+  df.acc[i, "period"] <- i
+  if (df.acc$period[i] <= 4) df.acc[i, "overtime"] <- 0
+  if (df.acc$period[i] >= 5) df.acc[i, "overtime"] <- 1
+}
 
-acc_qrt2 <- as.numeric
-acc_qrt2 <- sum(df$PERIOD == 2 & df$FGM == 1)/sum(df$PERIOD == 2)
 
-acc_qrt3 <- as.numeric
-acc_qrt3 <- sum(df$PERIOD == 3 & df$FGM == 1)/sum(df$PERIOD == 3)
-
-acc_qrt4 <- as.numeric
-acc_qrt4 <- sum(df$PERIOD == 4 & df$FGM == 1)/sum(df$PERIOD == 4)
-
-acc_qrt5 <- as.numeric
-acc_qrt5 <- sum(df$PERIOD == 5 & df$FGM == 1)/sum(df$PERIOD == 5)
-
-acc_qrt6 <- as.numeric
-acc_qrt6 <- sum(df$PERIOD == 6 & df$FGM == 1)/sum(df$PERIOD == 6)
-
-acc_qrt7 <- as.numeric
-acc_qrt7 <- sum(df$PERIOD == 7 & df$FGM == 1)/sum(df$PERIOD == 7)
-
-acc_qrt1_4 <- as.numeric
-acc_qrt1_4 <- sum(df$PERIOD <= 4 & df$FGM == 1) / sum(df$PERIOD <= 4)
-
-t.test(df$FGM[df$PERIOD <= 4], df$FGM[df$PERIOD >= 5])
 t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 2])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 3], df$FGM[df$PERIOD == 4])
@@ -246,38 +228,65 @@ t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
 
 
-# accuracy for Top 10 scoring players
+# accuracy per player per period
 
+df.period <- cast(df, player_id + player_name + PERIOD ~ FGM)
 
+df.period[, "accuracy"] <- as.numeric()
 
+for (i in 1:nrow(df.period)){
+  df.period[i, "accuracy"] <- df.period[i, "1"] / sum(df.period[i, "1"], df.period[i, "0"] ) }
+  
+# do analysis for top players per team in regards of accuracy per period
 
 # accuracy for Shot Clock
 
-  # dealing with missing values
+# dealing with missing values
 df[is.na(df)] <- 99
 
-acc <- data.frame()
+acc <- data.frame(seconds.left = c(0:23))
 
 #accuracy for every second
-for (i in 1:23){
-  acc[i, "Accuracy"] <- (sum(df$SHOT_CLOCK > i & df$SHOT_CLOCK <= i+1 & df$SHOT_CLOCK != 99 & df$FGM == 1)/ sum(df$SHOT_CLOCK > i & df$SHOT_CLOCK <= i+1 & df$SHOT_CLOCK != 99))}
+for (i in (0:23)){
+  acc[i, "accuracy"] <- (sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i+1 & df$SHOT_CLOCK != 99 & df$FGM == 1)/           sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i+1 & df$SHOT_CLOCK != 99))}
 
-acc[, "SECONDS_LEFT"] <- c(1:23)
+ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
 
-ggplot(acc, aes(x = SECONDS_LEFT, y = Accuracy)) + geom_point() + geom_smooth()
 
-df[, "ACC_P_SEC"] <- as.numeric()
+
+#accuracy for players per second
+
+##simplifying shot clock to seconds left
+  
+df.acc.players <- cast(df, player_id + player_name + SHOT_CLOCK ~ FGM)
+
+for (i in (1:nrow(df.acc.players))){
+  for (j in (0:23)){
+    if (df.acc.players$SHOT_CLOCK[i] >= j & df.acc.players$SHOT_CLOCK[i] < j+1) df.acc.players[i, "seconds.left"] <- j
+    if (df.acc.players$SHOT_CLOCK[i] == 99) df.acc.players[i, "seconds.left"] <- 99}
+}
+
+df.acc.players[, "acc.per.sec"] <- as.numeric()
+
+for (i in (1:nrow(df.acc.players))){
+  df.acc.players[i, "acc.per.sec"] <- sum(df.acc.players$'0'[df.acc.players$seconds.left == df.acc.players$seconds.left[i] & df.acc.players$player_id == df.acc.players$players_id[i]])} ### doesnt work as I would like it
+  
+
+ggplot(df.acc.players, aes(x = seconds.left, y = ))
+
+
+
+
 
 #Assign accuracy per second to main dataframe
+df[, "acc.per.sec"] <- as.numeric()
+
 for (i in 1:nrow(df)){
-  for (j in 1:23){
-    if (df$SHOT_CLOCK[i] >j & df$SHOT_CLOCK[i] <= j+1 & df$SHOT_CLOCK[i] != 99) df[i, "ACC_P_SEC"] <- acc[j, "Accuracy"]
+  for (j in 0:23){
+    if (df$SHOT_CLOCK[i] >j & df$SHOT_CLOCK[i] <= j+1 & df$SHOT_CLOCK[i] != 99) df[i, "acc.per.sec"] <- acc[j, "accuracy"]
   }
 }
 
-
-cov(df$ACC_P_SEC, df$SHOT_CLOCK)
-cor.test(df$ACC_P_SEC, df$SHOT_CLOCK)
 
 ```
 
