@@ -311,60 +311,65 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 ```
 
 ### Find shooting percentage of each match
+### Find field goal percentage (FG percentage) for each match
+
 
 ```{r}
 # Reshape the dataframe
 
-game <- cast(data = df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION + player_name + W + FINAL_MARGIN~ FGM)
+shot.stats <- cast(data = df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
 
 # Field Goal Attempts
 
-game[, "FGA"] <- NA
-for(i in 1:nrow(game)){
-  game[i, "FGA"] <- game[i, "1"] + game[i, "0"]
+shot.stats[, "FGA"] <- NA
+for(i in 1:nrow(shot.stats)){
+  shot.stats[i, "FGA"] <- shot.stats[i, "1"] + shot.stats[i, "0"]
 }
 
 # Find Feild Goal Percentage of each indivudual player in that match
 
-game[, "FG.percentage"] <- NA 
-for (i in 1:nrow(game)){
-  game[i, "FG.percentage"] <- round(((game[i, "1"]/game[i, "FGA"]) * 100), digits = 2)
+shot.stats[, "FG.percentage"] <- NA 
+for (i in 1:nrow(shot.stats)){
+  shot.stats[i, "FG.percentage"] <- round(((shot.stats[i, "1"]/shot.stats[i, "FGA"]) * 100), digits = 2)
 }
 ```
 
+<<<<<<< HEAD
 ### Impact of Super Star Players
+### Impact of Top Scorers
+
 
 ```{r}
 # Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
-super.star.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "klay thompson", "lamarcus aldridge") # players picked out
-super.star <- game[game$player_name %in% super.star.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
+top.scorers.list <- c("paul millsap", "isaiah thomas", "brook lopez", "kemba walker", "jimmy butler", "mnta ellis", "ty lawson", "reggie jackson", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "cj miles", "kobe bryant", "marc gasol", "dwayne wade", "brandon knight", "andrew wiggins", "carmelo anthony", "nikola vucevic", "michael carter-williams", "eric bledsoe", "demarcus cousins", "kawhi leonard", "kyle lowry", "gordon hayward", "john wall") # players picked out
+top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
 
 # Replace "W" and "L" with 1 and 0 respectively, 
-super.star[, "W"] <- as.character(super.star[, "W"])
-for (i in 1:nrow(super.star)) {
-  if (super.star[i, "W"] == "W") super.star[i, "W"] <- 1
-  if (super.star[i, "W"] == "L") super.star[i, "W"] <- 0
+top.scorers[, "W"] <- as.character(top.scorers[, "W"])
+for (i in 1:nrow(top.scorers)) {
+  if (top.scorers[i, "W"] == "W") top.scorers[i, "W"] <- 1
+  if (top.scorers[i, "W"] == "L") top.scorers[i, "W"] <- 0
 }
-super.star[, "W"] <- as.numeric(super.star[, "W"])
+top.scorers[, "W"] <- as.numeric(top.scorers[, "W"])
 
-ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W))
-ggplot(super.star) + geom_point(aes(x = FINAL_MARGIN, y = FGA, colour = player_name))
-ggplot(super.star) + geom_boxplot(aes(x = LOCATION, y = FINAL_MARGIN))
+ggplot(top.scorers) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+ggplot(top.scorers) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W))
+ggplot(top.scorers) + geom_point(aes(x = FINAL_MARGIN, y = FGA, colour = player_name))
+ggplot(top.scorers) + geom_boxplot(aes(x = LOCATION, y = FINAL_MARGIN))
 
-# t.test(super.star$FINAL_MARGIN[super.star$LOCATION == "H"], super.star$FINAL_MARGIN[super.star$LOCATION == "A"])
+# t.test(top.scorers$FINAL_MARGIN[top.scorers$LOCATION == "H"], top.scorers$FINAL_MARGIN[top.scorers$LOCATION == "A"])
 
 # Correlation test
-cor.test(super.star$FINAL_MARGIN, super.star$FGA)
-cor.test(super.star$FINAL_MARGIN, super.star$FG.percentage) # cor = 0.272
+cor.test(top.scorers$FINAL_MARGIN, top.scorers$FGA)
+cor.test(top.scorers$FINAL_MARGIN, top.scorers$FG.percentage) # cor = 0.272
 
 # Linear regression
-summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = super.star)) # Final margin ~ FGA and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = super.star)) # Final margin ~ FG% and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data= super.star)) 
+summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ FGA and location
+summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
+summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data= top.scorers)) 
 
-summary(lm(FINAL_MARGIN ~ LOCATION, data = super.star)) # Final margin ~ FGA and location
+summary(lm(FINAL_MARGIN ~ LOCATION, data = top.scorers)) # Final margin ~ FGA and location
 
 ```
 
