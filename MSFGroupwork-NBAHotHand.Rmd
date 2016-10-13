@@ -53,7 +53,7 @@ a.
 ##Methods
 ###Dataset Description:  
   
-    Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. The data comprise of 128,609 rows and 22 columns with 16 MB data size with several value in some column is missing. The column titles are generally self-explanatory. It has the following data:   
+  Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. The data comprise of 128,609 rows and 22 columns with 16 MB data size with several value in some column is missing. The column titles are generally self-explanatory. It has the following data:   
     1.  Match ID  
     2.  Match date  
     3.  Which team plays as home and away  
@@ -71,7 +71,6 @@ a.
     15. Distance from the nearest defender  
   
   The dataset is useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, affect of home playing team, close game effect, shooting accuracy from best players, and defender distance effect on shooting accuracy. Data was taken from NBA's REST API provided by [Kaggle](https://www.kaggle.com/dansbecker/nba-shot-logs) and acquired at 30 September 2016.  
->>>>>>> ffa732d5e8e2f51ae1f136d3572f36becfcf2f39
 
 ###Dataset Strengths  
     
@@ -89,7 +88,7 @@ a.
 ### Installing libraries
 
 ```{r}
-#install.packages('reshape')
+install.packages('reshape')
 #install.packages('gridExtra')
 ```
 
@@ -126,7 +125,7 @@ df[,"MATCHUP"] <- as.character(df[,"MATCHUP"])
 df[,"W"] <- as.character(df[,"W"])
 
 for (i in 1:nrow(df)) {
-  if (LOCATION[i]=="H") {df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[5]
+  if (LOCATION[i] == "H") {df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[5]
   df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[7]
   if (W[i]=="W") df$WINNER[i] <- "HOME" 
   if (W[i]=="L") df$WINNER[i] <- "AWAY"}
@@ -139,7 +138,7 @@ for (i in 1:nrow(df)) {
 df1[,"MATCHUP"] <- as.character(df1[,"MATCHUP"])
 for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$MATCHUP[i]," -"))[1], format= "%B %d, %Y"))
 
-restdays<-cast(df1, DATE+ HOME_TEAM + AWAY_TEAM + WINNER ~ FGM)
+restdays <- cast(df1, DATE + HOME_TEAM + AWAY_TEAM + WINNER ~ FGM, value = 'FGM')
 
 #this code is supposed to produce a list of dates when teams play at HOME in DATES column. for some reason it is not working.
 
@@ -148,13 +147,6 @@ for (i in aa3$TEAM) {
     aa3$DATES<- as.list(aa3$DATES)
     if (restdays$HOME_TEAM[j]==i) aa3$DATES[aa3$TEAM==i]<- c(aa3$DATES[aa3$TEAM==i], restdays$DATE[j])}}
 
-
-```
-
-
-#we need to change the format of some of the columns to 'Character'
-#get rid off 'attach()'
-#get rid off column X in shot logs1010 file
 
 ```
 
