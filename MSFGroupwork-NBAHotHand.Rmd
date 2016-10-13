@@ -198,7 +198,7 @@ ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_po
  
 ```
 
-#Close Game Effect (Justin)
+##Close Game Effect (Justin)
 
 ```{r}
 # create new variable to seperate overtime
@@ -294,7 +294,7 @@ for (i in 1:nrow(df)){
 
 
 
-# Shooting Percentage Analysis (James)
+## Shooting Percentage Analysis (James)
 
 ```{r}
 # Replace "made" and "missed" with 1 and 0 respectively
@@ -310,7 +310,7 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 
 ```
 
-# Find shooting percentage of each match
+### Find shooting percentage of each match
 
 ```{r}
 # Reshape the dataframe
@@ -332,7 +332,7 @@ for (i in 1:nrow(game)){
 }
 ```
 
-# Impact of Super Star Players
+### Impact of Super Star Players
 
 ```{r}
 # Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
