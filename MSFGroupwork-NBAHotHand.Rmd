@@ -579,12 +579,12 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
  Since the dataset mostly return 0% for shooting distance greater than 30 feet, it would better if the dataset could be enriched with previous season statistics, or even the last 10 seasons to exercise in more detail about the pattern for long distance shots attempt.  
 ```{r}
 #Summary of total points
-ptssum<- cast(df1, GAME_ID1+ player_id + player_name  ~ PTS); head(ptssum)
+ptssum <- cast(df1, GAME_ID1+ player_id + player_name  ~ PTS); head(ptssum)
 #creating "total points per player, per game" column
-ptssum$totalpts<- ptssum[,"2"]*2 + ptssum[,"3"]*3
+ptssum$totalpts <- ptssum[, "2"] * 2 + ptssum[, "3"] * 3
 
-pttsum2<-ptssum[order(ptssum$totalpts,decreasing=TRUE),]
-head(pttsum2,10)
+pttsum2 <- ptssum[order(ptssum$totalpts, decreasing = TRUE), ]
+head(pttsum2, 10)
 ```
 
 ##Hot Hand Theory
@@ -617,11 +617,11 @@ number_of_streaks <- function(x) {
 number_of_streaks(df$FGM)
 
 #Set a new data frame for the 3 players with best performances(higher points)
-best_players_df <- head(pttsum2,3)
+best_players_df <- head(pttsum2, 3)
 
 #Create a function that gives us a vector of streaks for a specific player and game
 player_and_game <- function(x, y) {
-   player <- df[df[ ,'player_id'] == x & df[ ,'GAME_ID1'] == y, 'FGM']
+   player <- df[df[, 'player_id'] == x & df[,'GAME_ID1'] == y, 'FGM']
    number_of_streaks(as.vector(player))
 }
 #For the first player and game try:
@@ -632,7 +632,7 @@ player_and_game <- function(x, y) {
 streak_per_player <- list()
 j <- 1
 for(i in best_players_df$player_id) {
-   streak_per_player[[j]] <- player_and_game(i, best_players_df[ourtable[ ,'player_id'] == i, 'GAME_ID1'])
+   streak_per_player[[j]] <- player_and_game(i, best_players_df[ourtable[, 'player_id'] == i, 'GAME_ID1'])
    j <- j + 1
 }
 streak_per_player
@@ -706,8 +706,8 @@ IQR(player3_df$streaks)
 j <- 1
 shooting_percentage <- list()
 for(i in best_players_df$player_id) {
-  shooting_percentage[j] <- sum(df[df[ ,'player_id'] == i, 'FGM'])/ nrow(df[df[ ,'player_id'] == i, ])
-  j <- j+1
+  shooting_percentage[j] <- sum(df[df[ ,'player_id'] == i, 'FGM']) / nrow(df[df[, 'player_id'] == i, ])
+  j <- j + 1
 }
 shooting_percentage
 ```
@@ -745,7 +745,7 @@ summary(realshooter_df$streaks)
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
 g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Kyrie Irving')
-grid.arrange(g1, g2, ncol = 2
+grid.arrange(g1, g2, ncol = 2)
 ```
 
   The streak length distributions are quite similar, so we can conclude that Kyrie Irving doesn't have a hot hand.
@@ -830,15 +830,15 @@ grid.arrange(g1, g2, ncol = 2)
 ```{r}
 #Regression Analysis
 
-df1$GAME_CLOCK <-as.numeric(df1$GAME_CLOCK)
+df1$GAME_CLOCK <- as.numeric(df1$GAME_CLOCK)
 
 df1$AWAY_TEAM <- as.character(df1$AWAY_TEAM)
 
-linreg_fgm <-lm(FGM ~ LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST+ player_id+ WINNER, df1 )
+linreg_fgm <- lm(FGM ~ LOCATION + W + FINAL_MARGIN + SHOT_NUMBER + PERIOD + GAME_CLOCK + SHOT_CLOCK+ DRIBBLES + TOUCH_TIME + SHOT_DIST + PTS_TYPE + CLOSEST_DEFENDER_PLAYER_ID + CLOSE_DEF_DIST + player_id + WINNER, df1)
 
 summary(linreg_fgm)
 
-linreg_fgm2 <- lm(FGM ~ FINAL_MARGIN + SHOT_NUMBER + PERIOD +  SHOT_CLOCK +  DRIBBLES + TOUCH_TIME + SHOT_DIST + PTS_TYPE + CLOSE_DEF_DIST + player_id, df1 )
+linreg_fgm2 <- lm(FGM ~ FINAL_MARGIN + SHOT_NUMBER + PERIOD + SHOT_CLOCK + DRIBBLES + TOUCH_TIME + SHOT_DIST + PTS_TYPE + CLOSE_DEF_DIST + player_id, df1 )
 
 
 summary(linreg_fgm2)
