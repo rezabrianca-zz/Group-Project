@@ -98,6 +98,8 @@ install.packages('reshape')
 library(reshape)
 library(ggplot2)
 library(gridExtra)
+library(plyr)
+
 ```
 
 
@@ -257,7 +259,7 @@ for (i in 1:nrow(df.period)){
 # accuracy for Shot Clock
 
 # dealing with missing values
-df[is.na(df)] <- 99
+df1[is.na(df1)] <- 99
 
 acc <- data.frame(seconds.left = c(0:23))
 
@@ -274,10 +276,10 @@ ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
 
 ##simplifying shot clock to seconds left
   
-df.acc.players <- cast(df, player_id + player_name + SHOT_CLOCK ~ FGM)
+df.acc.players <- cast(df1, player_id + player_name + SHOT_CLOCK ~ FGM)
 
 for (i in (1:nrow(df.acc.players))){
-  for (j in (0:23)){
+  for (j in (0:24)){
     if (df.acc.players$SHOT_CLOCK[i] >= j & df.acc.players$SHOT_CLOCK[i] < j + 1) df.acc.players[i, "seconds.left"] <- j
     if (df.acc.players$SHOT_CLOCK[i] == 99) df.acc.players[i, "seconds.left"] <- 99
   }
@@ -285,14 +287,21 @@ for (i in (1:nrow(df.acc.players))){
 
 df.acc.players[, "acc.per.sec"] <- as.numeric()
 
-### doesnt work as I would like it:
 
-for (i in (1:nrow(df.acc.players))){
-  for (j in (0:23)){
-    df.acc.players[i, "acc.per.sec"] <- sum(df.acc.players$'1'[df.acc.players$seconds.left == j])
-  }
-}
-  
+ap<- df.acc.players
+head(ap)
+
+ap$SHOT_CLOCK <- NULL
+
+colnames(ap)<- c( "player_id", "player_name","X0", "X1","seconds.left", "acc.per.sec") 
+
+
+ap2 <- ddply(ap, c("player_id", "player_name","seconds.left"), summarise,
+X0= sum(X0),
+X1= sum(X1))
+
+ap2$acc<- ap2$X1/(ap2$X0+ap2$X1)
+
 
 ggplot(df.acc.players, aes(x = seconds.left, y = ))
 
@@ -855,21 +864,7 @@ summary(linreg_fgm2)
 ###What would be the next steps?
 
 ```{r}
-#AR: analysis for Justin's shot acc (not to be included in the final report)
 
-library(plyr)
-
-ap<- read.csv("accuracy.players.csv")
-head(ap)
-
-ap$SHOT_CLOCK <- NULL
-
-ap2 <- ddply(ap, c("player_id", "player_name","seconds.left"), summarise,
-X0= sum(X0),
-X1= sum(X1))
-
-head(ap2)
-ap2$acc<- ap2$X1/(ap2$X0+ap2$X1)
 
 ```
 
