@@ -87,11 +87,8 @@ a.
 
 ### Installing libraries
 
-```{r}
 install.packages('reshape')
 install.packages('gridExtra')
-```
-
 
 ### Calling libraries
 ```{r}
@@ -163,7 +160,7 @@ for (i in aa3$TEAM) {
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
 
-Literature review demonstrates that 
+Literature review demonstrated that 
 
 The NULL Hypothesis is: 
 
