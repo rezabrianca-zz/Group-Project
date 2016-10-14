@@ -843,4 +843,26 @@ summary(linreg_fgm2)
 ###Why is this interesting?
 
 ###What would be the next steps?
+
+```{r}
+#AR: analysis for Justin's shot acc (not to be included in the final report)
+
+library(plyr)
+
+ap<- read.csv("accuracy.players.csv")
+head(ap)
+
+ap$SHOT_CLOCK <- NULL
+
+ap2 <- ddply(ap, c("player_id", "player_name","seconds.left"), summarise,
+X0= sum(X0),
+X1= sum(X1))
+
+head(ap2)
+ap2$acc<- ap2$X1/(ap2$X0+ap2$X1)
+
+```
+
+
+
 ---
