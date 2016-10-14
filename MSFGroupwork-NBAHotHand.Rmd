@@ -114,7 +114,8 @@ df[, "W"] <- as.character(df[, "W"])
 
 for (i in 1:nrow(df)) {
   if (df[i, "W"] == "W") df[i, "W"] <- 1
-  if (df[i, "W"] == "L") df[i, "W"] <- 0}
+  if (df[i, "W"] == "L") df[i, "W"] <- 0
+}
 
 df[, "W"] <- as.numeric(df[, "W"])
 ```
@@ -141,7 +142,7 @@ for (i in 1:nrow(df)) {
 
 #adding a column 'DATE'
 df1[, "MATCHUP"] <- as.character(df1[, "MATCHUP"])
-for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$MATCHUP[i], " -"))[1], format= "%B %d, %Y"))
+for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$MATCHUP[i], " -"))[1], format = "%B %d, %Y"))
 
 restdays <- cast(df1, DATE + HOME_TEAM + AWAY_TEAM + WINNER ~ FGM, value = 'FGM')
 
@@ -199,7 +200,7 @@ head(aa3)
 aa3 <- aa3[order(aa3$WIN_PCT_HOME, decreasing = TRUE),]
 rownames(aa4) <- NULL
 
-aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(- aa3$WIN_PCT_HOME)])
+aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
 
 
 ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "AWAY")) 
@@ -288,7 +289,8 @@ df.acc.players[, "acc.per.sec"] <- as.numeric()
 
 for (i in (1:nrow(df.acc.players))){
   for (j in (0:23)){
-    df.acc.players[i, "acc.per.sec"] <- sum(df.acc.players$'1'[df.acc.players$seconds.left == j])}
+    df.acc.players[i, "acc.per.sec"] <- sum(df.acc.players$'1'[df.acc.players$seconds.left == j])
+  }
 }
   
 
@@ -513,13 +515,7 @@ shooting_distance_level$Accuracy <- round(shooting_distance_level$SCORED / shoot
 #Plotting the result
 library(ggplot2)
 library(scales)
-ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) +
-  geom_point(aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) +
-  scale_y_continuous(labels = percent, breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0), limits = c(0, 1)) +
-  scale_x_discrete("Shooting Distance", breaks = c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48)) +
-  geom_smooth() +
-  ylab("Shooting Accuracy (%)") +
-  ggtitle("Shooting Distance vs Shooting Accuracy")
+ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) + geom_point(aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) + scale_y_continuous(labels = percent, breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0), limits = c(0, 1)) + scale_x_discrete("Shooting Distance", breaks = c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48)) + geom_smooth() + ylab("Shooting Accuracy (%)") + ggtitle("Shooting Distance vs Shooting Accuracy")
 
 ```
 
@@ -724,9 +720,12 @@ simul_shooter
 
 #Set 1 for baskets made and 0 for baskets missed
 simul_shooter <- as.list(simul_shooter)
-for(i in 1:length(simul_shooter)) {
-   if(simul_shooter[i] == 'made') simul_shooter[i] <- 1
-   else if(simul_shooter[i] == 'missed') simul_shooter[i] <- 0
+for (i in 1:length(simul_shooter)) {
+   if (simul_shooter[i] == 'made') {
+     simul_shooter[i] <- 1
+   } else if {
+     (simul_shooter[i] == 'missed') simul_shooter[i] <- 0
+   }
 }
 simul_shooter
 
@@ -756,7 +755,8 @@ grid.arrange(g1, g2, ncol = 2)
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(572)
 shot_results <- c('made', 'missed')
-simul_shooter <- sample(shot_results, size = length(streak_per_player[[2]]), replace = TRUE, prob = c(shooting_percentage[[2]], 1 - shooting_percentage[[2]]))
+simul_shooter <- sample(shot_results, size = length(streak_per_player[[2]]), replace = TRUE, 
+                        prob = c(shooting_percentage[[2]], 1 - shooting_percentage[[2]]))
 simul_shooter
 
 
@@ -794,7 +794,8 @@ grid.arrange(g1, g2, ncol = 2)
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(57)
 shot_results <- c('made', 'missed')
-simul_shooter <- sample(shot_results, size = length(streak_per_player[[3]]), replace = TRUE, prob = c(shooting_percentage[[3]], 1 - shooting_percentage[[3]]))
+simul_shooter <- sample(shot_results, size = length(streak_per_player[[3]]), replace = TRUE, 
+                        prob = c(shooting_percentage[[3]], 1 - shooting_percentage[[3]]))
 simul_shooter
 
 
