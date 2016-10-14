@@ -1,9 +1,9 @@
 ---
-title: "MSF_Groupwork-NBA_shotlog" 
+title: "MSF_Groupwork-NBA_shotlog"
 author: "Team_9"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -104,39 +104,44 @@ library(gridExtra)
 ###Data clean-up 
 
 ```{r}
-df<- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
+df <- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
 attach(df) #telling R that this is the dataframe we'll be working with (eliminating the need to use df$ for variables)
 
-df1<- read.csv("shot_logs1010.csv")
+df1 <- read.csv("shot_logs1010.csv")
 
 # replacing W/L in column "W" with 1/0 (1 for win, 0 for loss)
-df[,"W"] <- as.character(df[,"W"])
+df[, "W"] <- as.character(df[, "W"])
 
 for (i in 1:nrow(df)) {
-  if (df[i,"W"]=="W") df[i,"W"]<- 1
-  if (df[i,"W"]=="L") df[i,"W"]<- 0}
+  if (df[i, "W"] == "W") df[i, "W"] <- 1
+  if (df[i, "W"] == "L") df[i, "W"] <- 0}
 
-df[,"W"] <- as.numeric(df[,"W"])
+df[, "W"] <- as.numeric(df[, "W"])
 ```
 
 ```{r}
 #adding columns for names of 'home' and 'away' teams. In addition, WINNER column tells which team won
-df[,"MATCHUP"] <- as.character(df[,"MATCHUP"])
-df[,"W"] <- as.character(df[,"W"])
+df[, "MATCHUP"] <- as.character(df[, "MATCHUP"])
+df[, "W"] <- as.character(df[, "W"])
 
 for (i in 1:nrow(df)) {
-  if (LOCATION[i] == "H") {df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[5]
-  df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[7]
-  if (W[i]=="W") df$WINNER[i] <- "HOME" 
-  if (W[i]=="L") df$WINNER[i] <- "AWAY"}
-  if (LOCATION[i]=="A") {df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[7] 
-  df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[5]
-  if (W[i]=="L") df$WINNER[i] <- "HOME"  
-  if (W[i]=="W") df$WINNER[i] <- "AWAY"}}
+  if (LOCATION[i] == "H") {
+    df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[5]
+    df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[7]
+    if (W[i] == "W") df$WINNER[i] <- "HOME" 
+    if (W[i] == "L") df$WINNER[i] <- "AWAY"
+  }
+  if (LOCATION[i] == "A") {
+    df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], ""))[7] 
+    df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], ""))[5]
+    if (W[i] == "L") df$WINNER[i] <- "HOME"  
+    if (W[i] == "W") df$WINNER[i] <- "AWAY"
+  }
+}
 
 #adding a column 'DATE'
-df1[,"MATCHUP"] <- as.character(df1[,"MATCHUP"])
-for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$MATCHUP[i]," -"))[1], format= "%B %d, %Y"))
+df1[, "MATCHUP"] <- as.character(df1[, "MATCHUP"])
+for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$MATCHUP[i], " -"))[1], format= "%B %d, %Y"))
 
 restdays <- cast(df1, DATE + HOME_TEAM + AWAY_TEAM + WINNER ~ FGM, value = 'FGM')
 
@@ -144,10 +149,10 @@ restdays <- cast(df1, DATE + HOME_TEAM + AWAY_TEAM + WINNER ~ FGM, value = 'FGM'
 
 for (i in aa3$TEAM) {
   for (j in 1:nrow(restdays)) {
-    aa3$DATES<- as.list(aa3$DATES)
-    if (restdays$HOME_TEAM[j]==i) aa3$DATES[aa3$TEAM==i]<- c(aa3$DATES[aa3$TEAM==i], restdays$DATE[j])}}
-
-
+    aa3$DATES <- as.list(aa3$DATES)
+    if (restdays$HOME_TEAM[j] == i) aa3$DATES[aa3$TEAM == i] <- c(aa3$DATES[aa3$TEAM == i], restdays$DATE[j])
+  }
+}
 ```
 
 ## Home Advantage analysis
@@ -161,40 +166,43 @@ The NULL Hypothesis is:
 
 
 ```{r}
-aa<- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
+aa <- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
 
 table(aa$WINNER)
 #home wins:
-hh<-sum(aa$WINNER=="HOME")
+hh <- sum(aa$WINNER == "HOME")
 #Away wins:
-aw<-sum(aa$WINNER=="AWAY")
+aw <- sum(aa$WINNER == "AWAY")
 #percentage of home team winning: 
-round(hh/(hh+aw),2)
-round(aw/(hh+aw),2)
+round(hh / (hh + aw), 2)
+round(aw / (hh + aw), 2)
 
 ```
 
 ```{r}
 head(aa)
-aa1<- cast(aa, HOME_TEAM  ~ WINNER); names(aa1)[1]<-"TEAM"
-aa1$WIN_PCT_HOME<-round(aa1$HOME/(aa1$HOME+aa1$AWAY),2)
+aa1 <- cast(aa, HOME_TEAM ~ WINNER); names(aa1)[1] <- "TEAM"
+aa1$WIN_PCT_HOME <- round(aa1$HOME / (aa1$HOME + aa1$AWAY), 2)
 
-aa2<- cast(aa, AWAY_TEAM ~ WINNER); names(aa2)[1]<-"TEAM"
-aa2$WIN_PCT_AWAY<-round(aa2$AWAY/(aa2$HOME+aa2$AWAY),2)
+aa2 <- cast(aa, AWAY_TEAM ~ WINNER); names(aa2)[1] <- "TEAM"
+aa2$WIN_PCT_AWAY <- round(aa2$AWAY / (aa2$HOME + aa2$AWAY), 2)
 
-aa3<- merge (aa1,aa2, by ="TEAM")
+aa3 <- merge (aa1, aa2, by ="TEAM")
 
 
-for (i in 1:nrow(aa3)) {if(aa3$WIN_PCT_HOME[i]>aa3$WIN_PCT_AWAY[i]) aa3$HOME_ADV[i]<-"YES" else aa3$HOME_ADV[i]<-"NO"}
+for (i in 1:nrow(aa3)) {
+  if(aa3$WIN_PCT_HOME[i] > aa3$WIN_PCT_AWAY[i]) aa3$HOME_ADV[i] <- "YES" 
+  else aa3$HOME_ADV[i] <- "NO"
+}
 head(aa3)
 
-aa3<- aa3[order(aa3$WIN_PCT_HOME,decreasing=TRUE),]
-rownames(aa4)<-NULL
+aa3 <- aa3[order(aa3$WIN_PCT_HOME, decreasing = TRUE),]
+rownames(aa4) <- NULL
 
-aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
+aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(- aa3$WIN_PCT_HOME)])
 
 
-ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_point(aes( y= WIN_PCT_AWAY, col= "AWAY")) 
+ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "AWAY")) 
  
 ```
 
@@ -202,8 +210,6 @@ ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_po
 
 
 The potential effects of tiredness and stress on the accuracy of shots are investigated in this part of the analysis. 
-
-
 
 
 ```{r}
@@ -221,7 +227,7 @@ for (i in 1:nrow(df)) {
 df.acc <- data.frame()
   
 for (i in (1:7)){
-  df.acc[i, "accuracy"] <- sum(df$PERIOD == i & df$FGM == 1)/sum(df$PERIOD == i)
+  df.acc[i, "accuracy"] <- sum(df$PERIOD == i & df$FGM == 1) / sum(df$PERIOD == i)
   df.acc[i, "period"] <- i
   if (df.acc$period[i] <= 4) df.acc[i, "overtime"] <- 0
   if (df.acc$period[i] >= 5) df.acc[i, "overtime"] <- 1
@@ -242,7 +248,8 @@ df.period <- cast(df, player_id + player_name + PERIOD ~ FGM)
 df.period[, "accuracy"] <- as.numeric()
 
 for (i in 1:nrow(df.period)){
-  df.period[i, "accuracy"] <- df.period[i, "1"] / sum(df.period[i, "1"], df.period[i, "0"] ) }
+  df.period[i, "accuracy"] <- df.period[i, "1"] / sum(df.period[i, "1"], df.period[i, "0"] ) 
+}
   
 # do analysis for top players per team in regards of accuracy per period
 
@@ -255,7 +262,8 @@ acc <- data.frame(seconds.left = c(0:23))
 
 #accuracy for every second
 for (i in (0:23)){
-  acc[i, "accuracy"] <- (sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i+1 & df$SHOT_CLOCK != 99 & df$FGM == 1)/sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i+1 & df$SHOT_CLOCK != 99))}
+  acc[i, "accuracy"] <- (sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i + 1 & df$SHOT_CLOCK != 99 & df$FGM == 1) / sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i + 1 & df$SHOT_CLOCK != 99))
+}
 
 ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
 
@@ -269,8 +277,9 @@ df.acc.players <- cast(df, player_id + player_name + SHOT_CLOCK ~ FGM)
 
 for (i in (1:nrow(df.acc.players))){
   for (j in (0:23)){
-    if (df.acc.players$SHOT_CLOCK[i] >= j & df.acc.players$SHOT_CLOCK[i] < j+1) df.acc.players[i, "seconds.left"] <- j
-    if (df.acc.players$SHOT_CLOCK[i] == 99) df.acc.players[i, "seconds.left"] <- 99}
+    if (df.acc.players$SHOT_CLOCK[i] >= j & df.acc.players$SHOT_CLOCK[i] < j + 1) df.acc.players[i, "seconds.left"] <- j
+    if (df.acc.players$SHOT_CLOCK[i] == 99) df.acc.players[i, "seconds.left"] <- 99
+  }
 }
 
 df.acc.players[, "acc.per.sec"] <- as.numeric()
@@ -290,7 +299,7 @@ df[, "acc.per.sec"] <- as.numeric()
 
 for (i in 1:nrow(df)){
   for (j in 0:23){
-    if (df$SHOT_CLOCK[i] >j & df$SHOT_CLOCK[i] <= j+1 & df$SHOT_CLOCK[i] != 99) df[i, "acc.per.sec"] <- acc[j, "accuracy"]
+    if (df$SHOT_CLOCK[i] > j & df$SHOT_CLOCK[i] <= j + 1 & df$SHOT_CLOCK[i] != 99) df[i, "acc.per.sec"] <- acc[j, "accuracy"]
   }
 }
 
