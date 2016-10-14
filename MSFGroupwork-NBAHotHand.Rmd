@@ -838,7 +838,7 @@ linreg_fgm <-lm(FGM ~ LOCATION+W+FINAL_MARGIN+SHOT_NUMBER+ PERIOD+GAME_CLOCK+  S
 
 summary(linreg_fgm)
 
-linreg_fgm2 <-lm(FGM ~ FINAL_MARGIN+SHOT_NUMBER+ PERIOD +  SHOT_CLOCK+  DRIBBLES+ TOUCH_TIME+SHOT_DIST+PTS_TYPE+ CLOSE_DEF_DIST+ player_id, df1 )
+linreg_fgm2 <- lm(FGM ~ FINAL_MARGIN + SHOT_NUMBER + PERIOD +  SHOT_CLOCK +  DRIBBLES + TOUCH_TIME + SHOT_DIST + PTS_TYPE + CLOSE_DEF_DIST + player_id, df1 )
 
 
 summary(linreg_fgm2)
