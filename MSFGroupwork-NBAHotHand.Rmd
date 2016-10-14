@@ -649,7 +649,7 @@ streak_per_player
 player1_df <- data.frame('streaks' = streak_per_player[[1]])
 player2_df <- data.frame('streaks' = streak_per_player[[2]])
 player3_df <- data.frame('streaks' = streak_per_player[[3]])
-best_players_df
+
 
 #Show distribution for each player's streak lengths
 gg1 <- ggplot(data = player1_df, aes(x = streaks)) + geom_bar(fill = 'brown') + labs(title = 'Kyrie Irnving')
@@ -734,8 +734,8 @@ simul_shooter <- as.list(simul_shooter)
 for (i in 1:length(simul_shooter)) {
    if (simul_shooter[i] == 'made') {
      simul_shooter[i] <- 1
-   } else if {
-     (simul_shooter[i] == 'missed') simul_shooter[i] <- 0
+   } else if (simul_shooter[i] == 'missed') {
+     simul_shooter[i] <- 0
    }
 }
 simul_shooter
