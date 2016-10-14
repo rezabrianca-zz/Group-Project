@@ -161,7 +161,7 @@ for (i in aa3$TEAM) {
 ## Home Advantage analysis
 ###Introduction
 
-This area of anlysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
+This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
 
 Literature review demonstrates that 
 
@@ -208,6 +208,12 @@ ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_po
 
 #Close Game Effect (Justin)
 
+
+The potential effects of tiredness and stress on the accuracy of shots are investigated in this part of the analysis. 
+
+
+
+
 ```{r}
 # create new variable to seperate overtime
 
@@ -218,7 +224,7 @@ for (i in 1:nrow(df)) {
   if (df[i, "PERIOD"] <= 4) df[i, "overtime"] <- 0
 }
 
-# accuracy 
+# accuracy per period
 
 df.acc <- data.frame()
   
@@ -257,7 +263,7 @@ acc <- data.frame(seconds.left = c(0:23))
 
 #accuracy for every second
 for (i in (0:23)){
-  acc[i, "accuracy"] <- (sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i+1 & df$SHOT_CLOCK != 99 & df$FGM == 1)/           sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i+1 & df$SHOT_CLOCK != 99))}
+  acc[i, "accuracy"] <- (sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i+1 & df$SHOT_CLOCK != 99 & df$FGM == 1)/sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i+1 & df$SHOT_CLOCK != 99))}
 
 ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
 
@@ -277,15 +283,15 @@ for (i in (1:nrow(df.acc.players))){
 
 df.acc.players[, "acc.per.sec"] <- as.numeric()
 
+### doesnt work as I would like it:
+
 for (i in (1:nrow(df.acc.players))){
-  df.acc.players[i, "acc.per.sec"] <- sum(df.acc.players$'0'[df.acc.players$seconds.left == df.acc.players$seconds.left[i] & df.acc.players$player_id == df.acc.players$players_id[i]])} ### doesnt work as I would like it
+  for (j in (0:23)){
+    df.acc.players[i, "acc.per.sec"] <- sum(df.acc.players$'1'[df.acc.players$seconds.left == j])}
+}
   
 
 ggplot(df.acc.players, aes(x = seconds.left, y = ))
-
-
-
-
 
 #Assign accuracy per second to main dataframe
 df[, "acc.per.sec"] <- as.numeric()
