@@ -53,7 +53,7 @@ a.
 ##Methods
 ###Dataset Description:  
   
-    Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. The data comprise of 128,609 rows and 22 columns with 16 MB data size with several value in some column is missing. The column titles are generally self-explanatory. It has the following data:   
+  Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. The data comprise of 128,609 rows and 22 columns with 16 MB data size with several value in some column is missing. The column titles are generally self-explanatory. It has the following data:   
     1.  Match ID  
     2.  Match date  
     3.  Which team plays as home and away  
@@ -71,7 +71,6 @@ a.
     15. Distance from the nearest defender  
   
   The dataset is useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, affect of home playing team, close game effect, shooting accuracy from best players, and defender distance effect on shooting accuracy. Data was taken from NBA's REST API provided by [Kaggle](https://www.kaggle.com/dansbecker/nba-shot-logs) and acquired at 30 September 2016.  
->>>>>>> ffa732d5e8e2f51ae1f136d3572f36becfcf2f39
 
 ###Dataset Strengths  
     
@@ -89,7 +88,7 @@ a.
 ### Installing libraries
 
 ```{r}
-#install.packages('reshape')
+install.packages('reshape')
 #install.packages('gridExtra')
 ```
 
@@ -126,7 +125,7 @@ df[,"MATCHUP"] <- as.character(df[,"MATCHUP"])
 df[,"W"] <- as.character(df[,"W"])
 
 for (i in 1:nrow(df)) {
-  if (LOCATION[i]=="H") {df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[5]
+  if (LOCATION[i] == "H") {df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[5]
   df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i]," "))[7]
   if (W[i]=="W") df$WINNER[i] <- "HOME" 
   if (W[i]=="L") df$WINNER[i] <- "AWAY"}
@@ -139,7 +138,7 @@ for (i in 1:nrow(df)) {
 df1[,"MATCHUP"] <- as.character(df1[,"MATCHUP"])
 for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$MATCHUP[i]," -"))[1], format= "%B %d, %Y"))
 
-restdays<-cast(df1, DATE+ HOME_TEAM + AWAY_TEAM + WINNER ~ FGM)
+restdays <- cast(df1, DATE + HOME_TEAM + AWAY_TEAM + WINNER ~ FGM, value = 'FGM')
 
 #this code is supposed to produce a list of dates when teams play at HOME in DATES column. for some reason it is not working.
 
@@ -148,13 +147,6 @@ for (i in aa3$TEAM) {
     aa3$DATES<- as.list(aa3$DATES)
     if (restdays$HOME_TEAM[j]==i) aa3$DATES[aa3$TEAM==i]<- c(aa3$DATES[aa3$TEAM==i], restdays$DATE[j])}}
 
-
-```
-
-
-#we need to change the format of some of the columns to 'Character'
-#get rid off 'attach()'
-#get rid off column X in shot logs1010 file
 
 ```
 
@@ -206,7 +198,7 @@ ggplot(aa3,aes(x=TEAM)) + geom_point(aes(y= WIN_PCT_HOME, col= "HOME"))+ geom_po
  
 ```
 
-#Close Game Effect (Justin)
+##Close Game Effect (Justin)
 
 
 The potential effects of tiredness and stress on the accuracy of shots are investigated in this part of the analysis. 
@@ -308,7 +300,7 @@ for (i in 1:nrow(df)){
 
 
 
-# Shooting Percentage Analysis (James)
+## Shooting Percentage Analysis (James)
 
 ```{r}
 # Replace "made" and "missed" with 1 and 0 respectively
@@ -324,61 +316,66 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 
 ```
 
-# Find shooting percentage of each match
+### Find shooting percentage of each match
+### Find field goal percentage (FG percentage) for each match
+
 
 ```{r}
 # Reshape the dataframe
 
-game <- cast(data = df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION + player_name + W + FINAL_MARGIN~ FGM)
+shot.stats <- cast(data = df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
 
 # Field Goal Attempts
 
-game[, "FGA"] <- NA
-for(i in 1:nrow(game)){
-  game[i, "FGA"] <- game[i, "1"] + game[i, "0"]
+shot.stats[, "FGA"] <- NA
+for(i in 1:nrow(shot.stats)){
+  shot.stats[i, "FGA"] <- shot.stats[i, "1"] + shot.stats[i, "0"]
 }
 
 # Find Feild Goal Percentage of each indivudual player in that match
 
-game[, "FG.percentage"] <- NA 
-for (i in 1:nrow(game)){
-  game[i, "FG.percentage"] <- round(((game[i, "1"]/game[i, "FGA"]) * 100), digits = 2)
+shot.stats[, "FG.percentage"] <- NA 
+for (i in 1:nrow(shot.stats)){
+  shot.stats[i, "FG.percentage"] <- round(((shot.stats[i, "1"]/shot.stats[i, "FGA"]) * 100), digits = 2)
 }
 ```
 
-# Impact of Super Star Players
+<<<<<<< HEAD
+### Impact of Super Star Players
+### Impact of Top Scorers
+
 
 ```{r}
 # Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
-super.star.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "klay thompson", "lamarcus aldridge") # players picked out
-super.star <- game[game$player_name %in% super.star.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
+top.scorers.list <- c("paul millsap", "isaiah thomas", "brook lopez", "kemba walker", "jimmy butler", "mnta ellis", "ty lawson", "reggie jackson", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "cj miles", "kobe bryant", "marc gasol", "dwayne wade", "brandon knight", "andrew wiggins", "carmelo anthony", "nikola vucevic", "michael carter-williams", "eric bledsoe", "demarcus cousins", "kawhi leonard", "kyle lowry", "gordon hayward", "john wall") # players picked out
+top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
 
 # Replace "W" and "L" with 1 and 0 respectively, 
-super.star[, "W"] <- as.character(super.star[, "W"])
-for (i in 1:nrow(super.star)) {
-  if (super.star[i, "W"] == "W") super.star[i, "W"] <- 1
-  if (super.star[i, "W"] == "L") super.star[i, "W"] <- 0
+top.scorers[, "W"] <- as.character(top.scorers[, "W"])
+for (i in 1:nrow(top.scorers)) {
+  if (top.scorers[i, "W"] == "W") top.scorers[i, "W"] <- 1
+  if (top.scorers[i, "W"] == "L") top.scorers[i, "W"] <- 0
 }
-super.star[, "W"] <- as.numeric(super.star[, "W"])
+top.scorers[, "W"] <- as.numeric(top.scorers[, "W"])
 
-ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-ggplot(super.star) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W))
-ggplot(super.star) + geom_point(aes(x = FINAL_MARGIN, y = FGA, colour = player_name))
-ggplot(super.star) + geom_boxplot(aes(x = LOCATION, y = FINAL_MARGIN))
+ggplot(top.scorers) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+ggplot(top.scorers) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W))
+ggplot(top.scorers) + geom_point(aes(x = FINAL_MARGIN, y = FGA, colour = player_name))
+ggplot(top.scorers) + geom_boxplot(aes(x = LOCATION, y = FINAL_MARGIN))
 
-# t.test(super.star$FINAL_MARGIN[super.star$LOCATION == "H"], super.star$FINAL_MARGIN[super.star$LOCATION == "A"])
+# t.test(top.scorers$FINAL_MARGIN[top.scorers$LOCATION == "H"], top.scorers$FINAL_MARGIN[top.scorers$LOCATION == "A"])
 
 # Correlation test
-cor.test(super.star$FINAL_MARGIN, super.star$FGA)
-cor.test(super.star$FINAL_MARGIN, super.star$FG.percentage) # cor = 0.272
+cor.test(top.scorers$FINAL_MARGIN, top.scorers$FGA)
+cor.test(top.scorers$FINAL_MARGIN, top.scorers$FG.percentage) # cor = 0.272
 
 # Linear regression
-summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = super.star)) # Final margin ~ FGA and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = super.star)) # Final margin ~ FG% and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data= super.star)) 
+summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ FGA and location
+summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
+summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data= top.scorers)) 
 
-summary(lm(FINAL_MARGIN ~ LOCATION, data = super.star)) # Final margin ~ FGA and location
+summary(lm(FINAL_MARGIN ~ LOCATION, data = top.scorers)) # Final margin ~ FGA and location
 
 ```
 
