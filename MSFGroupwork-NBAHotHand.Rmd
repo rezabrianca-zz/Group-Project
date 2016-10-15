@@ -304,6 +304,14 @@ restdays3$ HW.pct <-   round(restdays3$HW*100/(restdays3$HL+restdays3$HW),2)
 
 print (restdays3[1:3,c(1,7,9)])
 
+
+#Testing of rest data
+t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+chisq.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+
+
+restdays2$W[restdays2$rest==0,]
+
 ```
 
 ###Findings
@@ -313,10 +321,15 @@ TO INCLUDE THE TABLES FROM THE ABOVE CODE
 
 ###Discussion
 
-The analysis demonstrated that overall winning ratio improves with increase in  
+The analysis demonstrated that overall winning ratio improves with increase in  rest days: back-to-back games had 47.07% winning ratio, 1 day rest increased winning ratio to 50.10% and with 2 days rest the winning ration has increased even further to 53.94%.
 
+By extending the analysis to the team level, the results have demonstrated similar tendency for home  games where winning ratio has increased from 53.54% to 54.68% and 59.57% respectively with 0, 1 and 2 days of rest. Somewhat interestingly the analysis of effect of rest days on winning ratio of away games demonstrated that there is hardly any difference between 0 and 1 days of rest (44.33% and 44.24%). However with 2 days of rest teams' average winning ratio have increased to 46.90% (2.66% increase). This perhaps could be explained by the fact that teams were able to minimise effect of travelling when having a bigger window between games.
 
+Based on the above, the analysis shown that the null hypothesis should be rejected as there is a clear evidence that the higher rest days correspond to higher winning ratio
 
+###Further research
+
+To better understand effects of rest and home/away advantage it would be interesting to take into account distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York travelling to play an away gamein New Jersey
 
 ##Effects on accuracy (Justin)
 
@@ -516,7 +529,7 @@ The steps to calculate this measurement are as follows:
 ```{r}
 #Calculate accuracy against defender distance
 #Group the defender distance level
-distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
+distance_level <- as.data.frame(table(factor(df[, "CLOSE_DEF_DIST"])))
 head(distance_level)
 
 #Calculate how many times players scored in every defender distance
