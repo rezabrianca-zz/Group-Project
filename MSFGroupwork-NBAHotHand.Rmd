@@ -146,10 +146,13 @@ for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$M
 #creating a column for 'TEAM' regardless whether they played at home or not as the original dataframe consists of both home and away teams
 for (i in 1:nrow(df1)) df1$TEAM[i] <-unlist(strsplit(df1$MATCHUP[i], " "))[5]
 
+
+#cleaning-up data for rest days calculation
 df1$BLANK2<-""
-restdays2 <- cast(df1, TEAM + DATE + LOCATION + W ~ FGM)
+restdays2 <- cast(df1, TEAM + DATE + LOCATION + W + FINAL_MARGIN ~ FGM)
 restdays2$DATE<- as.Date(restdays2$DATE)
 
+#calulating number of rest days between teams
 for (i in 2: nrow (restdays2)) {
   if (restdays2$TEAM[i]==restdays2$TEAM[i-1])
     restdays2$rest[i]<- as.numeric(restdays2$DATE[i] - restdays2$DATE[i-1]-1)
@@ -160,15 +163,32 @@ restdays2$BLANK<-""
 
 restdays2$rest <- as.numeric (restdays2$rest)
 
+#creating dataframe for total rest days
+restdays4<- cast (restdays2, rest ~  W)
+colnames(restdays4)<- c( "rest", "L","W") 
+
+restdays4$total<-restdays4$L + restdays4$W
+restdays4$dist <-   round (restdays4$total * 100 /sum (restdays4$total) ,2)
+
+print (restdays4[,c(1,6,7)])
+
+'''The distribution of rest days show that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections'''
+
+restdays4$ L.pct <-   round(restdays4$L*100/(restdays4$L+restdays4$W),2) 
+restdays4$ W.pct <-   round(restdays4$W*100/(restdays4$L+restdays4$W),2)
+
+print (restdays4[1:3,c(1:3,6,7)])
+
+#creating a new dataframe for summary of home/away win losses based on number of rest days.
 restdays3<- cast (restdays2, rest ~ LOCATION + W) ; 
 
 colnames(restdays3)<- c( "rest", "AL","AW","HL", "HW") 
-
 restdays3$ AL.pct <-   round(restdays3$AL*100/(restdays3$AL+restdays3$AW),2) 
 restdays3$ AW.pct <-   round(restdays3$AW*100/(restdays3$AL+restdays3$AW),2)
 restdays3$ HL.pct <-   round(restdays3$HL*100/(restdays3$HL+restdays3$HW),2)
 restdays3$ HW.pct <-   round(restdays3$HW*100/(restdays3$HL+restdays3$HW),2)
 
+print (restdays3[1:3,c(1,6:9)])
 
 
 ```
