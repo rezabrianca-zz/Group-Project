@@ -146,55 +146,10 @@ for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$M
 #creating a column for 'TEAM' regardless whether they played at home or not as the original dataframe consists of both home and away teams
 for (i in 1:nrow(df1)) df1$TEAM[i] <-unlist(strsplit(df1$MATCHUP[i], " "))[5]
 
-
 #cleaning-up data for rest days calculation
 df1$BLANK2<-""
 restdays2 <- cast(df1, TEAM + DATE + LOCATION + W + FINAL_MARGIN ~ FGM)
 restdays2$DATE<- as.Date(restdays2$DATE)
-
-#calulating number of rest days between teams
-for (i in 2: nrow (restdays2)) {
-  if (restdays2$TEAM[i]==restdays2$TEAM[i-1])
-    restdays2$rest[i]<- as.numeric(restdays2$DATE[i] - restdays2$DATE[i-1]-1)
-  else 
-    (restdays2$rest[i]<- "NA")  
-}
-restdays2$BLANK<-""
-
-restdays2$rest <- as.numeric (restdays2$rest)
-
-#regression analysis
-restreg<- lm(FINAL_MARGIN ~ LOCATION + rest, restdays2)
-summary(restreg)
-
-
-#creating dataframe for total rest days
-restdays4<- cast (restdays2, rest ~  W)
-colnames(restdays4)<- c( "rest", "L","W") 
-
-restdays4$total<-restdays4$L + restdays4$W
-restdays4$dist <-   round (restdays4$total * 100 /sum (restdays4$total) ,2)
-
-print (restdays4[,c(1,6,7)])
-
-'''The distribution of rest days show that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections'''
-
-restdays4$ L.pct <-   round(restdays4$L*100/(restdays4$L+restdays4$W),2) 
-restdays4$ W.pct <-   round(restdays4$W*100/(restdays4$L+restdays4$W),2)
-
-print (restdays4[1:3,c(1:3,6,7)])
-
-#creating a new dataframe for summary of home/away win losses based on number of rest days.
-restdays3<- cast (restdays2, rest ~ LOCATION + W) ; 
-
-colnames(restdays3)<- c( "rest", "AL","AW","HL", "HW") 
-restdays3$ AL.pct <-   round(restdays3$AL*100/(restdays3$AL+restdays3$AW),2) 
-restdays3$ AW.pct <-   round(restdays3$AW*100/(restdays3$AL+restdays3$AW),2)
-restdays3$ HL.pct <-   round(restdays3$HL*100/(restdays3$HL+restdays3$HW),2)
-restdays3$ HW.pct <-   round(restdays3$HW*100/(restdays3$HL+restdays3$HW),2)
-
-print (restdays3[1:3,c(1,6:9)])
-
 
 ```
 
@@ -203,9 +158,7 @@ print (restdays3[1:3,c(1,6:9)])
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
 
-Literature review demonstrated that a team playing at home is more likely to win with an average probability of the home win is around 60 percent. (http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball) As a result, part of this research is aimed at analysing whether home team advantage was statistically evident in season 2015-2016. 
-
-The NULL Hypothesis is: Home playing at home is more likely to win at home then when playing away.
+The NULL Hypothesis is: Teams performance at home is more likely to win at home then when playing away.
 
 ###Methods
 The steps to calculate this measurement are as follows:  
@@ -248,10 +201,11 @@ for (i in 1:nrow(aa3)) {
 head(aa3)
 
 aa3 <- aa3[order(aa3$WIN_PCT_HOME, decreasing = TRUE),]
-rownames(aa4) <- NULL
+
 
 aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
 
+aa3$WIN_PCT_DIFF<- aa3$WIN_PCT_HOME - aa3$WIN_PCT_AWAY
 
 ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "AWAY")) 
  
@@ -262,21 +216,105 @@ ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + g
 The plot shows that out of 30 teams:
   25 teams have won more games at home than away
   3 teams have won more games away than at home
-  2 teams home and away win ratios are almost equal (difference of less than XXX)
+  2 teams home and away win ratios are almost equal (difference of less than 0.01%)
 
 
 ###Variance test Analysis
+```{r}
 
+```
+
+###regression analysis
+
+```{r}
+margreg<- lm(FINAL_MARGIN ~ LOCATION, restdays2)
+summary(margreg)
+```
 
 ###Discussion
 
-The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis on a team level where 25 teams are clearly winning more games at home and away. The result confirm acceptance of the NULL hypothesis, which stated that a team playing at home is more likely to win then an away team.
+The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis on a team level where 25 teams are clearly winning more games at home and away. The result shown that the NULL hypothesis should be rejected as a team playing at home is more likely to win then an away team. Regression analysis shown that playing at home gives teams on average additional 4.29 margin points. 
 
 The result of this research also confirms recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to a figure around the 2011-15 mean of 58.8%. Home win ratio was 57.4% win in 2014-2015 season. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2015-2016 season. Based on the literature review this trend could be potentially explained by the following factors http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball:
 
   1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly charterd planes more often than in the past. This results in teams being less tired as a result of travel and better prepared for the games.
   
   2. Change in style of play in the NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees.
+
+
+##Effect of rest on teams' performance
+
+###Introduction
+
+This area of analysis focuses on investigation of whether a number of rest days between games affect performance and more importantly winning ratio of a team. 
+
+The Null Hypothesis is: By having longer rest a team is likely to have a higher winning ratio.
+
+###Methods
+The steps to calculate this measurement are as follows:  
+    1. Calculating number of rest days between games for all teams
+    2. Calculating ratios for effects of rest days on win/loss
+    3. Calculating ratios for effects of rest days on win/loss form home/awayCalculating ratios for effects of rest days on win/loss
+    4. Discuss the findings of the data
+    
+
+```{r}
+
+
+#calulating number of rest days between teams
+for (i in 2: nrow (restdays2)) {
+  if (restdays2$TEAM[i]==restdays2$TEAM[i-1])
+    restdays2$rest[i]<- as.numeric(restdays2$DATE[i] - restdays2$DATE[i-1]-1)
+  else 
+    (restdays2$rest[i]<- "NA")  
+}
+restdays2$BLANK<-""
+
+restdays2$rest <- as.numeric (restdays2$rest)
+
+#regression analysis
+margreg<- lm(FINAL_MARGIN ~ LOCATION + rest, restdays2)
+summary(margreg)
+
+
+#creating dataframe for total rest days
+restdays4<- cast (restdays2, rest ~  W)
+colnames(restdays4)<- c( "rest", "L","W") 
+
+restdays4$total<-restdays4$L + restdays4$W
+restdays4$dist <-   round (restdays4$total * 100 /sum (restdays4$total) ,2)
+
+restdays4[,c(1,4,5)]
+
+#The distribution of rest days show that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections
+
+restdays4$ L.pct <-   round(restdays4$L*100/(restdays4$L+restdays4$W),2) 
+restdays4$ W.pct <-   round(restdays4$W*100/(restdays4$L+restdays4$W),2)
+
+print (restdays4[1:3,c(1,3,7)])
+
+#creating a new dataframe for summary of home/away win losses based on number of rest days.
+restdays3<- cast (restdays2, rest ~ LOCATION + W) ; 
+
+colnames(restdays3)<- c( "rest", "AL","AW","HL", "HW") 
+restdays3$ AL.pct <-   round(restdays3$AL*100/(restdays3$AL+restdays3$AW),2) 
+restdays3$ AW.pct <-   round(restdays3$AW*100/(restdays3$AL+restdays3$AW),2)
+restdays3$ HL.pct <-   round(restdays3$HL*100/(restdays3$HL+restdays3$HW),2)
+restdays3$ HW.pct <-   round(restdays3$HW*100/(restdays3$HL+restdays3$HW),2)
+
+print (restdays3[1:3,c(1,7,9)])
+
+```
+
+###Findings
+
+TO INCLUDE THE TABLES FROM THE ABOVE CODE
+
+
+###Discussion
+
+The analysis demonstrated that overall winning ratio improves with increase in  
+
 
 
 
@@ -945,13 +983,10 @@ summary(linreg_fgm2)
 ```
 
 
-##Discussion  
-###What results did you find?  
+#Conclusion
 
-###Why is this interesting?
 
-###What would be the next steps?
-<<<<<<< HEAD
+#References
 =======
 
 ```{r}
