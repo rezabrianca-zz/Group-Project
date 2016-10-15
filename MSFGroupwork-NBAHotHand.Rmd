@@ -355,15 +355,17 @@ In this analysis fatigue was measured as the period of the game, as it can be as
 The steps to test the first hypothesis were as follows:
   1. The overall accuracy for each period was calculated, based on the number of shots made (FGM = 1) and the number of shots taken for the specific period (FGM = 1 & FGM = 0)
   2. This results in a percentage value of shots made for each of the periods
-  3. A T-test was used to examine whether or not these values were significant different at a level of significance of 5%.
+  3. A variable called "Overtime" was introduced to distinguish between periods in the regular game time and overtime
+  4. The average accuracy for regular time and overtime was calculated
+  5. A T-test was used to examine whether or not these values were significant different at a level of significance of 5%.
   
   
 Psychological stress was measured through the remaining time on the shot clock for each shot taken. It was assumed that a player would experience more stress the lower the shot clock goes.
 
 The steps to test the second hypothesis were as follows:
-  1. As the shot clock variable contained 5000 missing values, those were excluded from the analysis
+  1. As the shot clock variable contained 5567 missing values, those were excluded from the analysis
   2. To simplify the shot clock variable, decimals were removed from the data so every shot taken was assigned to 0 to 24 seconds left on the shot clock
-  3. The overall accuracy for each second was calculated using the FGM variable 
+  3. The overall accuracy for each second was calculated using the FGM variable
 
 
 ```{r}
@@ -381,12 +383,16 @@ for (i in (1:7)){
   if (df.acc$period[i] >= 5) df.acc[i, "overtime"] <- 1
 }
 
+regular <- sum(df.acc$accuracy[df.acc$period <= 4])/4
+overtime <- sum(df.acc$accuracy[df.acc$period >=5])/3
+
 
 t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 2])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 3], df$FGM[df$PERIOD == 4])
 t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
+t.test(df$FGM[df$PERIOD == c(1:4)], df$FGM[df$PERIOD == c(5:7)])
 
 
 ### STRESS
@@ -444,7 +450,7 @@ for (i in ap3$seconds.left){
 
 
 
-ggplot(NULL) + geom_smooth(data = ap3, aes(x = -seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = -seconds.left, y = accuracy, color = "Average"))
+ggplot(NULL) + geom_smooth(data = ap3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
 
 
 t.test(acc$accuracy, ap3$acc.top)
@@ -453,20 +459,57 @@ t.test(acc$accuracy, ap3$acc.top)
 
 ###Results
 
-The accuracies for each period are shown in the table below. 
+The accuracies for each period are detailed in the table below. 
 
 Period  | Accuracy
 ------- | ---------
-1       | `r print(df.acc$accuracy[1], digits = 2)`
-2       | `r print(df.acc$accuracy[2], digits = 2)`
-3       | `r print(df.acc$accuracy[3], digits = 2)`
-4       | `r print(df.acc$accuracy[4], digits = 2)`
-5       | `r print(df.acc$accuracy[5], digits = 2)`
-6       | `r print(df.acc$accuracy[6], digits = 2)`
-7       | `r print(df.acc$accuracy[7], digits = 2)`
+1       | 46%
+2       | 45%
+3       | 46%
+4       | 44%
+5       | 39%
+6       | 43%
+7       | 37%
+regular | 45%
+overtime | 40%
 
 
-The T-tests for period 1 and period 2 was significant, t(65301) = 2.42, p = 0.015, as well as the T-test for period 3 and 4, t(60757) = 4.24, p < 0.01. Further the T-test for period 2 and 3 was not significant, t(63843) = -1.53, p = 0.126, as well as the T-test for period 1 and 3, t()
+
+The T-tests for period 1 and period 2 was significant, t(65301) = 2.42, p = .015, as well as the T-test for period 3 and 4, t(60757) = 4.24, p < .01. Further the T-test for period 2 and 3 was not significant, t(63843) = -1.53, p = .126, as well as the T-test for period 1 and 3, t(65989) = 0.87, p = .38. 
+The T-test for regular time and overtime was highly significant, t(383) = 2.77, p < .01.
+
+
+The changes in the overall accuracy per second are shown in the graph below.
+
+```{r}
+graph.acc <- ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
+
+graph.acc + labs(title = "Overall Accuracy per second left on shot clock") + xlab("Seconds left on shot clock") + ylab("Overall Accuracy")
+```
+
+### Discussion
+
+The results of the T-tests show a significant difference for the overall accuracy between period 1 and period 2, between period 3 and period 4 and between regular game time and overtime. As the table shows the changes in accuracy are really small (from 46% to 44% over the regular game time) and often located on digit-level, so eventhough the changes are significant they are negligible. After all, there is not enought evidence to reject the Null hypothesis, statingthat there is no difference in the accuracy for later periods, in regular game time but it can be rejected for overtime. It can be concluded that accuracy does not suffer for later game periods as long as the game ends in regular time. For games that reach overtime a highly significant drop in the accuracy of over 5% (45% to below 40%) is observale. 
+This means that elite basketball players cope really well with any occurance of fatigue regarding their shot accuracy on a regular basis. As soon as the game reaches an intensity which is beyond the regular level effects of fatigue can be found leading to lower shot accuracy. 
+
+
+The effects of psychological stress are highly visible as shown in the graph above. While the accuracy in the first 10 seconds of the shot clock is exceeding the overall accuracy in the regular game time (60-45% vs 45% in regular game time), it declines quite fast in the last 5 seconds of the shot clock (from 42% to 32%), leading to the rejection of the Null hypothesis, that there are no differences in the accuracy for more stressful events. These results imply that as the shot clock runs out, so as the psychological pressure on the shooter increases, their shot performance suffers. ??????
+
+
+An ad hoc data analysis was undertaken to investigate whether this pattern of stress-inducted accuracy declination can be found as well for "superstar" players. The players were Lebron James, James Harden and Russel Westbrook, chosen because they were the top 3 shooters in the season. Their combined average accuracy per second can be seen in the graphic below. 
+
+```{r}
+
+graph2 <- ggplot(NULL) + geom_smooth(data = ap3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
+graph2 + labs(title = "Comparison - Accuracy per second on shot clock left for Top Players vs Overall Average") + xlab("Seconds left on shot clock") + ylab("Accuracy")
+
+```
+
+The graph shows many similarities for top players to the average graph. The most visual differences are the slightly lower accuracy around the 15 seconds mark for the top players and the much lower decrease below 5 seconds left. Explanations for these differences could be that around the 15 second mark top players feel more obligated to shoot than the average player, even when they are not in the optimal position to do so - leading to lower accuracies. Further it seems like Top players dont get affected by last seconds stress as much as average players. They keep up a quite high accuracy even for the last second of the shot clock (40%).
+
+### Future research
+
+Future research could focus on this difference between Top players and average players. While this analysis revealed a difference for shot clock pressure it would be interesting to look at more events that induce stress like the margin of the game or the placement in the standings of the own and the enemy team.
 
 ## Shooting Percentage Analysis (James)
 
