@@ -395,7 +395,7 @@ for (i in 1:nrow(shot.stats)){
 ```{r}
 # Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
-top.scorers.list <- c("paul millsap", "isaiah thomas", "brook lopez", "kemba walker", "jimmy butler", "mnta ellis", "ty lawson", "reggie jackson", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "cj miles", "kobe bryant", "marc gasol", "dwayne wade", "brandon knight", "andrew wiggins", "carmelo anthony", "nikola vucevic", "michael carter-williams", "eric bledsoe", "demarcus cousins", "kawhi leonard", "kyle lowry", "gordon hayward", "john wall") # players picked out
+top.scorers.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge") # players picked out
 top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for top scorers
 
 # Replace "W" and "L" with 1 and 0 respectively, 
