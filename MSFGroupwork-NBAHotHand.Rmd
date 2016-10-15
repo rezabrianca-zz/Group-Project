@@ -511,7 +511,7 @@ anova(model)
 
 ```{r}
 # Find out "special" players by t-test
-# Ressull Westbrook
+# Russell Westbrook
 t.test(top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "0"])
 t.test(top.scorers$FG.percentage[top.scorers$player_name == "russell westbrook" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "russell westbrook" & top.scorers$W == "0"])
 # Gordon Heyward
