@@ -307,10 +307,10 @@ print (restdays3[1:3,c(1,7,9)])
 
 #Testing of rest data
 t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
-chisq.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+#chisq.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
 
 
-restdays2$W[restdays2$rest==0,]
+#restdays2$W[restdays2$rest==0,]
 
 ```
 
@@ -607,7 +607,7 @@ for (i in 0:nrow(distance_level)){
 dfZerotoAll <- data.frame(distanceZerotoAll, accuracyDist1)
 
 #calculate correlation
-cor.test(dfZerotoFive$distanceZerotoAll, dfZerotoFive$accuracyDist1)
+cor.test(dfZerotoAll$distanceZerotoAll, dfZerotoAll$accuracyDist1)
 ```
 ###Correlation Test Result  
   The correlation test result produced slightly high number of correlation between defender distance with shooting accuracy for all shot distance attempt in the last seasons's NBA (0.59). If the findings made only based on this number only, there would be obvious that further defender distance will **automatically** increase shooting accuracy. However, after the analysis went into smaller piece of distance, ther result will be difference. For example, for distance range between 0 (zero) to 8 feet, the correlation measurement will be as follows:  
@@ -650,7 +650,7 @@ The steps to calculate this measurement are as follows:
 ```{r}
 #Calculate accuracy against shooting distance
 #Group the shooting distance level
-shooting_distance_level <- as.data.frame(table(factor(ShotDistance)))
+shooting_distance_level <- as.data.frame(table(factor(df[, "SHOT_DIST"])))
 head(shooting_distance_level)
 
 #Calculate how many times players scored in every shooting distance
@@ -704,7 +704,7 @@ cor.test(dfShootingZerotoAll$shootingDistanceZerotoAll, dfShootingZerotoAll$shoo
   The correlation test result shown strong negative correlation between shooting distance and shooting accuracy (-0.87). This meant that for all data points, the further a shooter from the basket, it was unlikely the shooter's attempt was success, regardless who was the shooter. However, if the correlation test taken for certain range distance based on the diagram, for example range from 10 feet to 20 feet, the correlation result would be different as follows:
 
 ```{r}
-#populate data for shooting distance in range 10 to 24 feet
+#populate data for shooting distance in range 10 to 20 feet
 shootingDistance10to20 <- c()
 shootingAccuracyDist2 <- c()
 for (i in 100:200){
@@ -722,16 +722,7 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
 
 ###Limitations  
  Since the dataset mostly return 0% for shooting distance greater than 30 feet, it would better if the dataset could be enriched with previous season statistics, or even the last 10 seasons to exercise in more detail about the pattern for long distance shots attempt.  
-```{r}
-#Summary of total points
-ptssum <- cast(df1, GAME_ID1+ player_id + player_name  ~ PTS); head(ptssum)
-#creating "total points per player, per game" column
-ptssum$totalpts <- ptssum[, "2"] * 2 + ptssum[, "3"] * 3
-
-pttsum2 <- ptssum[order(ptssum$totalpts, decreasing = TRUE), ]
-head(pttsum2, 10)
-```
-
+  
 ##Hot Hand Theory
 ###Introduction
   The analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is based on the hypothesis that a shooter with a hot hand will have shots that are not independent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
