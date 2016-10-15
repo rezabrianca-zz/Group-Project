@@ -479,9 +479,9 @@ for (i in 1:nrow(shot.stats)){
 
 
 ```{r}
-# Pick out 3 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
+# Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
-top.scorers.list <- c("mnta ellis", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "dwayne wade", "carmelo anthony", "nikola vucevic", "eric bledsoe", "demarcus cousins", "kawhi leonard", "gordon hayward", "john wall") # players picked out
+top.scorers.list <- c("mnta ellis", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "dwayne wade", "carmelo anthony", "eric bledsoe", "demarcus cousins", "kawhi leonard", "gordon hayward", "john wall") # 15 players picked out from all players
 top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
 top.scorers2 <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
 
@@ -493,19 +493,16 @@ for (i in 1:nrow(top.scorers)) {
 }
 top.scorers2[, "W"] <- as.character(top.scorers2[, "W"])
 
-ggplot(top.scorers2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-ggplot(top.scorers2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
-ggplot(top.scorers) + geom_point(aes(x = FINAL_MARGIN, y = FGA, colour = player_name))
-
 # Correlation test
-cor.test(top.scorers$FINAL_MARGIN, top.scorers$FGA)
-cor.test(top.scorers$FINAL_MARGIN, top.scorers$FG.percentage) # cor = 0.272
+cor.test(top.scorers$W, top.scorers$FGA)
+cor.test(top.scorers$W, top.scorers$FG.percentage)
 
 # Linear regression
-summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ FGA and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data = top.scorers)) 
+# summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ FGA and location
+# summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
+# summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data = top.scorers)) 
 
+# Logistic regression
 model <- glm(W ~ FGA + FG.percentage, data = top.scorers)
 summary(model)
 anova(model)
@@ -532,11 +529,19 @@ t.test(top.scorers$FG.percentage[top.scorers$player_name == "lebron james" & top
 
 special.list <- c("gordon hayward", "russell westbrook", "kawhi leonard")
 special <- shot.stats[shot.stats$player_name %in% special.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")]
+special2 <- shot.stats[shot.stats$player_name %in% special.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")]
+special2[, "W"] <- as.numeric(special2[, "W"])
+for (i in 1:nrow(special2)) {
+  if (special2[i, "W"] == 1) special2[i, "W"] <- "W"
+  if (special2[i, "W"] == 0) special2[i, "W"] <- "L"
+}
+
+ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
 
 special.model <- glm(W ~ FGA + FG.percentage, data = special)
 summary(special.model)
 anova(special.model)
-
 
 ```
 
