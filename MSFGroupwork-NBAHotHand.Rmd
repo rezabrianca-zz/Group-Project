@@ -163,6 +163,11 @@ restdays2$BLANK<-""
 
 restdays2$rest <- as.numeric (restdays2$rest)
 
+#regression analysis
+restreg<- lm(FINAL_MARGIN ~ LOCATION + rest, restdays2)
+summary(restreg)
+
+
 #creating dataframe for total rest days
 restdays4<- cast (restdays2, rest ~  W)
 colnames(restdays4)<- c( "rest", "L","W") 
