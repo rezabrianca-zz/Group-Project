@@ -318,10 +318,12 @@ The analysis demonstrated that overall winning ratio improves with increase in
 
 
 
-##Close Game Effect (Justin)
+##Effects on accuracy (Justin)
 
 
-The potential effects of tiredness and stress on the accuracy of shots are investigated in this part of the analysis. 
+The potential effects of fatigue and stress on the accuracy of shots are investigated in this part of the analysis.
+
+Fatigue in basketball is a broadly analysed topic in physiological research. Latest literature suggests that there is no 
 
 
 ```{r}
@@ -353,28 +355,17 @@ t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
 
 
-# accuracy per player per period
-
-df.period <- cast(df, player_id + player_name + PERIOD ~ FGM)
-
-df.period[, "accuracy"] <- as.numeric()
-
-for (i in 1:nrow(df.period)){
-  df.period[i, "accuracy"] <- df.period[i, "1"] / sum(df.period[i, "1"], df.period[i, "0"] ) 
-}
-  
-# do analysis for top players per team in regards of accuracy per period
 
 # accuracy for Shot Clock
 
 # dealing with missing values
 df1[is.na(df1)] <- 99
 
-acc <- data.frame(seconds.left = c(0:23))
+acc <- data.frame(seconds.left = c(0:24))
 
 #accuracy for every second
-for (i in (0:23)){
-  acc[i, "accuracy"] <- (sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i + 1 & df$SHOT_CLOCK != 99 & df$FGM == 1) / sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i + 1 & df$SHOT_CLOCK != 99))
+for (i in (0:24)){
+  acc[i, "accuracy"] <- (sum(df1$SHOT_CLOCK >= i & df1$SHOT_CLOCK < i + 1 & df1$SHOT_CLOCK != 99 & df1$FGM == 1) / sum(df1$SHOT_CLOCK >= i & df1$SHOT_CLOCK < i + 1 & df1$SHOT_CLOCK != 99))
 }
 
 ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
@@ -394,15 +385,13 @@ for (i in (1:nrow(df.acc.players))){
   }
 }
 
-df.acc.players[, "acc.per.sec"] <- as.numeric()
-
 
 ap<- df.acc.players
 head(ap)
 
 ap$SHOT_CLOCK <- NULL
 
-colnames(ap)<- c( "player_id", "player_name","X0", "X1","seconds.left", "acc.per.sec") 
+colnames(ap)<- c( "player_id", "player_name","X0", "X1","seconds.left") 
 
 
 ap2 <- ddply(ap, c("player_id", "player_name","seconds.left"), summarise,
@@ -411,18 +400,20 @@ X1= sum(X1))
 
 ap2$acc<- ap2$X1/(ap2$X0+ap2$X1)
 
+ap2[ap2 == 99] <- NA
 
-ggplot(df.acc.players, aes(x = seconds.left, y = ))
+ap3 <- data.frame(row.names = c(0:24))
+ap3$seconds.left <- c(0:24)
 
-#Assign accuracy per second to main dataframe
-df[, "acc.per.sec"] <- as.numeric()
+for (i in ap3$seconds.left){
+  ap3$acc.top[ap3$seconds.left == i] <- sum(ap2$acc[ap2$seconds.left == i & ap2$player_name == "james harden"][!is.na(ap2$acc[ap2$seconds.left == i & ap2$player_name == "james harden"])], ap2$acc[ap2$seconds.left == i & ap2$player_name == "lebron james"][!is.na(ap2$acc[ap2$seconds.left == i & ap2$player_name == "lebron james"])], ap2$acc[ap2$seconds.left == i & ap2$player_name == "russell westbrook"][!is.na(ap2$acc[ap2$seconds.left == i & ap2$player_name == "russell westbrook"])])/3}
 
-for (i in 1:nrow(df)){
-  for (j in 0:23){
-    if (df$SHOT_CLOCK[i] > j & df$SHOT_CLOCK[i] <= j + 1 & df$SHOT_CLOCK[i] != 99) df[i, "acc.per.sec"] <- acc[j, "accuracy"]
-  }
-}
 
+
+ggplot(NULL) + geom_smooth(data = ap3, aes(x = -seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = -seconds.left, y = accuracy, color = "Average"))
+
+
+t.test(acc$accuracy, ap3$acc.top)
 
 ```
 
@@ -452,7 +443,7 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 ```{r}
 # Reshape the dataframe
 
-shot.stats <- cast(data = df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
+shot.stats <- cast(data = df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
 
 # Field Goal Attempts
 
@@ -478,7 +469,7 @@ for (i in 1:nrow(shot.stats)){
 # Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
 top.scorers.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge") # players picked out
-top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for top scorers
+top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
 
 # Replace "W" and "L" with 1 and 0 respectively, 
 top.scorers[, "W"] <- as.character(top.scorers[, "W"])
@@ -504,7 +495,7 @@ summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ 
 summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
 summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data= top.scorers)) 
 
-summary(lm(FINAL_MARGIN ~ LOCATION, data = top.scorers)) # Final margin ~ FGA and location
+summary(glm(W ~ LOCATION, data = top.scorers)) # Final margin ~ FGA and location
 
 ```
 
