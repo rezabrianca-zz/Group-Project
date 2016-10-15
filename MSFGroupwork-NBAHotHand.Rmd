@@ -160,10 +160,18 @@ for (i in aa3$TEAM) {
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
 
-Literature review demonstrated that 
+Literature review demonstrated that a team playing at home is more likely to win with an average probability of the home win is around XXXX percent. It is also important to note that there a trend developed in last few years, which indicates that win probability of a team playing at home has reduced from around 65% from 1975-1992 to 60% since then and to 57.4% win in 2014-2015 season. (http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball) As a result, part of this research is aimed at analysing whether home team advantage was statistically evident in season 2015-2016. 
 
-The NULL Hypothesis is: 
+The NULL Hypothesis is: Home playing at home is more likely to win at home then when playing away.
 
+###Methods
+The steps to calculate this measurement are as follows:  
+    1. Calculate a total number of games, which has been won by a home or away team
+    2. Compare the total win numbers to identify whether home advantage is evident using means of the variables
+    3. Extend the analysis to review of the home/away wins on a team level 
+    4. Plot the team level data 
+    5. Discuss the findings of the analysis
+    6. Propose areas of further research (DO I NEED IT HERE???)
 
 ```{r}
 aa <- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
@@ -174,8 +182,8 @@ hh <- sum(aa$WINNER == "HOME")
 #Away wins:
 aw <- sum(aa$WINNER == "AWAY")
 #percentage of home team winning: 
-round(hh / (hh + aw), 2)
-round(aw / (hh + aw), 2)
+round(hh / (hh + aw), 4)
+round(aw / (hh + aw), 4)
 
 ```
 
@@ -205,6 +213,28 @@ aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
 ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "AWAY")) 
  
 ```
+
+###Plot Result
+
+The plot shows that out of 30 teams:
+  25 teams have won more games at home than away
+  3 teams have won more games away than at home
+  2 teams home and away win ratios are almost equal (difference of less than XXX)
+
+
+###Variance test Analysis
+
+
+###Discussion
+
+The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%
+
+
+
+
+###Limitations
+
+
 
 ##Close Game Effect (Justin)
 
