@@ -146,55 +146,10 @@ for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$M
 #creating a column for 'TEAM' regardless whether they played at home or not as the original dataframe consists of both home and away teams
 for (i in 1:nrow(df1)) df1$TEAM[i] <-unlist(strsplit(df1$MATCHUP[i], " "))[5]
 
-
 #cleaning-up data for rest days calculation
 df1$BLANK2<-""
 restdays2 <- cast(df1, TEAM + DATE + LOCATION + W + FINAL_MARGIN ~ FGM)
 restdays2$DATE<- as.Date(restdays2$DATE)
-
-#calulating number of rest days between teams
-for (i in 2: nrow (restdays2)) {
-  if (restdays2$TEAM[i]==restdays2$TEAM[i-1])
-    restdays2$rest[i]<- as.numeric(restdays2$DATE[i] - restdays2$DATE[i-1]-1)
-  else 
-    (restdays2$rest[i]<- "NA")  
-}
-restdays2$BLANK<-""
-
-restdays2$rest <- as.numeric (restdays2$rest)
-
-#regression analysis
-restreg<- lm(FINAL_MARGIN ~ LOCATION + rest, restdays2)
-summary(restreg)
-
-
-#creating dataframe for total rest days
-restdays4<- cast (restdays2, rest ~  W)
-colnames(restdays4)<- c( "rest", "L","W") 
-
-restdays4$total<-restdays4$L + restdays4$W
-restdays4$dist <-   round (restdays4$total * 100 /sum (restdays4$total) ,2)
-
-print (restdays4[,c(1,6,7)])
-
-'''The distribution of rest days show that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections'''
-
-restdays4$ L.pct <-   round(restdays4$L*100/(restdays4$L+restdays4$W),2) 
-restdays4$ W.pct <-   round(restdays4$W*100/(restdays4$L+restdays4$W),2)
-
-print (restdays4[1:3,c(1:3,6,7)])
-
-#creating a new dataframe for summary of home/away win losses based on number of rest days.
-restdays3<- cast (restdays2, rest ~ LOCATION + W) ; 
-
-colnames(restdays3)<- c( "rest", "AL","AW","HL", "HW") 
-restdays3$ AL.pct <-   round(restdays3$AL*100/(restdays3$AL+restdays3$AW),2) 
-restdays3$ AW.pct <-   round(restdays3$AW*100/(restdays3$AL+restdays3$AW),2)
-restdays3$ HL.pct <-   round(restdays3$HL*100/(restdays3$HL+restdays3$HW),2)
-restdays3$ HW.pct <-   round(restdays3$HW*100/(restdays3$HL+restdays3$HW),2)
-
-print (restdays3[1:3,c(1,6:9)])
-
 
 ```
 
@@ -203,9 +158,7 @@ print (restdays3[1:3,c(1,6:9)])
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
 
-Literature review demonstrated that a team playing at home is more likely to win with an average probability of the home win is around 60 percent. (http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball) As a result, part of this research is aimed at analysing whether home team advantage was statistically evident in season 2015-2016. 
-
-The NULL Hypothesis is: Home playing at home is more likely to win at home then when playing away.
+The NULL Hypothesis is: Teams performance at home is more likely to win at home then when playing away.
 
 ###Methods
 The steps to calculate this measurement are as follows:  
@@ -248,10 +201,11 @@ for (i in 1:nrow(aa3)) {
 head(aa3)
 
 aa3 <- aa3[order(aa3$WIN_PCT_HOME, decreasing = TRUE),]
-rownames(aa4) <- NULL
+
 
 aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
 
+aa3$WIN_PCT_DIFF<- aa3$WIN_PCT_HOME - aa3$WIN_PCT_AWAY
 
 ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "AWAY")) 
  
@@ -262,15 +216,24 @@ ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + g
 The plot shows that out of 30 teams:
   25 teams have won more games at home than away
   3 teams have won more games away than at home
-  2 teams home and away win ratios are almost equal (difference of less than XXX)
+  2 teams home and away win ratios are almost equal (difference of less than 0.01%)
 
 
 ###Variance test Analysis
+```{r}
 
+```
+
+###regression analysis
+
+```{r}
+margreg<- lm(FINAL_MARGIN ~ LOCATION, restdays2)
+summary(margreg)
+```
 
 ###Discussion
 
-The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis on a team level where 25 teams are clearly winning more games at home and away. The result confirm acceptance of the NULL hypothesis, which stated that a team playing at home is more likely to win then an away team.
+The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis on a team level where 25 teams are clearly winning more games at home and away. The result shown that the NULL hypothesis should be rejected as a team playing at home is more likely to win then an away team. Regression analysis shown that playing at home gives teams on average additional 4.29 margin points. 
 
 The result of this research also confirms recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to a figure around the 2011-15 mean of 58.8%. Home win ratio was 57.4% win in 2014-2015 season. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2015-2016 season. Based on the literature review this trend could be potentially explained by the following factors http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball:
 
@@ -279,6 +242,94 @@ The result of this research also confirms recent trend of decline in home advant
   2. Change in style of play in the NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees.
 
 
+##Effect of rest on teams' performance
+
+###Introduction
+
+This area of analysis focuses on investigation of whether a number of rest days between games affect performance and more importantly winning ratio of a team. 
+
+The Null Hypothesis is: By having longer rest a team is likely to have a higher winning ratio.
+
+###Methods
+The steps to calculate this measurement are as follows:  
+    1. Calculating number of rest days between games for all teams
+    2. Calculating ratios for effects of rest days on win/loss
+    3. Calculating ratios for effects of rest days on win/loss form home/awayCalculating ratios for effects of rest days on win/loss
+    4. Discuss the findings of the data
+    
+
+```{r}
+
+
+#calulating number of rest days between teams
+for (i in 2: nrow (restdays2)) {
+  if (restdays2$TEAM[i]==restdays2$TEAM[i-1])
+    restdays2$rest[i]<- as.numeric(restdays2$DATE[i] - restdays2$DATE[i-1]-1)
+  else 
+    (restdays2$rest[i]<- "NA")  
+}
+restdays2$BLANK<-""
+
+restdays2$rest <- as.numeric (restdays2$rest)
+
+#regression analysis
+margreg<- lm(FINAL_MARGIN ~ LOCATION + rest, restdays2)
+summary(margreg)
+
+
+#creating dataframe for total rest days
+restdays4<- cast (restdays2, rest ~  W)
+colnames(restdays4)<- c( "rest", "L","W") 
+
+restdays4$total<-restdays4$L + restdays4$W
+restdays4$dist <-   round (restdays4$total * 100 /sum (restdays4$total) ,2)
+
+restdays4[,c(1,4,5)]
+
+#The distribution of rest days show that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections
+
+restdays4$ L.pct <-   round(restdays4$L*100/(restdays4$L+restdays4$W),2) 
+restdays4$ W.pct <-   round(restdays4$W*100/(restdays4$L+restdays4$W),2)
+
+print (restdays4[1:3,c(1,3,7)])
+
+#creating a new dataframe for summary of home/away win losses based on number of rest days.
+restdays3<- cast (restdays2, rest ~ LOCATION + W) ; 
+
+colnames(restdays3)<- c( "rest", "AL","AW","HL", "HW") 
+restdays3$ AL.pct <-   round(restdays3$AL*100/(restdays3$AL+restdays3$AW),2) 
+restdays3$ AW.pct <-   round(restdays3$AW*100/(restdays3$AL+restdays3$AW),2)
+restdays3$ HL.pct <-   round(restdays3$HL*100/(restdays3$HL+restdays3$HW),2)
+restdays3$ HW.pct <-   round(restdays3$HW*100/(restdays3$HL+restdays3$HW),2)
+
+print (restdays3[1:3,c(1,7,9)])
+
+
+#Testing of rest data
+t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+chisq.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+
+
+restdays2$W[restdays2$rest==0,]
+
+```
+
+###Findings
+
+TO INCLUDE THE TABLES FROM THE ABOVE CODE
+
+
+###Discussion
+
+The analysis demonstrated that overall winning ratio improves with increase in  rest days: back-to-back games had 47.07% winning ratio, 1 day rest increased winning ratio to 50.10% and with 2 days rest the winning ration has increased even further to 53.94%.
+
+By extending the analysis to the team level, the results have demonstrated similar tendency for home  games where winning ratio has increased from 53.54% to 54.68% and 59.57% respectively with 0, 1 and 2 days of rest. Somewhat interestingly the analysis of effect of rest days on winning ratio of away games demonstrated that there is hardly any difference between 0 and 1 days of rest (44.33% and 44.24%). However with 2 days of rest teams' average winning ratio have increased to 46.90% (2.66% increase). This perhaps could be explained by the fact that teams were able to minimise effect of travelling when having a bigger window between games.
+
+Based on the above, the analysis shown that the null hypothesis should be rejected as there is a clear evidence that the higher rest days correspond to higher winning ratio
+
+###Further research
+
+To better understand effects of rest and home/away advantage it would be interesting to take into account distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York travelling to play an away gamein New Jersey
 
 ##Effects on accuracy (Justin)
 
@@ -440,7 +491,7 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 ```{r}
 # Reshape the dataframe
 
-shot.stats <- cast(data = df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
+shot.stats <- cast(data = df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
 
 # Field Goal Attempts
 
@@ -463,44 +514,71 @@ for (i in 1:nrow(shot.stats)){
 
 
 ```{r}
-# Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
+# Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
-<<<<<<< HEAD
-top.scorers.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "cj miles", "kobe bryant", "marc gasol", "dwayne wade", "brandon knight", "andrew wiggins", "carmelo anthony", "nikola vucevic", "michael carter-williams", "eric bledsoe", "demarcus cousins", "kawhi leonard", "kyle lowry", "gordon hayward", "john wall") # players picked out
+top.scorers.list <- c("mnta ellis", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "dwayne wade", "carmelo anthony", "eric bledsoe", "demarcus cousins", "kawhi leonard", "gordon hayward", "john wall") # 15 players picked out from all players
 top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
-=======
-top.scorers.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge") # players picked out
-top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for top scorers
->>>>>>> 3d446d3ae38210f7e380e41539b94208ca820936
+top.scorers2 <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
 
-# Replace "W" and "L" with 1 and 0 respectively, 
-top.scorers[, "W"] <- as.character(top.scorers[, "W"])
+# Replace 1 and 0 with "W" and "L" respectively, 
+top.scorers2[, "W"] <- as.numeric(top.scorers2[, "W"])
 for (i in 1:nrow(top.scorers)) {
-  if (top.scorers[i, "W"] == "W") top.scorers[i, "W"] <- 1
-  if (top.scorers[i, "W"] == "L") top.scorers[i, "W"] <- 0
+  if (top.scorers2[i, "W"] == 1) top.scorers2[i, "W"] <- "W"
+  if (top.scorers2[i, "W"] == 0) top.scorers2[i, "W"] <- "L"
 }
-top.scorers[, "W"] <- as.numeric(top.scorers[, "W"])
-
-ggplot(top.scorers) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-ggplot(top.scorers) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W))
-ggplot(top.scorers) + geom_point(aes(x = FINAL_MARGIN, y = FGA, colour = player_name))
-ggplot(top.scorers) + geom_boxplot(aes(x = LOCATION, y = FINAL_MARGIN))
-
-# t.test(top.scorers$FINAL_MARGIN[top.scorers$LOCATION == "H"], top.scorers$FINAL_MARGIN[top.scorers$LOCATION == "A"])
+top.scorers2[, "W"] <- as.character(top.scorers2[, "W"])
 
 # Correlation test
-cor.test(top.scorers$FINAL_MARGIN, top.scorers$FGA)
-cor.test(top.scorers$FINAL_MARGIN, top.scorers$FG.percentage) # cor = 0.272
+cor.test(top.scorers$W, top.scorers$FGA)
+cor.test(top.scorers$W, top.scorers$FG.percentage)
 
 # Linear regression
-summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ FGA and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data= top.scorers)) 
+# summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ FGA and location
+# summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
+# summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data = top.scorers)) 
 
-summary(lm(FINAL_MARGIN ~ LOCATION, data = top.scorers)) # Final margin ~ FGA and location
+# Logistic regression
+model <- glm(W ~ FGA + FG.percentage, data = top.scorers)
+summary(model)
+anova(model)
 
 ```
 
+```{r}
+# Find out "special" players by t-test
+# Ressull Westbrook
+t.test(top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "0"])
+t.test(top.scorers$FG.percentage[top.scorers$player_name == "russell westbrook" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "russell westbrook" & top.scorers$W == "0"])
+# Gordon Heyward
+t.test(top.scorers$FGA[top.scorers$player_name == "gordon hayward" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "gordon hayward" & top.scorers$W == "0"])
+t.test(top.scorers$FG.percentage[top.scorers$player_name == "gordon hayward" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "gordon hayward" & top.scorers$W == "0"])
+# Kawhi Leonard
+t.test(top.scorers$FGA[top.scorers$player_name == "kawhi leonard" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "kawhi leonard" & top.scorers$W == "0"])
+t.test(top.scorers$FG.percentage[top.scorers$player_name == "kawhi leonard" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "kawhi leonard" & top.scorers$W == "0"])
+# Mnta Ellis
+t.test(top.scorers$FGA[top.scorers$player_name == "mnta ellis" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "mnta ellis" & top.scorers$W == "0"])
+t.test(top.scorers$FG.percentage[top.scorers$player_name == "mnta ellis" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "mnta ellis" & top.scorers$W == "0"])
+# Lebron James
+t.test(top.scorers$FGA[top.scorers$player_name == "lebron james" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "lebron james" & top.scorers$W == "0"])
+t.test(top.scorers$FG.percentage[top.scorers$player_name == "lebron james" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "lebron james" & top.scorers$W == "0"])
+
+special.list <- c("gordon hayward", "russell westbrook", "kawhi leonard")
+special <- shot.stats[shot.stats$player_name %in% special.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")]
+special2 <- shot.stats[shot.stats$player_name %in% special.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")]
+special2[, "W"] <- as.numeric(special2[, "W"])
+for (i in 1:nrow(special2)) {
+  if (special2[i, "W"] == 1) special2[i, "W"] <- "W"
+  if (special2[i, "W"] == 0) special2[i, "W"] <- "L"
+}
+
+ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
+
+special.model <- glm(W ~ FGA + FG.percentage, data = special)
+summary(special.model)
+anova(special.model)
+
+```
 
 ##Defender Proximity Analysis  
 ###Closest Defender Distance vs Shot Accuracy
@@ -518,7 +596,7 @@ The steps to calculate this measurement are as follows:
 ```{r}
 #Calculate accuracy against defender distance
 #Group the defender distance level
-distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
+distance_level <- as.data.frame(table(factor(df[, "CLOSE_DEF_DIST"])))
 head(distance_level)
 
 #Calculate how many times players scored in every defender distance
@@ -958,13 +1036,10 @@ summary(linreg_fgm2)
 ```
 
 
-##Discussion  
-###What results did you find?  
+#Conclusion
 
-###Why is this interesting?
 
-###What would be the next steps?
-<<<<<<< HEAD
+#References
 =======
 
 ```{r}
