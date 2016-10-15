@@ -132,8 +132,8 @@ for (i in 1:nrow(df)) {
     if (W[i] == "L") df$WINNER[i] <- "AWAY"
   }
   if (LOCATION[i] == "A") {
-    df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], ""))[7] 
-    df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], ""))[5]
+    df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[7] 
+    df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[5]
     if (W[i] == "L") df$WINNER[i] <- "HOME"  
     if (W[i] == "W") df$WINNER[i] <- "AWAY"
   }
@@ -143,16 +143,59 @@ for (i in 1:nrow(df)) {
 df1[, "MATCHUP"] <- as.character(df1[, "MATCHUP"])
 for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$MATCHUP[i], " -"))[1], format = "%B %d, %Y"))
 
-restdays <- cast(df1, DATE + HOME_TEAM + AWAY_TEAM + WINNER ~ FGM, value = 'FGM')
+#creating a column for 'TEAM' regardless whether they played at home or not as the original dataframe consists of both home and away teams
+for (i in 1:nrow(df1)) df1$TEAM[i] <-unlist(strsplit(df1$MATCHUP[i], " "))[5]
 
-#this code is supposed to produce a list of dates when teams play at HOME in DATES column. for some reason it is not working.
 
-for (i in aa3$TEAM) {
-  for (j in 1:nrow(restdays)) {
-    aa3$DATES <- as.list(aa3$DATES)
-    if (restdays$HOME_TEAM[j] == i) aa3$DATES[aa3$TEAM == i] <- c(aa3$DATES[aa3$TEAM == i], restdays$DATE[j])
-  }
+#cleaning-up data for rest days calculation
+df1$BLANK2<-""
+restdays2 <- cast(df1, TEAM + DATE + LOCATION + W + FINAL_MARGIN ~ FGM)
+restdays2$DATE<- as.Date(restdays2$DATE)
+
+#calulating number of rest days between teams
+for (i in 2: nrow (restdays2)) {
+  if (restdays2$TEAM[i]==restdays2$TEAM[i-1])
+    restdays2$rest[i]<- as.numeric(restdays2$DATE[i] - restdays2$DATE[i-1]-1)
+  else 
+    (restdays2$rest[i]<- "NA")  
 }
+restdays2$BLANK<-""
+
+restdays2$rest <- as.numeric (restdays2$rest)
+
+#regression analysis
+restreg<- lm(FINAL_MARGIN ~ LOCATION + rest, restdays2)
+summary(restreg)
+
+
+#creating dataframe for total rest days
+restdays4<- cast (restdays2, rest ~  W)
+colnames(restdays4)<- c( "rest", "L","W") 
+
+restdays4$total<-restdays4$L + restdays4$W
+restdays4$dist <-   round (restdays4$total * 100 /sum (restdays4$total) ,2)
+
+print (restdays4[,c(1,6,7)])
+
+'''The distribution of rest days show that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections'''
+
+restdays4$ L.pct <-   round(restdays4$L*100/(restdays4$L+restdays4$W),2) 
+restdays4$ W.pct <-   round(restdays4$W*100/(restdays4$L+restdays4$W),2)
+
+print (restdays4[1:3,c(1:3,6,7)])
+
+#creating a new dataframe for summary of home/away win losses based on number of rest days.
+restdays3<- cast (restdays2, rest ~ LOCATION + W) ; 
+
+colnames(restdays3)<- c( "rest", "AL","AW","HL", "HW") 
+restdays3$ AL.pct <-   round(restdays3$AL*100/(restdays3$AL+restdays3$AW),2) 
+restdays3$ AW.pct <-   round(restdays3$AW*100/(restdays3$AL+restdays3$AW),2)
+restdays3$ HL.pct <-   round(restdays3$HL*100/(restdays3$HL+restdays3$HW),2)
+restdays3$ HW.pct <-   round(restdays3$HW*100/(restdays3$HL+restdays3$HW),2)
+
+print (restdays3[1:3,c(1,6:9)])
+
+
 ```
 
 ## Home Advantage analysis
@@ -160,7 +203,7 @@ for (i in aa3$TEAM) {
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
 
-Literature review demonstrated that a team playing at home is more likely to win with an average probability of the home win is around XXXX percent. It is also important to note that there a trend developed in last few years, which indicates that win probability of a team playing at home has reduced from around 65% from 1975-1992 to 60% since then and to 57.4% win in 2014-2015 season. (http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball) As a result, part of this research is aimed at analysing whether home team advantage was statistically evident in season 2015-2016. 
+Literature review demonstrated that a team playing at home is more likely to win with an average probability of the home win is around 60 percent. (http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball) As a result, part of this research is aimed at analysing whether home team advantage was statistically evident in season 2015-2016. 
 
 The NULL Hypothesis is: Home playing at home is more likely to win at home then when playing away.
 
@@ -171,7 +214,7 @@ The steps to calculate this measurement are as follows:
     3. Extend the analysis to review of the home/away wins on a team level 
     4. Plot the team level data 
     5. Discuss the findings of the analysis
-    6. Propose areas of further research (DO I NEED IT HERE???)
+
 
 ```{r}
 aa <- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
@@ -227,12 +270,13 @@ The plot shows that out of 30 teams:
 
 ###Discussion
 
-The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%
+The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis on a team level where 25 teams are clearly winning more games at home and away. The result confirm acceptance of the NULL hypothesis, which stated that a team playing at home is more likely to win then an away team.
 
+The result of this research also confirms recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to a figure around the 2011-15 mean of 58.8%. Home win ratio was 57.4% win in 2014-2015 season. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2015-2016 season. Based on the literature review this trend could be potentially explained by the following factors http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball:
 
-
-
-###Limitations
+  1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly charterd planes more often than in the past. This results in teams being less tired as a result of travel and better prepared for the games.
+  
+  2. Change in style of play in the NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees.
 
 
 
@@ -386,8 +430,13 @@ for (i in 1:nrow(shot.stats)){
 ```{r}
 # Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
+<<<<<<< HEAD
 top.scorers.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "cj miles", "kobe bryant", "marc gasol", "dwayne wade", "brandon knight", "andrew wiggins", "carmelo anthony", "nikola vucevic", "michael carter-williams", "eric bledsoe", "demarcus cousins", "kawhi leonard", "kyle lowry", "gordon hayward", "john wall") # players picked out
 top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
+=======
+top.scorers.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge") # players picked out
+top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for top scorers
+>>>>>>> 3d446d3ae38210f7e380e41539b94208ca820936
 
 # Replace "W" and "L" with 1 and 0 respectively, 
 top.scorers[, "W"] <- as.character(top.scorers[, "W"])
@@ -619,7 +668,7 @@ The steps to approximate this question are as follows:
   1. Calculate streaks achieved in all games and from all players
   2. Categorize streaks per player and game, focusing on the 3 players with the top 3 performances in terms of points
   3. Extract zeros and keep only streaks above 1
-  4. Visualise streaks' length distribution - barplots
+  4. Visualise streaks' length distribution - barrplots
   5. Visualise streaks' length via boxplot
   6. Calculate the shooting percentage of the 3 players 
   7. Create a sample independent shooter setting as shooting percentage the real player's shooting percentage
@@ -627,9 +676,9 @@ The steps to approximate this question are as follows:
 
 ```{r}
 
-#From 'FGM' column: 1 represents a basket made and 0 represents a basket missed
+#From 'FGM' column we have that 1 represents a basket made and 0 represents a basket missed
 #Define the length of a shooting streak to be the number of consecutive baskets made until a miss occurs
-#Create a function that gives a vector with the number of total streaks(from all players and for all games)
+#Create a function that gives us a vector with the number of total streaks(from all players and all games)
 number_of_streaks <- function(x) {
   x <- c(0, x, 0)
   which_zero <- which(x == 0)
@@ -642,17 +691,16 @@ number_of_streaks(df$FGM)
 #Set a new data frame for the 3 players with best performances(higher points)
 best_players_df <- head(pttsum2, 3)
 
-#Create a function that gives a vector of streaks for a specific player and game
+#Create a function that gives us a vector of streaks for a specific player and game
 player_and_game <- function(x, y) {
    player <- df[df[, 'player_id'] == x & df[,'GAME_ID1'] == y, 'FGM']
    number_of_streaks(as.vector(player))
 }
-
 #For the first player and game try:
 #player_and_game('202681', '21400681')
 
 
-#Create a list that gives the streaks of each player and game (3 best performances)
+#Create a list that gives us the streaks of each player and game (5 best performances)
 streak_per_player <- list()
 j <- 1
 for(i in best_players_df$player_id) {
@@ -661,7 +709,7 @@ for(i in best_players_df$player_id) {
 }
 streak_per_player
 
-#Remove 0 from streak_per_player in order to show only the streaks achieved (streaks >= 1)
+#Remove 0 from streak_per_player in order to show only the streaks achieved
 streak_per_player[[1]] <- streak_per_player[[1]][streak_per_player[[1]] != 0]
 for(i in 1:length(streak_per_player)) {
   streak_per_player[[i]] <- streak_per_player[[i]][streak_per_player[[i]] != 0]
@@ -672,12 +720,11 @@ streak_per_player
 ###Barplots
 ```{r}
 
-#Create a data frame for the streaks of each one of the 3 players (cannot create a data frame including all of them, because each list has different length)
+#Create a data frame for the strikes of each one of the 3 players (cannot create a data frame including all of them, because each list has different length)
 player1_df <- data.frame('streaks' = streak_per_player[[1]])
 player2_df <- data.frame('streaks' = streak_per_player[[2]])
 player3_df <- data.frame('streaks' = streak_per_player[[3]])
-
-
+best_players_df
 #Show distribution for each player's streak lengths
 gg1 <- ggplot(data = player1_df, aes(x = streaks)) + geom_bar(fill = 'brown') + labs(title = 'Kyrie Irnving')
 gg2 <- ggplot(data = player2_df, aes(x = streaks)) + geom_bar(fill = 'red') + labs(title = 'Mo Williams')
@@ -688,48 +735,39 @@ grid.arrange(gg1, gg2, gg3, ncol = 3)
   The distribution of the three players is unimodal and left skewed. There are shown some extremely long shooting streaks made(i.e. Klay Thompson with 13 shots in a row).  
 
 ###Boxplots
+####Boxplot for Kyrie Irnving
 ```{r}
-attach(mtcars)
-par(mfrow=c(1, 3))
-boxplot(player1_df$streaks, main = 'Kyrie Irnving') 
-boxplot(player2_df$streaks, main = 'Mo Williams')
-boxplot(player3_df$streaks, main = 'Klay Thompson')
+#Create a boxplot for each player's streak lengths 
+boxplot(player1_df$streaks) 
+summary(player1_df$streaks) #Check that boxplot is valid
+IQR(player1_df$streaks) #Check that boxplot is valid
 ```
 
-###Further detail
-```{r}
-#Kyrie Irnving
-summary(player1_df$streaks)
-IQR(player1_df$streaks) 
-```
-
-Outcome for Kyrie Irnving:
   1. The typical length of a streak is 1 (median = 1)
   2. The Interquartile Range is 1 
   3. Streak length of 6 is unusually high compared to the rest of the distribution
 
-
+####Boxplot for Mo Williams
 ```{r}
-#Mo Williams
+boxplot(player2_df$streaks)
 summary(player2_df$streaks)
 IQR(player2_df$streaks)
 ```
 
-Outcome for Mo Williams:
   1. The typical length of a streak is 1.5 (median = 1.5)
   2. The Interquartile Range is 1
   3. Streak length of 4 is unusually high compared to the rest of the distribution
 
+####Boxplot for Klay Thompson
 ```{r}
-#Klay Thompson
+boxplot(player3_df$streaks)
 summary(player3_df$streaks)
 IQR(player3_df$streaks)
 ```
 
-Outcome for Klay Thompson:
   1. The typical length of a streak is 8 (median = 8)
   2. The Interquartile Range is 5
-  3. Extremely high streak - Streak length of 13 
+  3. Streak length of 13 is unsually high compared to the rest of the distribution
 
 ### Plots Result
 
@@ -740,7 +778,7 @@ Outcome for Klay Thompson:
 j <- 1
 shooting_percentage <- list()
 for(i in best_players_df$player_id) {
-  shooting_percentage[j] <- sum(df[df[ ,'player_id'] == i, 'FGM']) / nrow(df[df[, 'player_id'] == i, ])
+  shooting_percentage[j] <- sum(df[df[, 'player_id'] == i, 'FGM']) / nrow(df[df[, 'player_id'] == i, ])
   j <- j + 1
 }
 shooting_percentage
@@ -777,9 +815,7 @@ realshooter_df <- data.frame('streaks' = streak_per_player[[1]])
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
 summary(realshooter_df$streaks)
-```
 
-```{r}
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
@@ -787,7 +823,7 @@ g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title 
 grid.arrange(g1, g2, ncol = 2)
 ```
 
-  The streak length distributions are quite similar, so it can be concluded that Kyrie Irving doesn't have a hot hand.
+  The streak length distributions are quite similar, so we can conclude that Kyrie Irving doesn't have a hot hand.
 
 ### Mo Williams
 ```{r}
@@ -818,9 +854,7 @@ realshooter_df <- data.frame('streaks' = streak_per_player[[2]])
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
 summary(realshooter_df$streaks)
-```
 
-```{r}
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
@@ -828,7 +862,7 @@ g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title 
 grid.arrange(g1, g2, ncol = 2)
 ```
 
-  The streak length distributions are quite similar, so it can be concluded that Mo Williams doesn't have a hot hand.
+  The streak length distributions are quite similar, so we can conclude that Mo Williams doesn't have a hot hand.
 
 ###Klay Thompson
 ```{r}
@@ -859,9 +893,7 @@ realshooter_df <- data.frame('streaks' = streak_per_player[[3]])
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
 summary(realshooter_df$streaks)
-```
 
-```{r}
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
@@ -869,7 +901,7 @@ g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title 
 grid.arrange(g1, g2, ncol = 2)
 ```
 
-  Klay Thompson is an exception making 13 shots in a row. There is no such distribution in the sample, so it coulb be assumed that he is likely to have a hot hand. Further statistical analysis (logistic regression) should be done in order to reach a conclusion.
+  Klay Thompson is an exception making 13 shots in a row. There is no such distribution in our sample, so it coulb be assumed that he is likely to have a hot hand. Further statistical analysis (logistic regression) should be done in order to reach a conclusion.
 
 
 ```{r}
@@ -897,6 +929,8 @@ summary(linreg_fgm2)
 ###Why is this interesting?
 
 ###What would be the next steps?
+<<<<<<< HEAD
+=======
 
 ```{r}
 
@@ -905,4 +939,5 @@ summary(linreg_fgm2)
 
 
 
+>>>>>>> f09f38865de02686a7fc1576fd100ecf266b031c
 ---
