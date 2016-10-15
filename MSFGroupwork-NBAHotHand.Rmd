@@ -132,8 +132,8 @@ for (i in 1:nrow(df)) {
     if (W[i] == "L") df$WINNER[i] <- "AWAY"
   }
   if (LOCATION[i] == "A") {
-    df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], ""))[7] 
-    df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], ""))[5]
+    df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[7] 
+    df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[5]
     if (W[i] == "L") df$WINNER[i] <- "HOME"  
     if (W[i] == "W") df$WINNER[i] <- "AWAY"
   }
@@ -143,7 +143,33 @@ for (i in 1:nrow(df)) {
 df1[, "MATCHUP"] <- as.character(df1[, "MATCHUP"])
 for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$MATCHUP[i], " -"))[1], format = "%B %d, %Y"))
 
-restdays <- cast(df1, DATE + HOME_TEAM + AWAY_TEAM + WINNER ~ FGM, value = 'FGM')
+#creating a column for 'TEAM' regardless whether they played at home or not as the original dataframe consists of both home and away teams
+for (i in 1:nrow(df1)) df1$TEAM[i] <-unlist(strsplit(df1$MATCHUP[i], " "))[5]
+
+df1$BLANK2<-""
+restdays2 <- cast(df1, TEAM + DATE + LOCATION + W ~ FGM)
+restdays2$DATE<- as.Date(restdays2$DATE)
+
+for (i in 2: nrow (restdays2)) {
+  if (restdays2$TEAM[i]==restdays2$TEAM[i-1])
+    restdays2$rest[i]<- as.numeric(restdays2$DATE[i] - restdays2$DATE[i-1]-1)
+  else 
+    (restdays2$rest[i]<- "NA")  
+}
+restdays2$BLANK<-""
+
+restdays2$rest <- as.numeric (restdays2$rest)
+
+restdays3<- cast (restdays2, rest ~ LOCATION + W) ; 
+
+colnames(restdays3)<- c( "rest", "AL","AW","HL", "HW") 
+
+restdays3$ AL.pct <-   round(restdays3$AL*100/(restdays3$AL+restdays3$AW),2) 
+restdays3$ AW.pct <-   round(restdays3$AW*100/(restdays3$AL+restdays3$AW),2)
+restdays3$ HL.pct <-   round(restdays3$HL*100/(restdays3$HL+restdays3$HW),2)
+restdays3$ HW.pct <-   round(restdays3$HW*100/(restdays3$HL+restdays3$HW),2)
+
+
 
 #this code is supposed to produce a list of dates when teams play at HOME in DATES column. for some reason it is not working.
 
