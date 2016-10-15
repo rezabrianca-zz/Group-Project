@@ -405,7 +405,7 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 ```{r}
 # Reshape the dataframe
 
-shot.stats <- cast(data = df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
+shot.stats <- cast(data = df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
 
 # Field Goal Attempts
 
@@ -430,13 +430,8 @@ for (i in 1:nrow(shot.stats)){
 ```{r}
 # Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
-<<<<<<< HEAD
-top.scorers.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "cj miles", "kobe bryant", "marc gasol", "dwayne wade", "brandon knight", "andrew wiggins", "carmelo anthony", "nikola vucevic", "michael carter-williams", "eric bledsoe", "demarcus cousins", "kawhi leonard", "kyle lowry", "gordon hayward", "john wall") # players picked out
-top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
-=======
 top.scorers.list <- c("lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge") # players picked out
-top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for top scorers
->>>>>>> 3d446d3ae38210f7e380e41539b94208ca820936
+top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
 
 # Replace "W" and "L" with 1 and 0 respectively, 
 top.scorers[, "W"] <- as.character(top.scorers[, "W"])
@@ -462,7 +457,7 @@ summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ 
 summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
 summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data= top.scorers)) 
 
-summary(lm(FINAL_MARGIN ~ LOCATION, data = top.scorers)) # Final margin ~ FGA and location
+summary(glm(W ~ LOCATION, data = top.scorers)) # Final margin ~ FGA and location
 
 ```
 
