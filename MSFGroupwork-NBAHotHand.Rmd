@@ -171,14 +171,6 @@ restdays3$ HW.pct <-   round(restdays3$HW*100/(restdays3$HL+restdays3$HW),2)
 
 
 
-#this code is supposed to produce a list of dates when teams play at HOME in DATES column. for some reason it is not working.
-
-for (i in aa3$TEAM) {
-  for (j in 1:nrow(restdays)) {
-    aa3$DATES <- as.list(aa3$DATES)
-    if (restdays$HOME_TEAM[j] == i) aa3$DATES[aa3$TEAM == i] <- c(aa3$DATES[aa3$TEAM == i], restdays$DATE[j])
-  }
-}
 ```
 
 ## Home Advantage analysis
@@ -186,7 +178,7 @@ for (i in aa3$TEAM) {
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
 
-Literature review demonstrated that a team playing at home is more likely to win with an average probability of the home win is around XXXX percent. It is also important to note that there a trend developed in last few years, which indicates that win probability of a team playing at home has reduced from around 65% from 1975-1992 to 60% since then and to 57.4% win in 2014-2015 season. (http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball) As a result, part of this research is aimed at analysing whether home team advantage was statistically evident in season 2015-2016. 
+Literature review demonstrated that a team playing at home is more likely to win with an average probability of the home win is around 60 percent. (http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball) As a result, part of this research is aimed at analysing whether home team advantage was statistically evident in season 2015-2016. 
 
 The NULL Hypothesis is: Home playing at home is more likely to win at home then when playing away.
 
@@ -197,7 +189,7 @@ The steps to calculate this measurement are as follows:
     3. Extend the analysis to review of the home/away wins on a team level 
     4. Plot the team level data 
     5. Discuss the findings of the analysis
-    6. Propose areas of further research (DO I NEED IT HERE???)
+
 
 ```{r}
 aa <- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
@@ -253,12 +245,13 @@ The plot shows that out of 30 teams:
 
 ###Discussion
 
-The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%
+The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis on a team level where 25 teams are clearly winning more games at home and away. The result confirm acceptance of the NULL hypothesis, which stated that a team playing at home is more likely to win then an away team.
 
+The result of this research also confirms recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to a figure around the 2011-15 mean of 58.8%. Home win ratio was 57.4% win in 2014-2015 season. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2015-2016 season. Based on the literature review this trend could be potentially explained by the following factors http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball:
 
-
-
-###Limitations
+  1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly charterd planes more often than in the past. This results in teams being less tired as a result of travel and better prepared for the games.
+  
+  2. Change in style of play in the NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees.
 
 
 
