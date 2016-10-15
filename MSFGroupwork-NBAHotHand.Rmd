@@ -201,7 +201,7 @@ for (i in 1:nrow(aa3)) {
 head(aa3)
 
 aa3 <- aa3[order(aa3$WIN_PCT_HOME, decreasing = TRUE),]
-
+t(aa3[,c(1,4,7,10)])
 
 aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
 
@@ -211,7 +211,27 @@ ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + g
  
 ```
 
-###Plot Result
+###Findings
+Table 1: Proportion of total games split by Location win factor
+
+X     | HOME WIN | AWAY WIN
+----- | -------- | ---
+Game  | 506      | 398
+Perc  | 55.97%   | 44.03%
+TEAM        | GSW | ATL | POR | MEM | SAS | CLE | HOU | LAC | OKC | DAL | NOP | WAS | TOR | CHI | MIL  
+------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----
+Win % HOME  |   93| 88  | 81  | 77  | 75  | 72  | 72  | 72  | 71  | 68  | 68  | 68  | 66  | 59  | 59 
+Win % AWAY  |   69| 71  | 54  | 67  | 50  | 53  | 61  | 57  | 42  | 61  | 40  | 43  | 59  | 66  | 45 
+Win % Diff  |   24| 17  | 27  | 10  | 25  | 19  | 11  | 15  | 29  | 7   | 28  | 25  | 7   | -7  | 14
+
+
+TEAM        | PHX | IND | BOS | CHA | UTA | DEN | BKN | SAC | MIA | DET | LAL | ORL | PHI | NYK |MI 
+------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----
+Win % HOME  | 57  | 52  | 48  | 47  | 45  | 42  | 41  | 41  | 39  | 38  | 31  | 30  | 28  | 27  | 26 
+Win % AWAY  | 47  | 35  | 32  | 41  | 35  | 30  | 44  | 30  | 48  | 39  | 23  | 31  | 16  | 14  | 18 
+Win % Diff  | 10  | 17  | 16  | 6   | 10  | 12  |-3   | 11  |-9   |-1   |    8|   -1|   12|   13| 8
+
+
 
 The plot shows that out of 30 teams:
   25 teams have won more games at home than away
@@ -306,7 +326,11 @@ print (restdays3[1:3,c(1,7,9)])
 
 
 #Testing of rest data
+<<<<<<< HEAD
 t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+=======
+#t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+>>>>>>> 334f80c223b5add4579e9efe4c07028e7197c743
 #chisq.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
 
 
@@ -336,18 +360,41 @@ To better understand effects of rest and home/away advantage it would be interes
 
 The potential effects of fatigue and stress on the accuracy of shots are investigated in this part of the analysis.
 
-Fatigue in basketball is a broadly analysed topic in physiological research. Latest literature suggests that there is no 
+Fatigue in basketball is a broadly analysed topic in physiological research. Latest literature suggests that elite basketball players cope well with the effects of fatigue so it does not affect their shooting kinematics. This results in no difference for their shot accuracy even if the players are fatigued (Erčul, Frane & Supej, 2006; Uygur et al., 2010). This research paper analyses whether these previous findings can be confirmed for the NBA season 2015-2016.  
+
+Regarding the effect of psychological stress on shot accuracy, previous research is not as decisive as for the effects of fatigue. While Arhart(1973) concluded that stressful events like small or big margins for the game score have an effect on players free-throw accuracy, latest research introducing more controlled conditions states that there is no effect of stress on players shot accuracy (Mascret et al., 2016). The indecisiveness of previous literature led to a deeper analysis in this research paper.
+
+
+Hypotheses for this area of analysis are:
+
+Fatigue: The Null hypothesis states that there is no significant difference (p < .05) for the shot accuracy in later periods of the game.
+
+Stress: The Null hypothesis states that there is no significant difference (p < .05) for the shot accuracy in more stressful events.
+
+
+###METHOD
+
+In this analysis fatigue was measured as the period of the game, as it can be assumed that the later in the game the higher the fatigue of the players.
+
+The steps to test the first hypothesis were as follows:
+  1. The overall accuracy for each period was calculated, based on the number of shots made (FGM = 1) and the number of shots taken for the specific period (FGM = 1 & FGM = 0)
+  2. This results in a percentage value of shots made for each of the periods
+  3. A variable called "Overtime" was introduced to distinguish between periods in the regular game time and overtime
+  4. The average accuracy for regular time and overtime was calculated
+  5. A T-test was used to examine whether or not these values were significant different at a level of significance of 5%.
+  
+  
+Psychological stress was measured through the remaining time on the shot clock for each shot taken. It was assumed that a player would experience more stress the lower the shot clock goes.
+
+The steps to test the second hypothesis were as follows:
+  1. As the shot clock variable contained 5567 missing values, those were excluded from the analysis
+  2. To simplify the shot clock variable, decimals were removed from the data so every shot taken was assigned to 0 to 24 seconds left on the shot clock
+  3. The overall accuracy for each second was calculated using the FGM variable
 
 
 ```{r}
-# create new variable to seperate overtime
 
-df[, "overtime"] <- as.numeric()
-
-for (i in 1:nrow(df)) {
-  if (df[i, "PERIOD"] >= 5) df[i, "overtime"] <- 1
-  if (df[i, "PERIOD"] <= 4) df[i, "overtime"] <- 0
-}
+### FATIGUe
 
 # accuracy per period
 
@@ -360,15 +407,19 @@ for (i in (1:7)){
   if (df.acc$period[i] >= 5) df.acc[i, "overtime"] <- 1
 }
 
+regular <- sum(df.acc$accuracy[df.acc$period <= 4])/4
+overtime <- sum(df.acc$accuracy[df.acc$period >=5])/3
+
 
 t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 2])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 3], df$FGM[df$PERIOD == 4])
 t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
+t.test(df$FGM[df$PERIOD == c(1:4)], df$FGM[df$PERIOD == c(5:7)])
 
 
-
+### STRESS
 # accuracy for Shot Clock
 
 # dealing with missing values
@@ -423,15 +474,66 @@ for (i in ap3$seconds.left){
 
 
 
-ggplot(NULL) + geom_smooth(data = ap3, aes(x = -seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = -seconds.left, y = accuracy, color = "Average"))
+ggplot(NULL) + geom_smooth(data = ap3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
 
 
 t.test(acc$accuracy, ap3$acc.top)
 
 ```
 
+###Results
+
+The accuracies for each period are detailed in the table below. 
+
+Period  | Accuracy
+------- | ---------
+1       | 46%
+2       | 45%
+3       | 46%
+4       | 44%
+5       | 39%
+6       | 43%
+7       | 37%
+regular | 45%
+overtime | 40%
 
 
+
+The T-tests for period 1 and period 2 was significant, t(65301) = 2.42, p = .015, as well as the T-test for period 3 and 4, t(60757) = 4.24, p < .01. Further the T-test for period 2 and 3 was not significant, t(63843) = -1.53, p = .126, as well as the T-test for period 1 and 3, t(65989) = 0.87, p = .38. 
+The T-test for regular time and overtime was highly significant, t(383) = 2.77, p < .01.
+
+
+The changes in the overall accuracy per second are shown in the graph below.
+
+```{r}
+graph.acc <- ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
+
+graph.acc + labs(title = "Overall Accuracy per second left on shot clock") + xlab("Seconds left on shot clock") + ylab("Overall Accuracy")
+```
+
+### Discussion
+
+The results of the T-tests show a significant difference for the overall accuracy between period 1 and period 2, between period 3 and period 4 and between regular game time and overtime. As the table shows the changes in accuracy are really small (from 46% to 44% over the regular game time) and often located on digit-level, so eventhough the changes are significant they are negligible. After all, there is not enought evidence to reject the Null hypothesis, statingthat there is no difference in the accuracy for later periods, in regular game time but it can be rejected for overtime. It can be concluded that accuracy does not suffer for later game periods as long as the game ends in regular time. For games that reach overtime a highly significant drop in the accuracy of over 5% (45% to below 40%) is observale. 
+This means that elite basketball players cope really well with any occurance of fatigue regarding their shot accuracy on a regular basis. As soon as the game reaches an intensity which is beyond the regular level effects of fatigue can be found leading to lower shot accuracy. 
+
+
+The effects of psychological stress are highly visible as shown in the graph above. While the accuracy in the first 10 seconds of the shot clock is exceeding the overall accuracy in the regular game time (60-45% vs 45% in regular game time), it declines quite fast in the last 5 seconds of the shot clock (from 42% to 32%), leading to the rejection of the Null hypothesis, that there are no differences in the accuracy for more stressful events. These results imply that as the shot clock runs out, so as the psychological pressure on the shooter increases, their shot performance suffers. ??????
+
+
+An ad hoc data analysis was undertaken to investigate whether this pattern of stress-inducted accuracy declination can be found as well for "superstar" players. The players were Lebron James, James Harden and Russel Westbrook, chosen because they were the top 3 shooters in the season. Their combined average accuracy per second can be seen in the graphic below. 
+
+```{r}
+
+graph2 <- ggplot(NULL) + geom_smooth(data = ap3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
+graph2 + labs(title = "Comparison - Accuracy per second on shot clock left for Top Players vs Overall Average") + xlab("Seconds left on shot clock") + ylab("Accuracy")
+
+```
+
+The graph shows many similarities for top players to the average graph. The most visual differences are the slightly lower accuracy around the 15 seconds mark for the top players and the much lower decrease below 5 seconds left. Explanations for these differences could be that around the 15 second mark top players feel more obligated to shoot than the average player, even when they are not in the optimal position to do so - leading to lower accuracies. Further it seems like Top players dont get affected by last seconds stress as much as average players. They keep up a quite high accuracy even for the last second of the shot clock (40%).
+
+### Future research
+
+Future research could focus on this difference between Top players and average players. While this analysis revealed a difference for shot clock pressure it would be interesting to look at more events that induce stress like the margin of the game or the placement in the standings of the own and the enemy team.
 
 ## Shooting Percentage Analysis (James)
 
@@ -479,9 +581,9 @@ for (i in 1:nrow(shot.stats)){
 
 
 ```{r}
-# Pick out 3 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
+# Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
-top.scorers.list <- c("mnta ellis", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "dwayne wade", "carmelo anthony", "nikola vucevic", "eric bledsoe", "demarcus cousins", "kawhi leonard", "gordon hayward", "john wall") # players picked out
+top.scorers.list <- c("mnta ellis", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "dwayne wade", "carmelo anthony", "eric bledsoe", "demarcus cousins", "kawhi leonard", "gordon hayward", "john wall") # 15 players picked out from all players
 top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
 top.scorers2 <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
 
@@ -493,19 +595,16 @@ for (i in 1:nrow(top.scorers)) {
 }
 top.scorers2[, "W"] <- as.character(top.scorers2[, "W"])
 
-ggplot(top.scorers2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-ggplot(top.scorers2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
-ggplot(top.scorers) + geom_point(aes(x = FINAL_MARGIN, y = FGA, colour = player_name))
-
 # Correlation test
-cor.test(top.scorers$FINAL_MARGIN, top.scorers$FGA)
-cor.test(top.scorers$FINAL_MARGIN, top.scorers$FG.percentage) # cor = 0.272
+cor.test(top.scorers$W, top.scorers$FGA)
+cor.test(top.scorers$W, top.scorers$FG.percentage)
 
 # Linear regression
-summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ FGA and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data = top.scorers)) 
+# summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ FGA and location
+# summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
+# summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data = top.scorers)) 
 
+# Logistic regression
 model <- glm(W ~ FGA + FG.percentage, data = top.scorers)
 summary(model)
 anova(model)
@@ -514,7 +613,7 @@ anova(model)
 
 ```{r}
 # Find out "special" players by t-test
-# Ressull Westbrook
+# Russell Westbrook
 t.test(top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "0"])
 t.test(top.scorers$FG.percentage[top.scorers$player_name == "russell westbrook" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "russell westbrook" & top.scorers$W == "0"])
 # Gordon Heyward
@@ -532,11 +631,19 @@ t.test(top.scorers$FG.percentage[top.scorers$player_name == "lebron james" & top
 
 special.list <- c("gordon hayward", "russell westbrook", "kawhi leonard")
 special <- shot.stats[shot.stats$player_name %in% special.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")]
+special2 <- shot.stats[shot.stats$player_name %in% special.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")]
+special2[, "W"] <- as.numeric(special2[, "W"])
+for (i in 1:nrow(special2)) {
+  if (special2[i, "W"] == 1) special2[i, "W"] <- "W"
+  if (special2[i, "W"] == 0) special2[i, "W"] <- "L"
+}
+
+ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
 
 special.model <- glm(W ~ FGA + FG.percentage, data = special)
 summary(special.model)
 anova(special.model)
-
 
 ```
 
