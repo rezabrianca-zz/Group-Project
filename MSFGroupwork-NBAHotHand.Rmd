@@ -69,13 +69,19 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
 
 ##Analysis
 
-### Installing libraries
 
+```{r}
+# Installing libraries
 install.packages('reshape')
 install.packages('gridExtra')
 
-### Calling libraries
+```
+
+
+
+
 ```{r}
+# Calling libraries
 library(reshape)
 library(ggplot2)
 library(gridExtra)
@@ -84,11 +90,13 @@ library(plyr)
 ```
 
 
-###Data clean-up 
+ 
 
 ```{r}
+###Data clean-up
+
 df <- read.csv("shot_logs.csv")  #assigning the dataframe to 'df' variables
-attach(df) #telling R that this is the dataframe we'll be working with (eliminating the need to use df$ for variables)
+ #telling R that this is the dataframe we'll be working with (eliminating the need to use df$ for variables)
 
 df1 <- read.csv("shot_logs1010.csv")
 
@@ -109,13 +117,13 @@ df[, "MATCHUP"] <- as.character(df[, "MATCHUP"])
 df[, "W"] <- as.character(df[, "W"])
 
 for (i in 1:nrow(df)) {
-  if (LOCATION[i] == "H") {
+  if (df$LOCATION[i] == "H") {
     df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[5]
     df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[7]
     if (W[i] == "W") df$WINNER[i] <- "HOME" 
     if (W[i] == "L") df$WINNER[i] <- "AWAY"
   }
-  if (LOCATION[i] == "A") {
+  if (df$LOCATION[i] == "A") {
     df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[7] 
     df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[5]
     if (W[i] == "L") df$WINNER[i] <- "HOME"  
