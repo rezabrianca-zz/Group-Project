@@ -163,7 +163,11 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game location (home/away) on winning ratio.
 
+<<<<<<< HEAD
+The NULL Hypothesis: Teams playing at home is more likely to win then when playing away. 
+=======
 The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference 
+>>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 ###Methods
 Steps to test the hypothesis are as follows:  
@@ -171,9 +175,10 @@ Steps to test the hypothesis are as follows:
     2. Compare the total win numbers to identify whether home advantage is evident using means of the variables
     3. Extend the analysis to review of the home/away wins on a team level 
     4. Plot the team level data 
-    5. Discuss the findings of the analysis
+    5. Perform a t-test (p .05) to examine whether there is a difference in the means between teams winning at home and teams winning away
+    6. Linear regression with Final margin as dependent variable and Location as independent variable to examine whether playing at home results predicts a higher final margin
 
-The graph below shows descriptive variables for home/away wins:
+The graph below shows descriptive statistics for home/away wins: 
 
 
 
@@ -217,6 +222,10 @@ advdf3$TEAM <- factor(advdf3$TEAM, levels = advdf3$TEAM[order(-advdf3$WIN_PCT_HO
 #creating a column which shows a difference between home and away winning percentage rate
 advdf3$WIN_PCT_DIFF<- advdf3$WIN_PCT_HOME - advdf3$WIN_PCT_AWAY
 
+
+#t tests
+
+t.test(advdf3$AWAY.y, advdf3$HOME.x)
 ```
 
 
@@ -228,8 +237,13 @@ ggplot(advdf, aes(x = advdf$WINNER)) + geom_bar(aes()) + ylab("game count") + xl
 
 
 
+<<<<<<< HEAD
+###Results
+Table 1: Proportion of total games split by Location win factor
+=======
 ###Findings
 **Table 1**: Proportion of total games split by Location win factor
+>>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 X     | Home Win | Away Win
 ----- | -------- | ---
@@ -263,12 +277,7 @@ The plot shows that out of 30 teams:
   2 teams home and away win ratios are almost equal (difference of less than or equal to 1%)
 
 
-###Variance test Analysis
-```{r}
-
-```
-**JUSTING TO SEE IF THERE IS ANYTHING WE CAN INCLUDE HERE**
-
+The T-test used to verify the differences in the means seen in the plot reached significance, t(58) = -2.39, p = .02.
 
 ###Regression analysis
 
@@ -290,9 +299,9 @@ Adjusted R-squared = 0.02392
 
 ###Discussion
 
-The analysis shown that there is a clear evidence that a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis conducted on a team level where 25 teams are winning more games at home than away. The result shown that the NULL hypothesis should be rejected as a team playing at home is more likely to win then an away team. Regression analysis shown that playing at home gives teams on average additional 4.29 margin points. 
+The analysis shows that there is a clear evidence that a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis conducted on a team level where 25 teams are winning more games at home than away. The results show that the NULL hypothesis should be rejected as a team playing at home is more likely to win than an away team. Linear regression analysis shows that playing at home gives teams on average additional 4.29 margin points. 
 
-The result of this research also confirms recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to around 58.5% for 2011-15. Home win ratio was 57.4% win in 2014-2015 season. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2015-2016 season. Based on the literature review this trend could be potentially explained by the following factors (Economist, 2015):
+The result of this research also confirms the recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to around 58.5% for 2011-14. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2014-2015 season. Based on the literature review this trend could be potentially explained by the following factors (Economist, 2015):
 
   1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly charterd planes more often than in the past. These changes result in teams being less tired as a consequence of travel and being better physically prepared for the games.
   
@@ -304,15 +313,25 @@ The result of this research also confirms recent trend of decline in home advant
 
 ###Introduction
 
-This area of analysis focuses on investigation of whether a number of rest days between games affect performance and more importantly winning ratio of a team. 
+This area of analysis focuses on investigation of whether a number of rest days between games affect the performance and more importantly winning ratio of a team. 
 
+<<<<<<< HEAD
+The Null Hypothesis is: By having more restdays rest a team is likely to have a higher winning ratio. 
+=======
 The Null Hypothesis is: Teams' mean values of wins are not significantly different based on the number of rest days between games 
 
+>>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 ###Methods
+
 The steps to calculate this measurement are as follows:  
     1. Calculating number of rest days between games for all teams
     2. Calculating ratios for effects of rest days on win/loss
+<<<<<<< HEAD
+    3. Calculating ratios for effects of rest days on win/loss form home/away
+    4. Perform a Chi-square test to examine whether there is a difference in the distributon for games won and games lost for the different restdays
+    
+=======
     3. Calculating ratios for effects of rest days on win/loss form home/awayCalculating ratios for effects of rest days on win/loss
     4. Run a regression analysis
     5. Discuss the findings of the data
@@ -336,6 +355,7 @@ The table below shows descriptive statistics for Rest Days:
    1st game of season  |  30|  1.66
 
 The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections.    
+>>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 ```{r, include=FALSE}
 
@@ -389,17 +409,38 @@ print (restdays3[1:3,c(1,7,9)])
 
 
 #Testing of rest data
-
-#t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
-#chisq.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+qqqq<-as.matrix(sapply(restdays4, as.numeric))
 
 
-#restdays2$W[restdays2$rest==0,]
+chisq.test(qqqq[2,], qqqq[3,])
+
+
+
 
 ```
 
 ###Findings
 
+<<<<<<< HEAD
+Table 5: Distribution of number of games per rest days
+
+ Rest Days| Games | Distribution
+----------|-------|---
+    0  | 427 | 23.62
+    1  | 990 | 54.76
+    2  | 254 | 14.05
+    3  |  59 |  3.26
+    4  |  13 |  0.72
+    5  |   3 | 0.17
+    7  |   6 | 0.33
+    8  |  20 | 1.11
+    9  |   3 | 0.17
+    10 |   3 | 0.17
+   1st game of season  |  30|  1.66
+
+The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections. 
+=======
+>>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 **Table 6**: Win rate split by number of rest days between games
 
@@ -417,18 +458,20 @@ print (restdays3[1:3,c(1,7,9)])
     0|   53.54 |44.33 
     1 | 54.68 |  44.24
     2  | 59.57 | 46.90
-
+ 
+The Pearson's Chi-Square test failed to reach the level of significance, X2 (36) = 42, p= .23.
+ 
 ###Discussion
 
-The analysis demonstrated that overall winning ratio improves with increase in  rest days: back-to-back games had 47.07% winning ratio, 1 day rest increased winning ratio to 50.10% and with 2 days rest the winning ration has increased even further to 53.94%.
+The analysis demonstrates that overall the winning ratio stays the same with increase in  rest days. However, when looking at invididual restdays the findings are different: back-to-back games have 47.07% winning ratio, 1 day rest increases winning ratio to 50.1% and with 2 days rest the winning ration increases even further to 53.94%.
 
-By extending the analysis to the team level, the results have demonstrated similar tendency for home  games where winning ratio has increased from 53.54% to 54.68% and 59.57% respectively with 0, 1 and 2 days of rest. Somewhat interestingly the analysis of effect of rest days on winning ratio of away games demonstrated that there is hardly any difference between 0 and 1 days of rest (44.33% and 44.24%). However with 2 days of rest teams' average winning ratio have increased to 46.90% (2.66% increase). This perhaps could be explained by the fact that teams were able to minimise effect of travelling when having a bigger window between games.
+By extending the analysis to the team level, the results demonstrate similar tendency for home games where winning ratio increased from 53.54% to 54.68% and 59.57% respectively with 0, 1 and 2 days of rest. Somewhat interestingly the analysis of effect of rest days on winning ratio of away games demonstrates that there is hardly any difference between 0 and 1 days of rest (44.33% and 44.24%). However with 2 days of rest teams' average winning ratio increases to 46.90% (2.66% increase). This perhaps could be explained by the fact that teams were able to minimise effect of travelling when having a bigger window between games.
 
-Based on the above, the analysis shown that the null hypothesis should be rejected as there is a clear evidence that the higher rest days correspond to higher winning ratio
+Based on the above, the analysis shows that the null hypothesis should be rejected as there is a clear evidence that the higher rest days correspond to higher winning ratio.
 
 ###Further research
 
-To better understand effects of rest and home/away advantage the future research should focus on distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away gamein New Jersey.
+To better understand effects of rest and home/away advantage future research should focus on distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away game in New Jersey.
 
 ***
 
