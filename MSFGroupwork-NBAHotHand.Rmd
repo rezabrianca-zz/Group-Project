@@ -9,8 +9,8 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
-Date submitted: 16/10/2016
+##Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
+##Date submitted: 16/10/2016
 
 #Report structure 
 
@@ -19,6 +19,8 @@ Date submitted: 16/10/2016
 The purpose of this report is to analyse the chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focused on analysis of a number of areas, demonstrate how the analysis has been conducted, discusses theory used, demonstrate and evaluate produced results. In addition, where relevant, this report will highlight potential areas of future research. 
 
 The chosen dataset for this report is a summary of shots made during NBA season 2014-2015. The following areas of research have been selected:
+
+** TO GET UPDATED AS A FINAL STEP**
 
 **1. Team related**
   a. Home Advantage analysis
@@ -165,15 +167,15 @@ Steps to test the hypothesis are as follows:
 
 ```{r, include=FALSE}
 #preparing a dataframe for home advantage analysis
-aa <- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
+advdf <- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
 
 #table showing a number of games won by home and away teams in the whole season
-table(aa$WINNER)
+table(advdf$WINNER)
 
 #home wins:
-hh <- sum(aa$WINNER == "HOME")
+hh <- sum(advdf$WINNER == "HOME")
 #Away wins:
-aw <- sum(aa$WINNER == "AWAY")
+aw <- sum(advdf$WINNER == "AWAY")
 
 #percentage of home team winning: 
 round(hh / (hh + aw), 4)
@@ -183,24 +185,24 @@ round(aw / (hh + aw), 4)
 
 ```{r, include=FALSE}
 #preparing a dataframe for analysis of games when a team played at home 
-aa1 <- cast(aa, HOME_TEAM ~ WINNER); names(aa1)[1] <- "TEAM"
-aa1$WIN_PCT_HOME <- round(aa1$HOME / (aa1$HOME + aa1$AWAY), 2)
+advdf1 <- cast(advdf, HOME_TEAM ~ WINNER); names(advdf1)[1] <- "TEAM"
+advdf1$WIN_PCT_HOME <- round(advdf1$HOME / (advdf1$HOME + advdf1$AWAY), 2)
 
 #preparing a dataframe for analysis of games when a team played at away 
-aa2 <- cast(aa, AWAY_TEAM ~ WINNER); names(aa2)[1] <- "TEAM"
-aa2$WIN_PCT_AWAY <- round(aa2$AWAY / (aa2$HOME + aa2$AWAY), 2)
+advdf2 <- cast(advdf, AWAY_TEAM ~ WINNER); names(advdf2)[1] <- "TEAM"
+advdf2$WIN_PCT_AWAY <- round(advdf2$AWAY / (advdf2$HOME + advdf2$AWAY), 2)
 
 #merging two dataframes together to enable the effective analysis of win ratios for teams playing at home and away.
-aa3 <- merge (aa1, aa2, by ="TEAM")
+advdf3 <- merge (advdf1, advdf2, by ="TEAM")
 
 #ordering the dataframe by win percentage at home.
-aa3 <- aa3[order(aa3$WIN_PCT_HOME, decreasing = TRUE),]
+advdf3 <- advdf3[order(advdf3$WIN_PCT_HOME, decreasing = TRUE),]
 
 #ordering factors of the dataframe by win percentage at home.
-aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
+advdf3$TEAM <- factor(advdf3$TEAM, levels = advdf3$TEAM[order(-advdf3$WIN_PCT_HOME)])
 
 #creating a column which shows a difference between home and away winning percentage rate
-aa3$WIN_PCT_DIFF<- aa3$WIN_PCT_HOME - aa3$WIN_PCT_AWAY
+advdf3$WIN_PCT_DIFF<- advdf3$WIN_PCT_HOME - advdf3$WIN_PCT_AWAY
 
 ```
 
@@ -232,7 +234,7 @@ Win % Diff  | 10  | 17  | 16  | 6   | 10  | 12  |-3   | 11  |-9   |-1   |    8| 
 
 ```{r, out.width = '100%', fig.retina = NULL, fig.align = "center"}}
 #plot showing home and away win ratio per team
-ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "AWAY")) 
+ggplot(advdf3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "wins at HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "wins  AWAY")) + ylab("Win ratio") + xlab("Team Names")
 ```
 
 
@@ -247,7 +249,7 @@ The plot shows that out of 30 teams:
 ```{r}
 
 ```
-**JUSTING TO SEE IF THERE IS ANYTHING WE CAN INCLUDE HERE
+**JUSTING TO SEE IF THERE IS ANYTHING WE CAN INCLUDE HERE**
 
 
 ###regression analysis
@@ -1257,28 +1259,17 @@ summary(linreg_fgm2)
 
 ```
 
-
+***
 #Conclusion
 
+This report has demonstrated results of mathematical and statistical analysis of the dataset containing information of shots from NBA season 2014-2015. The report specifically focused on number of research areas covering teams and players performance. The report described steps taken to produce the results, discussed and evaluated the produced results and suggested potential areas for future research.  
 
+
+***
 #References
 
-<<<<<<< HEAD
   Ahart (1973). In Kendall, P. and Hollon, S. (1979). Cognitive-behavioral interventions. New York: Academic Press.
+  Economist: As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).
   Erculj, F. and Supej, M. (2009). Impact of Fatigue on the Position of the Release Arm and Shoulder Girdle over a Longer Shooting Distance for an Elite Basketball Player. Journal of Strength and Conditioning Research, 23(3), pp.1029-1036.
   Mascret, N., Ibáñez-Gijón, J., Bréjard, V., Buekers, M., Casanova, R., Marqueste, T., Montagne, G., Rao, G., Roux, Y. and Cury, F. (2016). The Influence of the ‘Trier Social Stress Test’ on Free Throw Performance in Basketball: An Interdisciplinary Study. PLOS ONE, 11(6), p.e0157215.
-
-=======
-=======
-ECONOMIST. As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).
->>>>>>> 30a99b72c77aee586827ca60570eb176b1e55b10
-
-```{r}
-
-
-```
-
-
-
->>>>>>> f09f38865de02686a7fc1576fd100ecf266b031c
----
+  
