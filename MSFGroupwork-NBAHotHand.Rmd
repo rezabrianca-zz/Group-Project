@@ -820,14 +820,11 @@ An ad hoc data analysis was used as 3 of the 15 players stood out in particular.
 
 ```{r, echo=FALSE}
 graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-graph01 + labs(title = "Differences in FGA for games lost/won of the three special players") + xlab("Player name") + ylab("FGA")
-```
-Diagram xx1: Differences in FGA for games lost/won of the three special players.
-```{r, echo=FALSE}
+graph01 <- graph01 + labs(title = "Differences in FGA for games lost/won of the three special players") + xlab("Player name") + ylab("FGA")
 graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
-graph02 + labs(title = "Differences in FG% for games lost/won of the three special players") + xlab("Player name") + ylab("FG%")
+graph02 <- graph02 + labs(title = "Differences in FG% for games lost/won of the three special players") + xlab("Player name") + ylab("FG%")
+grid.arrange(graph01, graph02, ncol = 2)
 ```
-Diagram xx2: Differences in FG% for games lost/won of the three special players.
 
 The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
 
