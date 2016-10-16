@@ -8,7 +8,6 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=TRUE)
-knitr::opts_chunk$set(echo = TRUE)
 ```
 ##Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
 ##Date submitted: 16/10/2016
@@ -160,8 +159,7 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game location (home/away) on winning ratio.
 
 
-The NULL Hypothesis: Teams playing at home is more likely to win then when playing away. 
-The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference 
+The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference in the means.
 
 ###Methods
 Steps to test the hypothesis are as follows:  
@@ -170,11 +168,16 @@ Steps to test the hypothesis are as follows:
     3. Extend the analysis to review of the home/away wins on a team level 
     4. Plot the team level data 
     5. Perform a t-test (p .05) to examine whether there is a difference in the means between teams winning at home and teams winning away
-    6. Linear regression with Final margin as dependent variable and Location as independent variable to examine whether playing at home results predicts a higher final margin
+    6. Linear regression with "Final margin"" as dependent variable and "Location" as independent variable to examine whether playing at home predicts a higher final margin
 
-The graph below shows descriptive statistics for home/away wins: 
+Table 1 below shows descriptive statistics for home/away wins: 
 
+**Table 1**: Proportion of total games split by Location win factor
 
+X     | Home Win | Away Win
+----- | -------- | ---
+Game  | 506      | 398
+Perc  | 55.97%   | 44.03%
 
 ```{r, include=FALSE}
 #preparing a dataframe for home advantage analysis
@@ -229,18 +232,8 @@ ggplot(advdf, aes(x = advdf$WINNER)) + geom_bar(aes()) + ylab("game count") + xl
 ```
 
 
-
-
-
 ###Results
 
-###Findings
-**Table 1**: Proportion of total games split by Location win factor
-
-X     | Home Win | Away Win
------ | -------- | ---
-Game  | 506      | 398
-Perc  | 55.97%   | 44.03%
 
 **Tables 2 & 3**: Winning ratio of teams playing at home vs games playing away 
 
@@ -269,9 +262,9 @@ The plot shows that out of 30 teams:
   2 teams home and away win ratios are almost equal (difference of less than or equal to 1%)
 
 
-The T-test used to verify the differences in the means seen in the plot reached significance, t(58) = -2.39, p = .02.
+The T-test used to verify the differences in the means seen in the plot reached the level of significance, t(58) = -2.39, p = .02.
 
-###Regression analysis
+####Regression analysis
 
 ```{r, include=FALSE}
 margreg<- lm(FINAL_MARGIN ~ LOCATION, restdays2)
@@ -283,7 +276,7 @@ summary(margreg)
   X         |Estimate |Std. Error| t value| Pr(>t)    
 ------------|---------|--|--|------------------------
 (Intercept) |-2.12919 |   0.51589 | -4.127 |3.84e-05 ***
-LOCATIONH   |4.28556  |  0.63881  | 6.709 |2.63e-11 ***
+LOCATIONH   |4.28556  |  0.63881  | 6.709  |2.63e-11 ***
 rest        |-0.01129 |   0.25992 | -0.043 |   0.965 
   
 
@@ -316,9 +309,7 @@ The steps to calculate this measurement are as follows:
     3. Calculating ratios for effects of rest days on win/loss form home/away
     4. Perform a Chi-square test to examine whether there is a difference in the distributon for games won and games lost for the different restdays
     5. Calculating ratios for effects of rest days on win/loss form home/away
-    6. Run a regression analysis
-    7. Discuss the findings of the data
-
+    
 The table below shows descriptive statistics for Rest Days:
 
 **Table 5**: Distribution of number of games per rest days
@@ -397,9 +388,6 @@ qqqq<-as.matrix(sapply(restdays4, as.numeric))
 
 chisq.test(qqqq[2,], qqqq[3,])
 
-
-
-
 ```
 
 ###Findings
@@ -466,9 +454,9 @@ Regarding the effect of psychological stress on shot accuracy, previous research
 
 Hypotheses for this area of analysis are:
 
-Fatigue: The Null hypothesis states that there is no significant difference (p < .05) for the shot accuracy in later periods of the game.
+Fatigue: The Null hypothesis states that there is no significant difference (p < .05) in the mean of shot accuracy in later periods of the game.
 
-Stress: The Null hypothesis states that there is no significant difference (p < .05) for the shot accuracy in more stressful events.
+Stress: The Null hypothesis states that there is no significant difference (p < .05) in the means for the shot accuracy for lower seconds left on the shot clock.
 
 
 ###Methods
@@ -665,7 +653,7 @@ The measurements are calculated in the following steps:
   2. A new subset was created so that each row contained the player’s name, match details and shooting performance for that player.
   3. The number of attempts and field goal percentage of all players were calculated according to the shooting data. 
   4. The players with most outstanding performances were picked out and another subset was generated for these players.
-  5. The correlation (p = .05) between the results of the matches and the performances of top scorers was investigated. 
+  5. The correlation (p = .05) between the results of the matches and the performances regarding FGA and FG% of top scorers was investigated. 
   6. A logistic regression analysis with the outcome of the match as dependent variable and FGA and percentage of FG made as independent variables was conducted.
 
 ```{r, include=FALSE}
@@ -1215,7 +1203,7 @@ shooting_percentage
 #Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(974)
 shot_results <- c('made', 'missed')
-simul_shooter <- sample(shot_results, size = sum(best_players_df[1,4], best_players_df[1,5], best_players_df[1,6]), replace = TRUE, prob = c(shooting_percentage[[1]], 1 - shooting_percentage[[1]]))
+simul_shooter <- sample(shot_results, size = length(streak_per_player[[1]]), replace = TRUE, prob = c(shooting_percentage[[1]], 1 - shooting_percentage[[1]]))
 simul_shooter
 
 
@@ -1257,9 +1245,10 @@ grid.arrange(g1, g2, ncol = 2)
 ```{r, include=FALSE}
 ###PLAYER 2 VS SAMPLE PLAYER###
 #Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter2 
-set.seed(57)
+set.seed(572)
 shot_results <- c('made', 'missed')
-simul_shooter <- sample(shot_results, size = sum(best_players_df[2,4], best_players_df[2,5], best_players_df[2,6]), replace = TRUE, prob = c(shooting_percentage[[2]], 1 - shooting_percentage[[2]]))
+simul_shooter <- sample(shot_results, size = length(streak_per_player[[2]]), replace = TRUE, 
+                        prob = c(shooting_percentage[[2]], 1 - shooting_percentage[[2]]))
 simul_shooter
 
 
@@ -1301,7 +1290,7 @@ grid.arrange(g1, g2, ncol = 2)
 #Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter3 
 set.seed(57)
 shot_results <- c('made', 'missed')
-simul_shooter <- sample(shot_results, size = sum(best_players_df[3,4], best_players_df[3,5], best_players_df[3, 6]), replace = TRUE, 
+simul_shooter <- sample(shot_results, size = length(streak_per_player[[3]]), replace = TRUE, 
                         prob = c(shooting_percentage[[3]], 1 - shooting_percentage[[3]]))
 simul_shooter
 
