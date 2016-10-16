@@ -923,7 +923,7 @@ player_and_game <- function(x, y) {
 streak_per_player <- list()
 j <- 1
 for(i in best_players_df$player_id) {
-   streak_per_player[[j]] <- player_and_game(i, best_players_df[ourtable[, 'player_id'] == i, 'GAME_ID1'])
+   streak_per_player[[j]] <- player_and_game(i, best_players_df[best_players_df[, 'player_id'] == i, 'GAME_ID1'])
    j <- j + 1
 }
 streak_per_player
