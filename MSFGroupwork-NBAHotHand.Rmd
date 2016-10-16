@@ -947,6 +947,7 @@ gg3 <- ggplot(data = player3_df, aes(x = streaks)) + geom_bar(fill = 'blue') + l
 grid.arrange(gg1, gg2, gg3, ncol = 3)
 ```
 
+####Barplot result
   The distribution of the three players is unimodal and left skewed. There are shown some extremely long shooting streaks made(i.e. Klay Thompson with 13 shots in a row).  
 
 ###Boxplots
@@ -964,29 +965,32 @@ boxplot(player3_df$streaks, main = 'Klay Thompson')
 #Kyrie Irnving
 summary(player1_df$streaks)
 IQR(player1_df$streaks) 
-
-#Mo Williams
-summary(player2_df$streaks)
-IQR(player2_df$streaks)
-
-#Klay Thompson
-summary(player3_df$streaks)
-IQR(player3_df$streaks)
 ```
-
-Outcome for Kyrie Irnving:
+#### Outcome for Kyrie Irnving:
 
   1. The typical length of a streak is 1 (median = 1)
   2. The Interquartile Range is 1 
   3. Streak length of 6 is unusually high compared to the rest of the distribution
   
+```{r}
+#Mo Williams
+summary(player2_df$streaks)
+IQR(player2_df$streaks)
+```
 
+#### Outcome for Mo Williams
 
   1. The typical length of a streak is 1.5 (median = 1.5)
   2. The Interquartile Range is 1
   3. Streak length of 4 is unusually high compared to the rest of the distribution
 
+```{r}
+#Klay Thompson
+summary(player3_df$streaks)
+IQR(player3_df$streaks)
+```
 
+#### Outcome for Klay Thompson
 
   1. The typical length of a streak is 8 (median = 8)
   2. The Interquartile Range is 5
