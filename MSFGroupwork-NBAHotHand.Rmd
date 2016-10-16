@@ -15,36 +15,23 @@ Date submitted: 16/10/2016
 #Report structure 
 
 ##Introduction
-###What is your theme or research question?
-    a. Hot Hand Theory (Artemis)
-    b. Defender Proximity Analysis (Reza)
-    c. Shot Clock Pressure  (Alex)
-    d. Close Game Effect - Small Margin affecting the scoring rate 
-    e. Home Advantage (Alex is working in this point)  
-    f. Fatigue Effect (Quarter Heat Rate)  
-    g. Shooting Percentage (James)
-    h. Fatigue Effect (Number of Rest Day)  
-    i. Regression Analysis (Alex)
 
-###Introduction/Summary
-
-The purpose of this report is to analyse a chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focused on analysis of a number of areas, demonstrate how the analysis has been conducted, discusses theory used, demonstrate and evaluate produced results. In addition this report will highlight potential areas of future research. 
+The purpose of this report is to analyse the chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focused on analysis of a number of areas, demonstrate how the analysis has been conducted, discusses theory used, demonstrate and evaluate produced results. In addition, where relevant, this report will highlight potential areas of future research. 
 
 The chosen dataset for this report is a summary of shots made during NBA season 2015-2016. The following areas of research have been selected:
 
-#Report structure 
+1. Team related:
+  a. Home Advantage analysis
+  b. Effect of rest on teams' performance
+  
+2. Player related
+  a. Defender Proximity Analysis
+  b. Shot Clock Pressure
+  c. Fatigue Effect (Quarter Accuracy Rate)  
+  d. Game result impact by field goal attempts
 
-##Introduction
-I   What is your theme or research question?
-a. Hot Hand Theory (Artemis)
-b. Defender Proximity Analysis (Reza)
-c. Shot Clock Pressure  (Alex)
-d. Close Game Effect - Small Margin affecting the scoring rate 
-e. Home Advantage (Alex is working in this point)  
-f. Fatigue Effect (Quarter Heat Rate)  
-g. Shooting Percentage (James)
-h. Fatigue Effect (Number of Rest Day)  
-i. Regression Analysis (Alex)
+
+a. Hot Hand Theory 
 
 ##Theory
 I   What do you expect to find?
@@ -201,7 +188,6 @@ aa3 <- merge (aa1, aa2, by ="TEAM")
 
 #ordering the dataframe by win percentage at home.
 aa3 <- aa3[order(aa3$WIN_PCT_HOME, decreasing = TRUE),]
-t(aa3[,c(1,4,7,10)])
 
 #ordering factors of the dataframe by win percentage at home.
 aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
