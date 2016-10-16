@@ -247,6 +247,8 @@ The plot shows that out of 30 teams:
 ```{r}
 
 ```
+**JUSTING TO SEE IF THERE IS ANYTHING WE CAN INCLUDE HERE
+
 
 ###regression analysis
 
@@ -773,16 +775,18 @@ The data set only contains 904 out of 1230 matches in the entire regular season.
 ##Defender Proximity Analysis  
 ###Closest Defender Distance vs Shot Accuracy
 ####Introduction  
-This analysis focuses on whether there is a significant effect from closest defender distance to the shot outcome. The Null Hypothesis is that the distance to a closest defender does not have an impact on  further a defender from the shooter, then it will be more likely to increase the chance of scoring. This is because the shooter is practically in "free" condition without any physical interference.  
+This analysis focuses on whether there is a significant effect from closest defender distance to the shot outcome. The analysis is aimed to establish whether being away from the defender, i.e. having more time to prepare and execute a shot enables the shooter to score with a higher probability. Opposite effect will be when defender is close to the shooter it doesn't leave the shooter enough time to prepare and execute the shot properly.
+
+The Null Hypothesis is that the distance to a closest defender does not have an impact on accuracy of shooting.  
 
 ###Methods  
 The steps to calculate this measurement are as follows:  
-  1. Assign shot result to determine whether the shot is succeed (1) or missed (0)  
-  2. Select distinct of **all** closest defender distance  
+  1. Assign shot result to determine whether the shot is scored (1) or missed (0)  
+  2. Select and analyse subset of **all** closest defender distance values  
   3. Count the occurence fOr every distance  
-  4. Calculate how many succesfull shot scored from every distance point  
-  5. Calculate accuracy by dividing successfull shot scored with distance occurence for every defender distance point  
-  6. Plot the result
+  4. Calculate a number of uccessful shots for every distance point  
+  5. Calculate accuracy ratio for every defender distance value  
+  6. Plot and discuss the result
 ```{r, include=FALSE}
 #Calculate accuracy against defender distance
 #Group the defender distance level
@@ -811,15 +815,17 @@ ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Ac
 ```
 ###Plot Result
   The explanation from the plot above are as follows:   
-  1. If the defender stands really close to the shooter (0 to 2 feet), the accuracy varied between **42%** to **50%**  
-  2. If the defender distance range from 2 to 4 feet, the accuracy rate for this distance range from **44%** to **49%**  
-  3. If the defender distance range from 4 to 6 feet, the accuracy rate for this distance range from **41%** to **46%**
-  4. If the defender distance range from 6 to 8 feet, the accuracy rate for this distance range from **37%** to **42%**
-  5. If the defender distance range from 8 to 10 feet, the accuracy rate for this distance range from **37%** to **54%**
-  6. For defender distance more than 10 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from **33%** to **60%**.  
-  7. For the distance greater than 16 feet, the data varies between **0%** (no shots scored from that distance) to **100%** (certain successfull shot from that distance)  
+  1. Defender distance range from 0 to 2 feet, the accuracy varied between **42%** to **50%**  
+  2. Defender distance range from 2 to 4 feet, the accuracy rate for this distance range from **44%** to **49%**  
+  3. Defender distance range from 4 to 6 feet, the accuracy rate for this distance range from **41%** to **46%**
+  4. Defender distance range from 6 to 8 feet, the accuracy rate for this distance range from **37%** to **42%**
+  5. Defender distance range from 8 to 10 feet, the accuracy rate for this distance range from **37%** to **54%**
+  6. Defender distance more than 10 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from **33%** to **60%**.  
+  7. Distance greater than 16 feet, the data varies between **0%** (no shots scored from that distance) to **100%** (certain successfull shot from that distance)  
 
-  Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:
+  *Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:* #NEED TO AMEND
+  
+  
 ```{r, include=FALSE}
 #change distance level to numeric type for correlation test function
 distance_level$Var1 <- as.numeric(distance_level$Var1)
@@ -839,8 +845,10 @@ dfZerotoAll <- data.frame(distanceZerotoAll, accuracyDist1)
 #calculate correlation
 cor.test(dfZerotoAll$distanceZerotoAll, dfZerotoAll$accuracyDist1)
 ```
+
 ###Correlation Test Result  
-  The correlation test result produced slightly high number of correlation between defender distance with shooting accuracy for all shot distance attempt in the last seasons's NBA (0.59). If the findings made only based on this number only, there would be obvious that further defender distance will **automatically** increase shooting accuracy. However, after the analysis went into smaller piece of distance, ther result will be difference. For example, for distance range between 0 (zero) to 8 feet, the correlation measurement will be as follows:  
+  The correlation test result produced slightly higher number of correlation between defender distance with shooting accuracy for all shot distance attempts (0.59). If the findings made only based on this number only, there would be obvious that further defender distance will **automatically** increase shooting accuracy. However, when analysisng distance ranges the result is somewhat different. For example, for distance range between 0 (zero) to 8 feet, the correlation measurement will be as follows:  
+
   
 ```{r, include=FALSE}
 #populate data from data frame
@@ -857,26 +865,29 @@ dfZerotoEight <- data.frame(distanceZerotoEight, accuracyDist2)
 #calculate correlation
 cor.test(dfZerotoEight$distanceZerotoEight, dfZerotoEight$accuracyDist2)
 ```
-  As the analysis shown, the correlation measurement between 0 (zero) to 8 feet would be negative (-0.40). This result was different with the previous calculation done for all data points (0.59).
+  The correlation measurement between 0 (zero) to 8 feet would be negative (-0.40). This result was different with the previous calculation done for all data points (0.59).
   
 ###Discussion  
-  As the analysis shown, the accuracy rate of every player in the last season was somehow **affected** by the defender distance for certain range. For defender distance starting from 0 (zero) to 8 (eight) feet For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance). It is also shown from the dataset that only small attempt of shots were made from further defender distance affecting the accuracy calculation result. However, from the correlation perspective, the result would be different if the analysis included all of the data points versus only included short distance data points. This was arguably because further defender distance did not implied shooter distance from the basket is nearer to improve the accuracy and also there were not many players to perform shooting attempt automatically although their opponent was standing far from the shooter
+  The analysis demonstrated that the accuracy rate for every player was **affected** by the defender distance for certain ranges. For defender distance starting from 0 (zero) to 8 (eight) feet **TO BE UPDATED** For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance), which means that this part of the analysis should not be taken into account as the results are insignificant. It is also shown from the dataset that only small attempt of shots were made from further defender distance affecting the accuracy calculation result. However, from the correlation perspective, the result would be different if the analysis included all of the data points versus only short distance data points. This was perhaps due to further defender distance did not take into account the shooter distance from the basket. 
 
-###Limitations  
-  As the dataset did not hold many data points for more than 20 feet defender distance, the accuracy analysis for these distances are limited. The analysis could be enhanced further by including additional season data. That way, there will be more data point for further distance and possibly would produce stronger pattern as the short distance shown.  
+**DO WE REJECT OR ACCEPT THE NULL HYPOTHESIS, PLEASE CONCLUDE**
+
+###Future Research
+  As the dataset did not hold many data points for more than 20 feet defender distance, the accuracy analysis for these distances are limited. The future analysis could be enhanced further by including data for additional seasons. 
   
 ###Shooting Distance vs Shot Accuracy
 ####Introduction  
-This analysis would calculate whether was there any significant effect from shooting distance from basket with the shot outcome. The hypothesis is the further a shooter from the basket, then the success rate would be decreased. This was because when the shooter was practically in closer shooting range, the shooter shooting's result would be more accurate.  
+This analysis focuses on whether there is any significant effect resulting from shooting distance from basket on the shot outcome. 
+
+The NULL hypothesis is that the distance to the basket does not influence outcome of a shot.  
 
 ###Methods  
 The steps to calculate this measurement are as follows:  
-  1. Assign shot result to determine whether the shot is succeed (1) or missed (0)  
-  2. Select distinct of **all** shooting distance  
-  3. Count the occurence fOr every distance  
-  4. Calculate how many succesfull shot scored from every distance point  
-  5. Calculate accuracy by dividing successfull shot scored with particular distance occurence for every shooting distance point  
-  6. Plot the result
+  1. Assign shot result to determine whether the shot is scored (1) or missed (0)  
+  2. Select subsets of **all** shooting distances from the basket  
+  3. Count the occurence fOr every distance to basket value  
+  4. Allocate shot success rate to every distance from basket value  
+  5. Plot and discuss the result
 ```{r, include=FALSE}
 #Calculate accuracy against shooting distance
 #Group the shooting distance level
@@ -899,21 +910,21 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
 ```
 
 ###Plot Result
-  The explanation from the plot above are as follows:   
-  1.  If the shooter stands really close to the basket (0 to 2 feet), the accuracy varied between **62%** to **68%**  
-  2.  If the shooting distance range from 2 to 4 feet, the accuracy rate for this distance range from **61%** to **67%**  
-  3.  If the shooting distance range from 4 to 6 feet, the accuracy rate for this distance range from **44%** to **58%**  
-  4.  If the shooting distance range from 6 to 8 feet, the accuracy rate for this distance range from **38%** to **51%**  
-  5.  If the shooting distance range from 8 to 10 feet, the accuracy rate for this distance range from **35%** to **42%**  
-  6.  If the shooting distance range from 10 to 12 feet, the accuracy rate for this distance range from **34%** to **42%**  
-  7.  If the shooting distance range from 12 to 14 feet, the accuracy rate for this distance range from **37%** to **47%**  
-  8.  If the shooting distance range from 14 to 16 feet, the accuracy rate for this distance range from **33%** to **51%**  
-  9.  If the shooting distance range from 16 to 18 feet, the accuracy rate for this distance range from **37%** to **48%**  
-  10. If the shooting distance range from 18 to 24 feet, the accuracy rate for this distance range from **33%** to **43%**  
-  11. If the shooting distance range from 24 to 28 feet, the accuracy rate for this distance range from **18%** to **38%**  
-  12. For shooting distance more than 28 feet, the accuracy varies greater than previous distance range, starting from **0%** (no shots scored from that distance) to **50%**  
+  The explanation from the plot above are as follows. The shooter distance ranges and accuracy:   
+  1.  0 to 2 feet: the accuracy varied between **62%** to **68%**  
+  2.  2 to 4 feet: the accuracy rate for this distance range from **61%** to **67%**  
+  3.  4 to 6 feet: the accuracy rate for this distance range from **44%** to **58%**  
+  4.  6 to 8 feet: the accuracy rate for this distance range from **38%** to **51%**  
+  5.  8 to 10 feet: the accuracy rate for this distance range from **35%** to **42%**  
+  6.  10 to 12 feet: the accuracy rate for this distance range from **34%** to **42%**  
+  7.  12 to 14 feet: the accuracy rate for this distance range from **37%** to **47%**  
+  8.  14 to 16 feet: the accuracy rate for this distance range from **33%** to **51%**  
+  9.  16 to 18 feet: the accuracy rate for this distance range from **37%** to **48%**  
+  10. 18 to 24 feet: the accuracy rate for this distance range from **33%** to **43%**  
+  11. 24 to 28 feet: the accuracy rate for this distance range from **18%** to **38%**  
+  12. more than 28 feet: the accuracy varies greater than previous distance range, starting from **0%** (no shots scored from that distance) to **50%**  
 
-  Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:  
+  Analysis has also produced a correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:  
 ```{r, include=FALSE}
 #change distance level to numeric type for correlation test function
 shooting_distance_level$Var1 <- as.numeric(shooting_distance_level$Var1)
@@ -931,7 +942,7 @@ dfShootingZerotoAll <- data.frame(shootingDistanceZerotoAll, shootingAccuracyDis
 cor.test(dfShootingZerotoAll$shootingDistanceZerotoAll, dfShootingZerotoAll$shootingAccuracyDist1)
 ```
 ###Correlation Test Result  
-  The correlation test result shown strong negative correlation between shooting distance and shooting accuracy (-0.87). This meant that for all data points, the further a shooter from the basket, it was unlikely the shooter's attempt was success, regardless who was the shooter. However, if the correlation test taken for certain range distance based on the diagram, for example range from 10 feet to 20 feet, the correlation result would be different as follows:
+  The correlation test result shown strong negative correlation between shooting distance and shooting accuracy (-0.87). This meant that for all data points, the further a shooter from the basket, the shooter's accuracy would decrease. However, if the correlation test taken for certain range distance based on the diagram, the correlation result would be different as follows:
 
 ```{r, include=FALSE}
 #populate data for shooting distance in range 10 to 20 feet
@@ -948,10 +959,15 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
   The second correlation test produced a small positive correlation between range 10 to 20 feet (0.11). This result was different with previous measurement (-0.87)  
   
 ###Discussion  
-  Based on the diagram and correlation, it can be concluded that although the shooting distance would directly affect shooting accuracy, but the relationship between these variables are not perfectly linear. This was shown in the diagram where there was a relatively **similar** shooting accuracy for shots taken from 10 feet until 20 feet, regardless the shooter's performance. And for the success rate in longer distances, it could be arguably inferred as the shooters tried to attempt in closing game time (buzzer beater) when the shot clock or game clock nearly reach zero.    
+  Based on the diagram and correlation, it can be concluded that although the shooting distance directly affects shooting accuracy, the relationship between these variables are not perfectly linear. This was shown in the diagram where there is a relatively **similar** shooting accuracy for shots taken from 10 feet to 20 feet, regardless the shooter's performance. The success rate for longer distances, it could be arguably inferred that the shooters tried to attempt a shot in closing game time (buzzer beater) when the shot clock or game clock nearly reach zero- hence a longer distances.    
 
-###Limitations  
- Since the dataset mostly return 0% for shooting distance greater than 30 feet, it would better if the dataset could be enriched with previous season statistics, or even the last 10 seasons to exercise in more detail about the pattern for long distance shots attempt.  
+
+**DO WE REJECT OR ACCEPT THE NULL HYPOTHESIS, PLEASE CONCLUDE**
+
+###Future Research
+ The dataset mostly returns 0% for shooting distance greater than 30 feet. Therefore the future research could be enriched with statistics from other seasons to see if these findings hold.  
+  
+  
   
 ##Hot Hand Theory
 ###Introduction
