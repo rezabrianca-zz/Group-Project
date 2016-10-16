@@ -156,12 +156,12 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 ## Home Advantage analysis
 ###Introduction
 
-This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
+This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game lovation (home/away) on winning ratio.
 
-The NULL Hypothesis is: Teams performance at home is more likely to win at home then when playing away.
+The NULL Hypothesis: Teams playing at home is more likely to win then when playing away.
 
 ###Methods
-The steps to calculate this measurement are as follows:  
+Steps to test the hypothesis are as follows:  
     1. Calculate a total number of games, which has been won by a home or away team
     2. Compare the total win numbers to identify whether home advantage is evident using means of the variables
     3. Extend the analysis to review of the home/away wins on a team level 
@@ -224,6 +224,9 @@ X     | HOME WIN | AWAY WIN
 ----- | -------- | ---
 Game  | 506      | 398
 Perc  | 55.97%   | 44.03%
+
+Tables 2 & 3: Winning ratio of teams playing at home vs games playing away 
+
 TEAM        | GSW | ATL | POR | MEM | SAS | CLE | HOU | LAC | OKC | DAL | NOP | WAS | TOR | CHI | MIL  
 ------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----
 Win % HOME  |   93| 88  | 81  | 77  | 75  | 72  | 72  | 72  | 71  | 68  | 68  | 68  | 66  | 59  | 59 
@@ -242,7 +245,7 @@ Win % Diff  | 10  | 17  | 16  | 6   | 10  | 12  |-3   | 11  |-9   |-1   |    8| 
 The plot shows that out of 30 teams:
   25 teams have won more games at home than away
   3 teams have won more games away than at home
-  2 teams home and away win ratios are almost equal (difference of less than 0.01%)
+  2 teams home and away win ratios are almost equal (difference of less than or equal to 1%)
 
 
 ###Variance test Analysis
@@ -257,6 +260,8 @@ margreg<- lm(FINAL_MARGIN ~ LOCATION, restdays2)
 summary(margreg)
 ```
 
+Table 4: Regression Analysis
+
   X         |Estimate |Std. Error| t value| Pr(>t)    
 ------------|---------|--|--|------------------------
 (Intercept) |-2.12919 |   0.51589 | -4.127 |3.84e-05 ***
@@ -268,13 +273,13 @@ Adjusted R-squared = 0.02392
 
 ###Discussion
 
-The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis on a team level where 25 teams are clearly winning more games at home and away. The result shown that the NULL hypothesis should be rejected as a team playing at home is more likely to win then an away team. Regression analysis shown that playing at home gives teams on average additional 4.29 margin points. 
+The analysis shown that there is a clear evidence that a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis conducted on a team level where 25 teams are winning more games at home than away. The result shown that the NULL hypothesis should be rejected as a team playing at home is more likely to win then an away team. Regression analysis shown that playing at home gives teams on average additional 4.29 margin points. 
 
-The result of this research also confirms recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to a figure around the 2011-15 mean of 58.8%. Home win ratio was 57.4% win in 2014-2015 season. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2015-2016 season. Based on the literature review this trend could be potentially explained by the following factors http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball:
+The result of this research also confirms recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to around 58.5% for 2011-15. Home win ratio was 57.4% win in 2014-2015 season. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2015-2016 season. Based on the literature review this trend could be potentially explained by the following factors (http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball):
 
-  1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly charterd planes more often than in the past. This results in teams being less tired as a result of travel and better prepared for the games.
+  1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly charterd planes more often than in the past. These changes result in teams being less tired as a consequence of travel and being better physically prepared for the games.
   
-  2. Change in style of play in the NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees.
+  2. Change in style of play in NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees.
 
 
 
@@ -346,11 +351,8 @@ print (restdays3[1:3,c(1,7,9)])
 
 
 #Testing of rest data
-<<<<<<< HEAD
-t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
-=======
+
 #t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
->>>>>>> 334f80c223b5add4579e9efe4c07028e7197c743
 #chisq.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
 
 
@@ -360,7 +362,7 @@ t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
 
 ###Findings
 
-Distribution of number of games per rest days
+Table 5: Distribution of number of games per rest days
 
  Rest Days| Games | Distribution
 ----------|-------|---
@@ -376,7 +378,9 @@ Distribution of number of games per rest days
     10 |   3 | 0.17
    1st game of season  |  30|  1.66
 
-Win Rate split by number of rest days between games
+The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections.
+
+Table 6: Win Rate split by number of rest days between games
 
   rest days| number of wins| win percentage
 -|-|-
@@ -384,7 +388,8 @@ Win Rate split by number of rest days between games
     1| 496| 50.10
     2| 137| 53.94
 
-Win Rate split by number of rest days between games and location
+
+Table 7: Win Rate split by number of rest days between games and location
 
   rest days| home wins percentage | away wins percentage|
 -|-|-
@@ -402,7 +407,7 @@ Based on the above, the analysis shown that the null hypothesis should be reject
 
 ###Further research
 
-To better understand effects of rest and home/away advantage it would be interesting to take into account distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York travelling to play an away gamein New Jersey
+To better understand effects of rest and home/away advantage it would be interesting in future research papers to take into account distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away gamein New Jersey.
 
 ##Effects on accuracy (Justin)
 
