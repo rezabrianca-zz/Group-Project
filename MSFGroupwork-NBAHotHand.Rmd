@@ -9,8 +9,8 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=TRUE)
 ```
-##Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
-##Date submitted: 16/10/2016
+#####Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
+#####Date submitted: 16/10/2016
 
 ***
 
@@ -156,7 +156,7 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 ## Home Advantage analysis
 ###Introduction
 
-This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game location (home/away) on winning ratio.
+This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Essentially, this analysis focuses on effect of the game location (home/away) on winning ratio.
 
 
 The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference 
@@ -254,7 +254,7 @@ Win % Diff  | 10  | 17  | 16  | 6   | 10  | 12  |-3   | 11  |-9   |-1   |    8| 
 
 ```{r, echo=FALSE}
 #plot showing home and away win ratio per team
-ggplot(advdf3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "wins at HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "wins  AWAY")) + ylab("Win ratio") + xlab("Team Names")
+ggplot(advdf3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "wins HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "wins  AWAY")) + ylab("Win ratio") + xlab("Team Names")
 ```
 
 The plot shows that out of 30 teams:
@@ -289,7 +289,7 @@ The analysis shows that there is a clear evidence that a team playing at home is
 
 The result of this research also confirms the recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to around 58.5% for 2011-14. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2014-2015 season. Based on the literature review this trend could be potentially explained by the following factors (Economist, 2015):
 
-  1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly charterd planes more often than in the past. These changes result in teams being less tired as a consequence of travel and being better physically prepared for the games.
+  1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly chartered planes more often than in the past. These changes result in teams being less tired as a consequence of travel and being better physically prepared for the games.
   
   2. Change in style of play in NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees (Economist, 2015).
 
@@ -308,7 +308,7 @@ The NULL Hypothesis is: Teams' mean values of wins are not significantly differe
 The steps to calculate this measurement are as follows:  
     1. Calculating number of rest days between games for all teams
     3. Calculating ratios for effects of rest days on win/loss form home/away
-    4. Perform a Chi-square test to examine whether there is a difference in the distributon for games won and games lost for the different restdays
+    4. Perform a Chi-square test to examine whether there is a difference in the distribution for games won and games lost for the different restdays
     5. Calculating ratios for effects of rest days on win/loss form home/away
     
 The table below shows descriptive statistics for Rest Days:
@@ -393,24 +393,6 @@ chisq.test(qqqq[2,], qqqq[3,])
 
 ###Findings
 
-**Table 5**: Distribution of number of games per rest days
-
- Rest Days| Games | Distribution
-----------|-------|---
-    0  | 427 | 23.62
-    1  | 990 | 54.76
-    2  | 254 | 14.05
-    3  |  59 |  3.26
-    4  |  13 |  0.72
-    5  |   3 | 0.17
-    7  |   6 | 0.33
-    8  |  20 | 1.11
-    9  |   3 | 0.17
-    10 |   3 | 0.17
-   1st game of season  |  30|  1.66
-
-The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections. 
-
 **Table 6**: Win rate split by number of rest days between games
 
   Rest Days| Number of Wins|Win Percentage
@@ -432,7 +414,7 @@ The Pearson's Chi-Square test failed to reach the level of significance, X2 (36)
  
 ###Discussion
 
-The analysis demonstrates that overall the winning ratio stays the same with increase in  rest days. However, when looking at invididual restdays the findings are different: back-to-back games have 47.07% winning ratio, 1 day rest increases winning ratio to 50.1% and with 2 days rest the winning ration increases even further to 53.94%.
+The analysis demonstrates that overall the winning ratio stays the same with increase in  rest days. However, when looking at individual restdays the findings are different: back-to-back games have 47.07% winning ratio, 1 day rest increases winning ratio to 50.1% and with 2 days rest the winning ration increases even further to 53.94%.
 
 By extending the analysis to the team level, the results demonstrate similar tendency for home games where winning ratio increased from 53.54% to 54.68% and 59.57% respectively with 0, 1 and 2 days of rest. Somewhat interestingly the analysis of effect of rest days on winning ratio of away games demonstrates that there is hardly any difference between 0 and 1 days of rest (44.33% and 44.24%). However with 2 days of rest teams' average winning ratio increases to 46.90% (2.66% increase). This perhaps could be explained by the fact that teams were able to minimise effect of travelling when having a bigger window between games.
 
@@ -610,8 +592,8 @@ graph.acc + labs(title = "Overall Accuracy per second left on shot clock") + xla
 
 ### Discussion
 
-The results of the T-tests show a significant difference for the overall accuracy between period 1 and period 2, between period 3 and period 4 and between regular game time and overtime. This means that player have a higher accuracy in periods 1 and 3 than in the following one. As the table 8 shows, the changes in accuracy are minor (from 46% to 44% over the regular game time) and often located on digit-level, so although the changes are significant they are negligible. After all, the Null hypothesis must be rejected as the statistical methods used show differences for accuracy in later periods of the game, but as they are negligible in the regular game time but it can be concluded that accuracy does not suffer for later game periods as long as the game ends in regular time. For games that reach overtime a highly significant drop in the accuracy of over 5% (45% to below 40%) is observale, stating that players are less likely to score in overtime periods that in the regular game time.
-This means that elite basketball players cope really well with any occurance of fatigue regarding their shot accuracy on a regular basis. As soon as the game reaches an intensity which is beyond the regular level effects of fatigue can be found leading to lower shot accuracy. 
+The results of the T-tests show a significant difference for the overall accuracy between period 1 and period 2, between period 3 and period 4 and between regular game time and overtime. This means that player have a higher accuracy in periods 1 and 3 than in the following one. As the table 8 shows, the changes in accuracy are minor (from 46% to 44% over the regular game time) and often located on digit-level, so although the changes are significant they are negligible. After all, the Null hypothesis must be rejected as the statistical methods used show differences for accuracy in later periods of the game, but as they are negligible in the regular game time but it can be concluded that accuracy does not suffer for later game periods as long as the game ends in regular time. For games that reach overtime a highly significant drop in the accuracy of over 5% (45% to below 40%) is observable, stating that players are less likely to score in overtime periods that in the regular game time.
+This means that elite basketball players cope really well with any occurrence of fatigue regarding their shot accuracy on a regular basis. As soon as the game reaches an intensity which is beyond the regular level effects of fatigue can be found leading to lower shot accuracy. 
 
 
 The effects of psychological stress are highly visible as shown in the graph above. While the accuracy in the first 10 seconds of the shot clock is exceeding the overall accuracy in the regular game time (60-45% vs 45% in regular game time), it declines quite fast in the last 5 seconds of the shot clock (from 42% to 32%), leading to the rejection of the Null hypothesis, that there are no differences in the accuracy for more stressful events. These results imply that as the shot clock runs out, so as the psychological pressure on the shooter increases, their shot performance suffers.
@@ -626,11 +608,11 @@ graph2 + labs(title = "Comparison - Accuracy per second on shot clock left for T
 
 ```
 
-The graph shows many similarities for top players to the average graph. The most visual differences are the slightly lower accuracy around the 15 seconds mark for the top players and the much lower decrease below 5 seconds left. Explanations for these differences could be that around the 15 second mark top players feel more obligated to shoot than the average player, even when they are not in the optimal position to do so - leading to lower accuracies. Further it seems like Top players dont get affected by last seconds stress as much as average players. They keep up a quite high accuracy even for the last second of the shot clock (40%). However, as there are many similarities for the accuracy of Top players and average players there must be other things than the accuracy that seperates those two groups. 
+The graph shows many similarities for top players to the average graph. The most visual differences are the slightly lower accuracy around the 15 seconds mark for the top players and the much lower decrease below 5 seconds left. Explanations for these differences could be that around the 15 second mark top players feel more obligated to shoot than the average player, even when they are not in the optimal position to do so - leading to lower accuracies. Further it seems like Top players don't get affected by last seconds stress as much as average players. They keep up a quite high accuracy even for the last second of the shot clock (40%). However, as there are many similarities for the accuracy of Top players and average players there must be other things than the accuracy that separates those two groups. 
 
 ### Future research
 
-Future research could focus on this difference between Top players and average players. While this analysis revealed a difference for shot clock pressure it would be interesting to look at more events that induce stress like the margin of the game or the placement in the standings of the own and the enemy team. Further an investigation of the reasons that lead to the higher accuracy would be interesting. Do top players keep up their usual shot kinematics when under pressure while average players dont? Is it a different mindset that helps them to cope better with stress? Or do they simply have a higher stress tolerance as the result of continuous high expectations top players have to endure?
+Future research could focus on this difference between Top players and average players. While this analysis revealed a difference for shot clock pressure it would be interesting to look at more events that induce stress like the margin of the game or the placement in the standings of the own and the enemy team. Further an investigation of the reasons that lead to the higher accuracy would be interesting. Do top players keep up their usual shot kinematics when under pressure while average players don't? Is it a different mindset that helps them to cope better with stress? Or do they simply have a higher stress tolerance as the result of continuous high expectations top players have to endure?
 
 Additionally, further reasons that lead to distinction between top players and average players should be investigated.
 
@@ -647,7 +629,7 @@ The shot clock variable had missing values for 5567 shots, equal to 4.34% of all
 
 ###Introduction  
 
-The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The Null hypothesis is that there is no difference regarding the likelyhood of winning if the top scorer of a team has more field goal attempts. The second Null hypothesis is there is no difference regarding the likelyhood of winning if the top scorer of a team has a higher shot percentage than on average. As this is such a niche area research a literature review did not reveal sufficient results so this analysis aims to fill this gap.
+The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The Null hypothesis is that there is no difference regarding the likelihood of winning if the top scorer of a team has more field goal attempts. The second Null hypothesis is there is no difference regarding the likelihood of winning if the top scorer of a team has a higher shot percentage than on average. As this is such a niche area research a literature review did not reveal sufficient results so this analysis aims to fill this gap.
 
 ###Methods
 
@@ -734,7 +716,7 @@ There was no correlation found between the outcome of the matches in this season
 
 ####b.  Field Goal Percentage (FG%)
 
-There was no correlation found between the outcome of the matches in this seaon and the field goal percentage of the players. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach the level of significance (p = .05). 
+There was no correlation found between the outcome of the matches in this season and the field goal percentage of the players. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach the level of significance (p = .05). 
 
 ```{r, include=FALSE}
 # Find out "special" players by t-test
@@ -791,9 +773,9 @@ An ad hoc data analysis was used as 3 of the 15 players stood out in particular.
 
 ```{r, echo=FALSE}
 graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-graph01 <- graph01 + labs(title = "Differences in FGA for games lost/won /n of the three special players") + xlab("Player name") + ylab("FGA")
+graph01 <- graph01 + labs(title = "Differences in FGA for games lost/won for particular players") + xlab("Player name") + ylab("FGA")
 graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
-graph02 <- graph02 + labs(title = "Differences in FG% for games lost/won /n of the three special players") + xlab("Player name") + ylab("FG%")
+graph02 <- graph02 + labs(title = "Differences in FG% for games lost/won for particular players") + xlab("Player name") + ylab("FG%")
 grid.arrange(graph01, graph02, ncol = 2)
 ```
 
@@ -819,9 +801,9 @@ The box plots above shows the performances of the three special players in terms
 
 From the correlation tests between the match results and players’ performances, it can be noticed that the increase in number of field goal attempts from top scorers is unlikely to make any impact on the results of the game. The p-values of both correlation tests are too high to reach the level of significance (p = .05).
 
-From the logistic regression analysis for FGA and FG%, it was found that FGA did not have any impact on the result of the match. FG% is a significant predictor for the result of match. However, the anova showed that the residual deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
+From the logistic regression analysis for FGA and FG%, it was found that FGA did not have any impact on the result of the match. FG% is a significant predictor for the result of match. However, the anova showed that the residual deviance of these two factors were both quite large and thus further investigations must be done in order to improve this model.
 
-There was no correlation found between field goal attempts of top scorers and outcome of the matches. A possible explanation is that it is easier for the opponent to focus on a certain player on defensive side and then the overall efficiency of the team will start to decrease. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelyhood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This could be explained by that once a player is being efficient on the offensive side, that player can help the team not only by shooting but also by creating more opportunities for his teammates. 
+There was no correlation found between field goal attempts of top scorers and outcome of the matches. A possible explanation is that it is easier for the opponent to focus on a certain player on defensive side and then the overall efficiency of the team will start to decrease. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelihood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This could be explained by that once a player is being efficient on the offensive side, that player can help the team not only by shooting but also by creating more opportunities for his teammates. 
 
 Based on the results above, an additional analysis was done regarding the performance of three particular players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. These three players were chosen because their teams are more likely to take the victory when they score more in single game according to Diagram and t-test. 
 
@@ -843,10 +825,10 @@ The Null Hypothesis is that the distance to a closest defender does not have an 
 The steps to calculate this measurement are as follows:  
   1. Assign shot result to determine whether the shot is scored (1) or missed (0)  
   2. Select and analyse subset of all closest defender distance values  
-  3. Count the occurence fOr every distance  
+  3. Count the occurrence for every distance  
   4. Calculate a number of successful shots for every distance point  
   5. Calculate accuracy ratio for every defender distance value
-  6. Seperate data in two ranges - 0 to 8 feet distance and above 8 feet distance
+  6. Separate data in two ranges - 0 to 8 feet distance and above 8 feet distance
 
 ```{r, include=FALSE}
 #Calculate accuracy against defender distance
@@ -886,14 +868,19 @@ ggplot(data = distance_level) +
 ```
 
 ###Plot Result
-  The explanation from the plot above are as follows:   
-  1. Defender distance range from 0 to 2 feet, the accuracy varied between 42% to 50%  
-  2. Defender distance range from 2 to 4 feet, the accuracy rate for this distance range from 44% to 49%  
-  3. Defender distance range from 4 to 6 feet, the accuracy rate for this distance range from 41% to 46%
-  4. Defender distance range from 6 to 8 feet, the accuracy rate for this distance range from 37% to 42%
-  5. Defender distance range from 8 to 10 feet, the accuracy rate for this distance range from 37% to 54%
-  6. Defender distance more than 10 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from 33% to 60%.  
-  7. Distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance)  
+
+** Table 13**: Relationship between the defender distance and accuracy
+
+Defender Distance (range in feet) | accuracy (range in %) 
+- | -
+0 - 2 | 42 - 50
+2 - 4 | 44 - 49
+4 - 6 | 41 - 46
+6 - 8 | 37 - 42
+8 - 10 | 37 - 54
+10 - 16 | 33 - 60
+16+ | 0 - 100
+
 
 ###Correlation Test
   The next analysis calculates the correlation between both variables. If the analysis included all data points for every distance, the correlation result would be as follows:
@@ -941,7 +928,7 @@ cor.test(dfZerotoEight$distanceZerotoEight, dfZerotoEight$accuracyDist2)
 ```
   
 ###Discussion  
-  The analysis demonstrated that the accuracy rate was affected by the defender distance for certain ranges. For the defender distance starting from 0 to 8 feet, there is a negative correlation between distance and accuracy, implying that players are more likely to miss when the defender comes closer. For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance), which means that this part of the analysis should not be taken into account as the results were insignificant. It also shows that only a small amount of shots were made for higher defender distances. Therefore, it would affect the accuracy calculation result. However, from the correlation perspective, the result would be different if the analysis included all of the data points versus only short distance data points. This was arguably due to the fact that the defender distance does not mean the shooter distance from the basket was closer. Therefore, we reject the Null Hypothesis, since the defender distance affected shooting accuracy.  
+  The analysis demonstrated that the accuracy rate was affected by the defender distance for certain ranges. For the defender distance starting from 0 to 8 feet, there is a negative correlation between distance and accuracy, implying that players are more likely to miss when the defender comes closer. For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successful shot from that distance), which means that this part of the analysis should not be taken into account as the results were insignificant. It also shows that only a small amount of shots were made for higher defender distances. Therefore, it would affect the accuracy calculation result. However, from the correlation perspective, the result would be different if the analysis included all of the data points versus only short distance data points. This was arguably due to the fact that the defender distance does not mean the shooter distance from the basket was closer. Therefore, we reject the Null Hypothesis, since the defender distance affected shooting accuracy.  
 
 ###Future Research
   As the dataset did not hold many data points for more than 20 feet defender distance, the accuracy analysis for these distances are limited. The future analysis could be enhanced further by including data for additional seasons. 
@@ -959,10 +946,10 @@ The NULL hypothesis is that the distance to the basket does not influence outcom
 The steps to calculate this measurement are as follows:  
   1. Assign shot result to determine whether the shot is scored (1) or missed (0)  
   2. Select subsets of all shooting distances from the basket  
-  3. Count the occurence fOr every distance to basket value  
+  3. Count the occurrence for every distance to basket value  
   4. Allocate shot success rate to every distance from basket value 
   5. Examine the relationship between distance to the basket and shot outcome with a correlation test
-  6. Seperate data into ranges
+  6. Separate data into ranges
 
 ```{r, include=FALSE}
 #Calculate accuracy against shooting distance
@@ -998,7 +985,7 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
 
 ###Plot Result
 
-**Table 13**: The relationship between the shooter distance ranges and accuracy
+**Table 14**: The relationship between the shooter distance ranges and accuracy
 
   Distance (in feet) | Accuracy (range in %)
   - | -
@@ -1038,7 +1025,7 @@ cor.test(dfShootingZerotoAll$shootingDistanceZerotoAll, dfShootingZerotoAll$shoo
 
 ###Correlation Test Result  
   If the correlation test taken for a certain range of distance based on the diagram, the correlation result would be different as follows:
-  There was low positive correlation found between the shooting distance and shooting accuracy for the range 10 to 20 feet distance. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(99) = .11, p > .05, fail to reach level of significance (p = .05).
+  There was low positive correlation found between the shooting distance and shooting accuracy for the range 10 to 20 feet distance. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(99) = .11, p =.24, failing to  the level of significance (p = .05).
 ```{r, include=FALSE}
 #populate data for shooting distance in range 10 to 20 feet
 shootingDistance10to20 <- c()
@@ -1067,7 +1054,7 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
 ##Hot Hand Theory
 ###Introduction
 
-  The analysis aims to investigate whether the effect of the 'hot hand theory' is valid based on the given dataset. The 'hothand theory' states that if the shooter makes his first shot, the probability of making his next shot is higher. (Gilovich, T., Vallone, R. and Tversky, A. (1985))
+  The analysis aims to investigate whether the effect of the 'hot hand theory' is valid based on the given dataset. The 'hot hand theory' states that if the shooter makes his first shot, the probability of making his next shot is higher. (Gilovich et al., 1985)
   
 
 ###Methods
@@ -1198,7 +1185,7 @@ IQR(player3_df$streaks)
 
 ### Plots Result
 
-  The distribution of all players is left skewed and all of them (especially Klay Thompson) have some long shooting streaks. In order to prove/disprove the hot hand theory,  the examination of the indipendence of the shots is required. If each shot that a player takes is independent of the next shot, then the player has the same probability of hitting each shot regardless of the previous shot. If each shot that a player takes is dependent of the next shot, then the probability of making the next shot is higher - hot hand. Sampling an independent shooter having the same shooting percentage with the real one and comparing his distribution with real player's distribution gives further insight in the specific aera. 
+  The distribution of all players is left skewed and all of them (especially Klay Thompson) have some long shooting streaks. In order to prove/disprove the hot hand theory,  the examination of the independence of the shots is required. If each shot that a player takes is independent of the next shot, then the player has the same probability of hitting each shot regardless of the previous shot. If each shot that a player takes is dependent of the next shot, then the probability of making the next shot is higher - hot hand. Sampling an independent shooter having the same shooting percentage with the real one and comparing his distribution with real player's distribution gives further insight in the specific area. 
 
 ```{r, include=FALSE}
 #Find the shooting percentage for each of the 3 players
@@ -1339,7 +1326,7 @@ grid.arrange(g1, g2, ncol = 2)
 
 ####Plot Result
 
-  Klay Thompson is an exception making 13 shots in a row. There is no such distribution in the sample, so it could be assumed that he is likely to have a hot hand. However, further analysis of Klay Thompson's (and other basketball players) shooting streaks in other games is required to see if such a rare occurence is repeated(this is out of scope for this analysis).
+  Klay Thompson is an exception making 13 shots in a row. There is no such distribution in the sample, so it could be assumed that he is likely to have a hot hand. However, further analysis of Klay Thompson's (and other basketball players) shooting streaks in other games is required to see if such a rare occurrence is repeated(this is out of scope for this analysis).
   
 
 ###Discussion
@@ -1354,17 +1341,17 @@ grid.arrange(g1, g2, ncol = 2)
   
 ###Future research
 
-  Since the dataset is reffered to only one season and the analysis is not able to eliminate the hot hand theory, it would be an interesting topic to be investigated by using data from more than one season. 
+  Since the dataset is referred to only one season and the analysis is not able to eliminate the hot hand theory, it would be an interesting topic to be investigated by using data from more than one season. 
  
  
 
 ***
-#Conclusion
+##Conclusion
 
 This report has demonstrated results of mathematical and statistical analysis of the dataset containing information of shots from NBA season 2014-2015. The report specifically focused on number of research areas covering teams and players performance. The report described steps taken to produce the results, discussed and evaluated the produced results and suggested potential areas for future research.  
 
 ***
-#References
+##References
 
   Ahart (1973). In Kendall, P. and Hollon, S. (1979). Cognitive-behavioral interventions. New York: Academic Press.
   Economist: As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).
