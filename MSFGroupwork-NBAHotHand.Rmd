@@ -877,14 +877,19 @@ ggplot(data = distance_level) +
 ```
 
 ###Plot Result
-  The explanation from the plot above are as follows:   
-  1. Defender distance range from 0 to 2 feet, the accuracy varied between 42% to 50%  
-  2. Defender distance range from 2 to 4 feet, the accuracy rate for this distance range from 44% to 49%  
-  3. Defender distance range from 4 to 6 feet, the accuracy rate for this distance range from 41% to 46%
-  4. Defender distance range from 6 to 8 feet, the accuracy rate for this distance range from 37% to 42%
-  5. Defender distance range from 8 to 10 feet, the accuracy rate for this distance range from 37% to 54%
-  6. Defender distance more than 10 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from 33% to 60%.  
-  7. Distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance)  
+  The explanation from the plot above is summerised in the following table:  
+  
+** Table 13**: Relationship between the defender distance and accuracy 
+
+Defender Distance (range in feet) | accuracy (range in %) 
+- | -
+0 - 2 | 42 - 50
+2 - 4 | 44 - 49
+4 - 6 | 41 - 46
+6 - 8 | 37 - 42
+8 - 10 | 37 - 54
+10 - 16 | 33 - 60
+16+ | 0 - 100
 
 ###Correlation Test
   The next analysis calculates the correlation between both variables. If the analysis included all of the data points for every distance, the correlation result would be as follows:
@@ -984,9 +989,9 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
 
 ###Plot Result
 
-**Table 13**: The relationship between the shooter distance ranges and accuracy
+**Table 14**: Relationship between the shooter distance ranges and accuracy
 
-  Distance (in feet) | Accuracy (range in %)
+  Shooter Distance (in feet) | Accuracy (range in %)
   - | -
   0 - 2 | 62 - 68
   2 - 4 | 61 - 67
