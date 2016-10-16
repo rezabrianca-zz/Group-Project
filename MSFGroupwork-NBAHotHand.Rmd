@@ -62,9 +62,10 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
 ###Dataset Limitations  
   There are several limitations of the dataset:  
     1. The dataset consists only 1 year NBA season stats (2014-2015)  
-    2. The dataset comprise only of regular season matches  
-    3. The playoff and other matches during the year is not included
-    4. The dataset does not include free throw shot and results
+    2. The dataset comprise only the data for regular season matches  
+    3. The playoff and other matches during the year are not included
+    4. The dataset does not include information on free throw shots
+    5. The dataset does not include final scores of the games
 
 ##Analysis
 
