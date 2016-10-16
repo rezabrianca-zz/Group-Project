@@ -47,7 +47,7 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
     4.  Match result  
     5.  Final score difference  
     6.  shot number  
-    7.  Shot result: success or miss 
+    7.  FGM: Shot result: success or miss 
     8.  Type of shot attempt (2 points or 3 points)  
     9.  Quarter number (1 to 4, or higher for overtime)  
     10. Game clock for each quarter when the shot has been made 
@@ -402,11 +402,10 @@ Based on the above, the analysis shown that the null hypothesis should be reject
 
 ###Further research
 
-To better understand effects of rest and home/away advantage it would be interesting in future research papers to take into account distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away gamein New Jersey.
+To better understand effects of rest and home/away advantage the future research should focus on distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away gamein New Jersey.
 
 
-##Effects on accuracy (Justin)
-
+##Effects on accuracy
 
 The potential effects of fatigue and stress on the accuracy of shots are investigated in this part of the analysis.
 
@@ -566,7 +565,7 @@ The results of the T-tests show a significant difference for the overall accurac
 This means that elite basketball players cope really well with any occurance of fatigue regarding their shot accuracy on a regular basis. As soon as the game reaches an intensity which is beyond the regular level effects of fatigue can be found leading to lower shot accuracy. 
 
 
-The effects of psychological stress are highly visible as shown in the graph above. While the accuracy in the first 10 seconds of the shot clock is exceeding the overall accuracy in the regular game time (60-45% vs 45% in regular game time), it declines quite fast in the last 5 seconds of the shot clock (from 42% to 32%), leading to the rejection of the Null hypothesis, that there are no differences in the accuracy for more stressful events. These results imply that as the shot clock runs out, so as the psychological pressure on the shooter increases, their shot performance suffers. ??????
+The effects of psychological stress are highly visible as shown in the graph above. While the accuracy in the first 10 seconds of the shot clock is exceeding the overall accuracy in the regular game time (60-45% vs 45% in regular game time), it declines quite fast in the last 5 seconds of the shot clock (from 42% to 32%), leading to the rejection of the Null hypothesis, that there are no differences in the accuracy for more stressful events. These results imply that as the shot clock runs out, so as the psychological pressure on the shooter increases, their shot performance suffers.
 
 
 An ad hoc data analysis was undertaken to investigate whether this pattern of stress-inducted accuracy declination can be found as well for "superstar" players. The players were Lebron James, James Harden and Russel Westbrook, chosen because they were the top 3 shooters in the season. Their combined average accuracy per second can be seen in the graphic below. 
@@ -582,7 +581,7 @@ The graph shows many similarities for top players to the average graph. The most
 
 ### Future research
 
-Future research could focus on this difference between Top players and average players. While this analysis revealed a difference for shot clock pressure it would be interesting to look at more events that induce stress like the margin of the game or the placement in the standings of the own and the enemy team. Further an investigation of the reasons that lead to the higher accuracy would be interesting. Do top players keep up their usual shot kinematics when under pressure while average players dont? Is it a different mindset that helps them to cope better with stress? Or do they simply have a higher stress tolerance as the result of continuous high expectations top players have to endure.
+Future research could focus on this difference between Top players and average players. While this analysis revealed a difference for shot clock pressure it would be interesting to look at more events that induce stress like the margin of the game or the placement in the standings of the own and the enemy team. Further an investigation of the reasons that lead to the higher accuracy would be interesting. Do top players keep up their usual shot kinematics when under pressure while average players dont? Is it a different mindset that helps them to cope better with stress? Or do they simply have a higher stress tolerance as the result of continuous high expectations top players have to endure?
 
 Additionally, further reasons that lead to distinction between top players and average players should be investigated.
 
@@ -591,7 +590,7 @@ Additionally, further reasons that lead to distinction between top players and a
 
 The shot clock variable had missing values for 5567 shots, equal to 4.34% of all shots on the dataset, limiting the meaningfulness of the findings in the accuracy per second part. 
 
-## Shooting Percentage Analysis (James)
+## Shooting Percentage Analysis
 
 ```{r}
 # Replace "made" and "missed" with 1 and 0 respectively
