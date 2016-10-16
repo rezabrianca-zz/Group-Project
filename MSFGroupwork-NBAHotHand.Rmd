@@ -600,12 +600,6 @@ The shot clock variable had missing values for 5567 shots, equal to 4.34% of all
 
 <<<<<<< HEAD
 The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The Null hypothesis is that there is no difference regarding the likelyhood of winning if the top scorer of a team has more field goal attempts. The second Null hypothesis is there is no difference regarding the likelyhood of winning if the top scorer of a team has a higher shot percentage than on average. As this is such a niche area research a literature review did not reveal sufficient results so this analysis aims to fill this gap.
-=======
-<<<<<<< HEAD
-=======
-The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The hypothesis is that a team will be more likely to win the game if the top scorer have more opportunities to shot in a single match as this player tend to score than others players in the team. Furthermore, a team is more likely to win when the key player has higher shot percentage than normal. 
->>>>>>> 8fec43a3e6d7a4f67b132a36b03c8ce90dcc18c9
-
 
 ###Methods
 
@@ -618,9 +612,7 @@ The measurements are calculated in the following steps:
 5. Plot results. 
 6. Investigate the correlation between the results of the matches and the performances of top scorers. 
 7. A further logistic regression test was run in order to examine three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. 
->>>>>>> fe0134f116f5f5d78d1c886aa59bc28fb130f542
 
->>>>>>> 30a99b72c77aee586827ca60570eb176b1e55b10
 ```{r, include=FALSE}
 # Replace "made" and "missed" with 1 and 0 respectively
 
