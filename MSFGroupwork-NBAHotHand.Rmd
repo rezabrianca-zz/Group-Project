@@ -1235,7 +1235,7 @@ shooting_percentage
 #Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(974)
 shot_results <- c('made', 'missed')
-simul_shooter <- sample(shot_results, size = length(streak_per_player[[1]]), replace = TRUE, prob = c(shooting_percentage[[1]], 1 - shooting_percentage[[1]]))
+simul_shooter <- sample(shot_results, size = sum(best_players_df[1,4], best_players_df[1,5], best_players_df[1,6]), replace = TRUE, prob = c(shooting_percentage[[1]], 1 - shooting_percentage[[1]]))
 simul_shooter
 
 
@@ -1277,10 +1277,9 @@ grid.arrange(g1, g2, ncol = 2)
 ```{r, include=FALSE}
 ###PLAYER 2 VS SAMPLE PLAYER###
 #Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter2 
-set.seed(572)
+set.seed(57)
 shot_results <- c('made', 'missed')
-simul_shooter <- sample(shot_results, size = length(streak_per_player[[2]]), replace = TRUE, 
-                        prob = c(shooting_percentage[[2]], 1 - shooting_percentage[[2]]))
+simul_shooter <- sample(shot_results, size = sum(best_players_df[2,4], best_players_df[2,5], best_players_df[2,6]), replace = TRUE, prob = c(shooting_percentage[[2]], 1 - shooting_percentage[[2]]))
 simul_shooter
 
 
@@ -1322,7 +1321,7 @@ grid.arrange(g1, g2, ncol = 2)
 #Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter3 
 set.seed(57)
 shot_results <- c('made', 'missed')
-simul_shooter <- sample(shot_results, size = length(streak_per_player[[3]]), replace = TRUE, 
+simul_shooter <- sample(shot_results, size = sum(best_players_df[3,4], best_players_df[3,5], best_players_df[3, 6]), replace = TRUE, 
                         prob = c(shooting_percentage[[3]], 1 - shooting_percentage[[3]]))
 simul_shooter
 
