@@ -866,7 +866,7 @@ library(ggplot2)
 library(scales)
 ggplot(data = df) + geom_bar(aes(x = df[, "CLOSE_DEF_DIST"])) +
   scale_x_discrete("Closest Defender Distance", breaks = c (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24), limits = 0:24) + 
-  ggtitle("Closest Defender Distance vs Shooting Accuracy")
+  ggtitle("Defender Distance Distribution")
   
 ```
 
