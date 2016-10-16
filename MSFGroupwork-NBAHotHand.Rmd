@@ -60,13 +60,11 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
     14. Name and ID of the nearest defender  
     15. Distance from the nearest defender  
   
- The data has been acquired from Kaggle website **(https://www.kaggle.com/dansbecker/nba-shot-logs)** on 30 September 2016.  
+ The data has been acquired from [Kaggle](https://www.kaggle.com/dansbecker/nba-shot-logs) website on 30 September 2016.  
 
 ###Dataset Strengths  
     
-    The dataset comprises of comprehensive observational data to start to work with. In general, the dataset has only a small percentage of missing value (0.19%) so there was not need to remove or assign many data points to default values. Since the column name is not ambiguous it was really helpful to understand the dataset right from the beginning. 
-
-    The dataset comprises of comprehensive observational data which enables efficient analysis without extensive 'clean up' of the data. The dataset only have small percentage of missing value (0.19%), therefore there is no need to remove or assign numerous data points to default values. The fact that initial dataset meant that only a small number of additional columns had to be added (see data clean-up part of the code for details. 
+  The dataset comprises of comprehensive observational data which enables efficient analysis without extensive 'clean up' of the data. The dataset only have small percentage of missing value (0.19%), therefore there is no need to remove or assign numerous data points to default values. The fact that initial dataset meant that only a small number of additional columns had to be added (see data clean-up part of the code for details. 
 
 
 ###Dataset Limitations  
@@ -830,9 +828,15 @@ for (i in 1:nrow(distance_level)){
 
 #Calculate shooting accuracy for each distance
 distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 4)
+
+library(ggplot2)
+library(scales)
+ggplot(data = df) + geom_bar(aes(x = df[, "CLOSE_DEF_DIST"])) +
+  scale_x_discrete("Closest Defender Distance", breaks = c (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24), limits = 0:24)
+  
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 #Plotting the result
 library(ggplot2)
 library(scales)
@@ -856,6 +860,7 @@ ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Ac
 
 ###Correlation Test
   Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:
+  There was medium to strong positive correlation found between the defender distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Defender Distance and Accuracy was r(297) = .59, p < .05, as part of level of significance (p = .05).  
   
 ```{r, include=FALSE}
 #change distance level to numeric type for correlation test function
@@ -874,14 +879,14 @@ for (i in 0:nrow(distance_level)){
 dfZerotoAll <- data.frame(distanceZerotoAll, accuracyDist1)
 ```
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 #calculate correlation
 cor.test(dfZerotoAll$distanceZerotoAll, dfZerotoAll$accuracyDist1)
 ```
 
 ###Correlation Test Result  
   The correlation test result produced slightly higher number of correlation between defender distance with shooting accuracy for all shot distance attempts (0.59). If the findings made only based on this number only, there would be obvious that further defender distance will **automatically** increase shooting accuracy. However, when analysing distance ranges the result was somewhat different. For example, for distance range between 0 (zero) to 8 feet, the correlation measurement will be as follows:  
-
+  There was medium negative correlation found between the defender distance and shooting accuracy in this range. The Pearson’s correlation coefficient for the relationship between the variables Defender Distance and Accuracy was r(297) = -0.40, p < .05, as part of level of significance (p = .05).
 ```{r, include=FALSE}
 #populate data from data frame
 distanceZerotoEight <- c()
@@ -895,7 +900,7 @@ for (i in 0:80){
 dfZerotoEight <- data.frame(distanceZerotoEight, accuracyDist2)
 ```
   
-```{r, echo=FALSE}
+```{r, include=FALSE}
 #calculate correlation
 cor.test(dfZerotoEight$distanceZerotoEight, dfZerotoEight$accuracyDist2)
 ```
@@ -936,7 +941,7 @@ for (i in 1:nrow(shooting_distance_level)){
 shooting_distance_level$Accuracy <- round(shooting_distance_level$SCORED / shooting_distance_level$Freq, 4)
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 #Plotting the result
 library(ggplot2)
 library(scales)
@@ -965,6 +970,7 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
   12. more than 28 feet: the accuracy varies greater than previous distance range, starting from **0%** (no shots scored from that distance) to **50%**  
 
   Analysis has also produced a correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:  
+  There was strong negative correlation found between the shooting distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(446) = -0.87, p < .05, as part of level of significance (p = .05).
 ```{r, include=FALSE}
 #change distance level to numeric type for correlation test function
 shooting_distance_level$Var1 <- as.numeric(shooting_distance_level$Var1)
@@ -981,13 +987,13 @@ for (i in 0:nrow(shooting_distance_level)){
 dfShootingZerotoAll <- data.frame(shootingDistanceZerotoAll, shootingAccuracyDist1)
 ```
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 cor.test(dfShootingZerotoAll$shootingDistanceZerotoAll, dfShootingZerotoAll$shootingAccuracyDist1)
 ```
 
 ###Correlation Test Result  
   The correlation test result shown strong negative correlation between shooting distance and shooting accuracy (-0.87). This meant that for all data points, the further a shooter from the basket, the shooter's accuracy would decrease. However, if the correlation test taken for certain range distance based on the diagram, the correlation result would be different as follows:
-
+  There was low positive correlation found between the shooting distance and shooting accuracy between range 10 to 20 feet. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(99) = .11, p > .05, fail to reach level of significance (p = .05).
 ```{r, include=FALSE}
 #populate data for shooting distance in range 10 to 20 feet
 shootingDistance10to20 <- c()
