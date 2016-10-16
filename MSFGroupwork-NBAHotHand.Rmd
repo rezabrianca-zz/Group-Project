@@ -919,7 +919,7 @@ player_and_game <- function(x, y) {
 #player_and_game('202681', '21400681')
 
 
-#Create a list that gives us the streaks of each player and game (5 best performances)
+#Create a list that gives us the streaks of each player and game (3 best performances)
 streak_per_player <- list()
 j <- 1
 for(i in best_players_df$player_id) {
