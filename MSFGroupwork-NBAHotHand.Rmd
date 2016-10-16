@@ -681,7 +681,7 @@ ggplot(data = distance_level) +
 
 ####Plot Result
 
-**Table 9** : Relationship between the defender distance and accuracy
+**Table 9**: Relationship between the defender distance and accuracy
 
 Defender Distance (range in feet) | accuracy (range in %) 
 - | -
@@ -1306,11 +1306,10 @@ anova(special.model)
 An ad hoc data analysis was used as 3 of the 15 players stood out in particular. To examine whether their data result in a better model, another logistic regression analysis was performed with the same dependent and independent variables for three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward.
 
 ```{r, echo=FALSE}
-graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-graph01 <- graph01 + labs(title = "Differences in FGA for games lost/won for particular players") + xlab("Player name") + ylab("FGA")
-graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
-graph02 <- graph02 + labs(title = "Differences in FG% for games lost/won for particular players") + xlab("Player name") + ylab("FG%")
-grid.arrange(graph01, graph02, ncol = 2)
+graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))+ graph01 + labs(title = "Differences in FGA for games lost/won for particular players") + xlab("Player name") + ylab("FGA")
+graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) + labs(title = "Differences in FG% for games lost/won for particular players") + xlab("Player name") + ylab("FG%")
+graph01
+graph02
 ```
 
 The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
