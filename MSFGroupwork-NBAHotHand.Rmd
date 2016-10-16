@@ -78,14 +78,12 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
 ##Analysis
 
 
-```{r}
+```{r, eval=FALSE, include=FALSE}
 # Installing libraries
 install.packages('reshape')
 install.packages('gridExtra')
 
 ```
-
-
 
 
 ```{r}
@@ -97,8 +95,6 @@ library(plyr)
 
 ```
 
-
- 
 
 ```{r}
 ###Data clean-up
@@ -128,14 +124,14 @@ for (i in 1:nrow(df)) {
   if (df$LOCATION[i] == "H") {
     df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[5]
     df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[7]
-    if (W[i] == "W") df$WINNER[i] <- "HOME" 
-    if (W[i] == "L") df$WINNER[i] <- "AWAY"
+    if (df$W[i] == "W") df$WINNER[i] <- "HOME" 
+    if (df$W[i] == "L") df$WINNER[i] <- "AWAY"
   }
   if (df$LOCATION[i] == "A") {
     df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[7] 
     df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[5]
-    if (W[i] == "L") df$WINNER[i] <- "HOME"  
-    if (W[i] == "W") df$WINNER[i] <- "AWAY"
+    if (df$W[i] == "L") df$WINNER[i] <- "HOME"  
+    if (df$W[i] == "W") df$WINNER[i] <- "AWAY"
   }
 }
 
@@ -407,6 +403,7 @@ Based on the above, the analysis shown that the null hypothesis should be reject
 ###Further research
 
 To better understand effects of rest and home/away advantage it would be interesting in future research papers to take into account distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away gamein New Jersey.
+
 
 ##Effects on accuracy (Justin)
 
@@ -977,7 +974,7 @@ player_and_game <- function(x, y) {
 streak_per_player <- list()
 j <- 1
 for(i in best_players_df$player_id) {
-   streak_per_player[[j]] <- player_and_game(i, best_players_df[ourtable[, 'player_id'] == i, 'GAME_ID1'])
+   streak_per_player[[j]] <- player_and_game(i, best_players_df[best_players_df[, 'player_id'] == i, 'GAME_ID1'])
    j <- j + 1
 }
 streak_per_player
