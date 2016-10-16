@@ -681,7 +681,7 @@ ggplot(data = distance_level) +
 
 ####Plot Result
 
-** Table 9**: Relationship between the defender distance and accuracy
+**Table 9** : Relationship between the defender distance and accuracy
 
 Defender Distance (range in feet) | accuracy (range in %) 
 - | -
