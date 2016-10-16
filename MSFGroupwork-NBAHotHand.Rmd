@@ -7,14 +7,16 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(include = FALSE)
+<<<<<<< HEAD
+knitr::opts_chunk$set(echo=TRUE)
+=======
+knitr::opts_chunk$set(echo = TRUE)
+>>>>>>> 91b4c1b9b8689ebb1022b0a84a2b6b48aeaef358
 ```
 ##Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
 ##Date submitted: 16/10/2016
 
 ***
-
-
 
 ##Introduction
 
@@ -893,19 +895,20 @@ distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 4)
 library(ggplot2)
 library(scales)
 ggplot(data = df) + geom_bar(aes(x = df[, "CLOSE_DEF_DIST"])) +
-  scale_x_discrete("Closest Defender Distance", breaks = c (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24), limits = 0:24)
+  scale_x_discrete("Closest Defender Distance", breaks = c (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24), limits = 0:24) + 
+  ggtitle("Defender Distance Distribution")
   
 ```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE}
 #Plotting the result
 library(ggplot2)
 library(scales)
-ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
+ggplot(data = distance_level) +
   geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
   scale_y_continuous(labels = percent, breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0), limits = c(0, 1)) +
   scale_x_discrete("Closest Defender Distance", limits = 0:24) +  
-  ylab("Shooting Accuracy (%)") +   ggtitle("Closest Defender Distance vs Shooting Accuracy")
+  ylab("Shooting Accuracy (%)") + ggtitle("Closest Defender Distance vs Shooting Accuracy")
 ```
 
 ###Plot Result
@@ -1082,7 +1085,7 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
   
 ##Hot Hand Theory
 ###Introduction
-  The specific analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is based on the hypothesis that a shooter with a hot hand will have shots that are dependent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
+  The specific analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is aimed to establish whether there are  the hypothesis that a shooter with a hot hand will have shots that are dependent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
 
 ###Methods
 The steps to approximate this question are as follows:
@@ -1400,9 +1403,3 @@ This report has demonstrated results of mathematical and statistical analysis of
   Economist: As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).
   Erculj, F. and Supej, M. (2009). Impact of Fatigue on the Position of the Release Arm and Shoulder Girdle over a Longer Shooting Distance for an Elite Basketball Player. Journal of Strength and Conditioning Research, 23(3), pp.1029-1036.
   Mascret, N., Ibáñez-Gijón, J., Bréjard, V., Buekers, M., Casanova, R., Marqueste, T., Montagne, G., Rao, G., Roux, Y. and Cury, F. (2016). The Influence of the ‘Trier Social Stress Test’ on Free Throw Performance in Basketball: An Interdisciplinary Study. PLOS ONE, 11(6), p.e0157215.
-<<<<<<< HEAD
-
-ECONOMIST. As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).
-=======
-  
->>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
