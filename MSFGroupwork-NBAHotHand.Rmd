@@ -908,9 +908,8 @@ grid.arrange(gg1, gg2, gg3, ncol = 3)
 ###Boxplots
 ```{r}
 #Create a boxplot for each player's streak lengths 
-boxplot(player1_df$streaks) 
-summary(player1_df$streaks) #Check that boxplot is valid
-IQR(player1_df$streaks) #Check that boxplot is valid
+summary(player1_df$streaks)
+IQR(player1_df$streaks) 
 ```
 
 
