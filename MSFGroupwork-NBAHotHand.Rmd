@@ -7,7 +7,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(include = FALSE)
 ```
 ##Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
 ##Date submitted: 16/10/2016
@@ -164,6 +164,16 @@ Steps to test the hypothesis are as follows:
     4. Plot the team level data 
     5. Discuss the findings of the analysis
 
+The graph below shows descriptive variables for home/away wins:
+
+```{r, echo=FALSE}
+#plot showing home and away win ratio per team
+ggplot()
+
+ggplot(advdf, aes(x = advdf$WINNER)) + geom_bar(aes()) + ylab("game count") + xlab("winner")
+```
+
+
 
 ```{r, include=FALSE}
 #preparing a dataframe for home advantage analysis
@@ -180,8 +190,9 @@ aw <- sum(advdf$WINNER == "AWAY")
 #percentage of home team winning: 
 round(hh / (hh + aw), 4)
 round(aw / (hh + aw), 4)
-
 ```
+
+
 
 ```{r, include=FALSE}
 #preparing a dataframe for analysis of games when a team played at home 
@@ -232,7 +243,7 @@ Win % AWAY  | 47  | 35  | 32  | 41  | 35  | 30  | 44  | 30  | 48  | 39  | 23  | 
 Win % Diff  | 10  | 17  | 16  | 6   | 10  | 12  |-3   | 11  |-9   |-1   |    8|   -1|   12|   13| 8
 
 
-```{r, out.width = '100%', fig.retina = NULL, fig.align = "center"}}
+```{r, echo=FALSE}
 #plot showing home and away win ratio per team
 ggplot(advdf3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "wins at HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "wins  AWAY")) + ylab("Win ratio") + xlab("Team Names")
 ```
