@@ -605,13 +605,13 @@ The aim of this analysis is to examine whether the top scorer of a team can help
 
 The measurements are calculated in the following steps:
 
-1. “Made” and “missed” in “FGM” column were replaced by 1 and 0 respectively.
-2. A new subset  was created so that each row contained the player’s name, match details and shooting performance of that player.
-3. The number of attempts and field goal percentage of all players were calculated according to the shooting data. 
-4. The players with most outstanding performances were picked out and another subset was generated for these players.
-5. Plot results. 
-6. Investigate the correlation between the results of the matches and the performances of top scorers. 
-7. A further logistic regression test was run in order to examine three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. 
+  1. “Made” and “missed” in “FGM” column were replaced by 1 and 0 respectively.
+  2. A new subset was created so that each row contained the player’s name, match details and shooting performance for that player.
+  3. The number of attempts and field goal percentage of all players were calculated according to the shooting data. 
+  4. The players with most outstanding performances were picked out and another subset was generated for these players.
+  5. The correlation (p = .05) between the results of the matches and the performances of top scorers was investigated. 
+  6. A logistic regression with the outcome of the match as dependent variable and FGA and percentage of FG made as independent variables. 
+  7. Another logistic regression test was run in order to examine three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. 
 
 ```{r, include=FALSE}
 # Replace "made" and "missed" with 1 and 0 respectively
