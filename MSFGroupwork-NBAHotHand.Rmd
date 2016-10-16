@@ -995,19 +995,23 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
 ```
 
 ###Plot Result
-  The explanation from the plot above are as follows. The shooter distance ranges and accuracy:   
-  1.  0 to 2 feet: the accuracy varied between **62%** to **68%**  
-  2.  2 to 4 feet: the accuracy rate for this distance range from **61%** to **67%**  
-  3.  4 to 6 feet: the accuracy rate for this distance range from **44%** to **58%**  
-  4.  6 to 8 feet: the accuracy rate for this distance range from **38%** to **51%**  
-  5.  8 to 10 feet: the accuracy rate for this distance range from **35%** to **42%**  
-  6.  10 to 12 feet: the accuracy rate for this distance range from **34%** to **42%**  
-  7.  12 to 14 feet: the accuracy rate for this distance range from **37%** to **47%**  
-  8.  14 to 16 feet: the accuracy rate for this distance range from **33%** to **51%**  
-  9.  16 to 18 feet: the accuracy rate for this distance range from **37%** to **48%**  
-  10. 18 to 24 feet: the accuracy rate for this distance range from **33%** to **43%**  
-  11. 24 to 28 feet: the accuracy rate for this distance range from **18%** to **38%**  
-  12. more than 28 feet: the accuracy varies greater than previous distance range, starting from **0%** (no shots scored from that distance) to **50%**  
+
+**Table 13**: The relationship between the shooter distance ranges and accuracy
+
+  Distance (in feet) | Accuracy (range in %)
+  - | -
+  0 - 2 | 62 - 68
+  2 - 4 | 61 - 67
+  4 - 6 | 44 - 58
+  6 - 8 | 38 - 51
+  8 - 10 | 35 - 42
+  10 - 12 | 34 - 42
+  12 - 14 | 37 - 47
+  14 - 16 | 33 - 51
+  16 - 18 | 37 - 48
+  18 - 24 | 33 - 43
+  24 - 28 | 18 - 38
+  28+ | 0 - 50
 
   Analysis has also produced a correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:  
   There was strong negative correlation found between the shooting distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(446) = -0.87, p < .05, as part of level of significance (p = .05).
