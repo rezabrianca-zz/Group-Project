@@ -9,8 +9,8 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
-Date submitted: 16/10/2016
+##Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
+##Date submitted: 16/10/2016
 
 ***
 
@@ -21,6 +21,8 @@ Date submitted: 16/10/2016
 The purpose of this report is to analyse the chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focused on analysis of a number of areas, demonstrate how the analysis has been conducted, discusses theory used, demonstrate and evaluate produced results. In addition, where relevant, this report will highlight potential areas of future research. 
 
 The chosen dataset for this report is a summary of shots made during NBA season 2014-2015. The following areas of research have been selected:
+
+** TO GET UPDATED AS A FINAL STEP**
 
 **1. Team related**
   a. Home Advantage analysis
@@ -171,15 +173,15 @@ Steps to test the hypothesis are as follows:
 
 ```{r, include=FALSE}
 #preparing a dataframe for home advantage analysis
-aa <- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
+advdf <- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
 
 #table showing a number of games won by home and away teams in the whole season
-table(aa$WINNER)
+table(advdf$WINNER)
 
 #home wins:
-hh <- sum(aa$WINNER == "HOME")
+hh <- sum(advdf$WINNER == "HOME")
 #Away wins:
-aw <- sum(aa$WINNER == "AWAY")
+aw <- sum(advdf$WINNER == "AWAY")
 
 #percentage of home team winning: 
 round(hh / (hh + aw), 4)
@@ -189,24 +191,24 @@ round(aw / (hh + aw), 4)
 
 ```{r, include=FALSE}
 #preparing a dataframe for analysis of games when a team played at home 
-aa1 <- cast(aa, HOME_TEAM ~ WINNER); names(aa1)[1] <- "TEAM"
-aa1$WIN_PCT_HOME <- round(aa1$HOME / (aa1$HOME + aa1$AWAY), 2)
+advdf1 <- cast(advdf, HOME_TEAM ~ WINNER); names(advdf1)[1] <- "TEAM"
+advdf1$WIN_PCT_HOME <- round(advdf1$HOME / (advdf1$HOME + advdf1$AWAY), 2)
 
 #preparing a dataframe for analysis of games when a team played at away 
-aa2 <- cast(aa, AWAY_TEAM ~ WINNER); names(aa2)[1] <- "TEAM"
-aa2$WIN_PCT_AWAY <- round(aa2$AWAY / (aa2$HOME + aa2$AWAY), 2)
+advdf2 <- cast(advdf, AWAY_TEAM ~ WINNER); names(advdf2)[1] <- "TEAM"
+advdf2$WIN_PCT_AWAY <- round(advdf2$AWAY / (advdf2$HOME + advdf2$AWAY), 2)
 
 #merging two dataframes together to enable the effective analysis of win ratios for teams playing at home and away.
-aa3 <- merge (aa1, aa2, by ="TEAM")
+advdf3 <- merge (advdf1, advdf2, by ="TEAM")
 
 #ordering the dataframe by win percentage at home.
-aa3 <- aa3[order(aa3$WIN_PCT_HOME, decreasing = TRUE),]
+advdf3 <- advdf3[order(advdf3$WIN_PCT_HOME, decreasing = TRUE),]
 
 #ordering factors of the dataframe by win percentage at home.
-aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
+advdf3$TEAM <- factor(advdf3$TEAM, levels = advdf3$TEAM[order(-advdf3$WIN_PCT_HOME)])
 
 #creating a column which shows a difference between home and away winning percentage rate
-aa3$WIN_PCT_DIFF<- aa3$WIN_PCT_HOME - aa3$WIN_PCT_AWAY
+advdf3$WIN_PCT_DIFF<- advdf3$WIN_PCT_HOME - advdf3$WIN_PCT_AWAY
 
 ```
 
@@ -236,9 +238,9 @@ Win % AWAY  | 47  | 35  | 32  | 41  | 35  | 30  | 44  | 30  | 48  | 39  | 23  | 
 Win % Diff  | 10  | 17  | 16  | 6   | 10  | 12  |-3   | 11  |-9   |-1   |    8|   -1|   12|   13| 8
 
 
-```{r}
+```{r, out.width = '100%', fig.retina = NULL, fig.align = "center"}}
 #plot showing home and away win ratio per team
-ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "AWAY")) 
+ggplot(advdf3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "wins at HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "wins  AWAY")) + ylab("Win ratio") + xlab("Team Names")
 ```
 
 
@@ -253,7 +255,7 @@ The plot shows that out of 30 teams:
 ```{r}
 
 ```
-**JUSTING TO SEE IF THERE IS ANYTHING WE CAN INCLUDE HERE
+**JUSTING TO SEE IF THERE IS ANYTHING WE CAN INCLUDE HERE**
 
 
 ###regression analysis
@@ -615,8 +617,7 @@ The measurements are calculated in the following steps:
   3. The number of attempts and field goal percentage of all players were calculated according to the shooting data. 
   4. The players with most outstanding performances were picked out and another subset was generated for these players.
   5. The correlation (p = .05) between the results of the matches and the performances of top scorers was investigated. 
-  6. A logistic regression with the outcome of the match as dependent variable and FGA and percentage of FG made as independent variables. 
-  7. Another logistic regression test was run in order to examine three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. 
+  6. A logistic regression analysis with the outcome of the match as dependent variable and FGA and percentage of FG made as independent variables was conducted.
 
 ```{r, include=FALSE}
 # Replace "made" and "missed" with 1 and 0 respectively
@@ -631,8 +632,6 @@ for (i in 1:nrow(df)) {
 df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 
 ```
-
-### Find field goal percentage (FG percentage) for each match
 
 
 ```{r, include=FALSE}
@@ -655,7 +654,10 @@ for (i in 1:nrow(shot.stats)){
 }
 ```
 
+<<<<<<< HEAD
 ### Impact of Top Scorers
+=======
+>>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
 
 ```{r, include=FALSE}
 # Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
@@ -687,13 +689,19 @@ summary(model)
 anova(model)
 
 ```
+###Results
+
 ##a. Field Goal Attempts (FGA)
 
+<<<<<<< HEAD
 There was no correlation found between the result of a match and the number of attempts of the player made in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach level of significance (p = .05). 
+=======
+There was no correlation found between the outcome of the matches in this season and the number of attempts of the players made. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach the level of significance (p = .05). 
+>>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
 
 ##b.  Field Goal Percentage (FG%)
 
-There was no correlation found between the result of a match and the field goal percentage of the player in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach level of significance (p = .05). 
+There was no correlation found between the outcome of the matches in this seaon and the field goal percentage of the players. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach the level of significance (p = .05). 
 
 ```{r, include=FALSE}
 # Find out "special" players by t-test
@@ -730,7 +738,7 @@ summary(special.model)
 anova(special.model)
 
 ```
-Table xxx: The logistic regression for FGA and FG% of 15 players.
+Table xxx: Result for the logistic regression analysis for FGA and FG% of 15 players.
 
    |   |Estimate | Std. Error | t value | Pr(>t)   
 |-|-|-|- | -             
@@ -738,21 +746,47 @@ Table xxx: The logistic regression for FGA and FG% of 15 players.
 |FGA   |-0.002679|   0.006468 | -0.414  |  0.679    
 |FG.percentage | 0.012329|   0.002736 |  4.506  |1.35e-05 ***
 
+Table xxx: Result for the anova for FGA and FG% for 15 players.
 
-Table xxx: The logistic regression for FGA and FG% of the 3 special players.
+   | |           Df| Deviance| Resid. Df| Resid. Dev
+|-|-|-|-| - 
+|NULL        |     |              | 777   |  188.73
+|FGA         |   1  | 0.0014   |    776  |   188.73
+|FG.percentage | 1 |  7.4664   |    775  |   181.26
+
+An ad hoc data analysis was used as 3 of the 15 players stood out in particular. To examine whether their data result in a better model, another logistic regression analysis was performed with the same dependent and independent variables for three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward.
+
+```{r}
+graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
+
+graph01 + labs(title = "Differences in FGA for games lost/won of the three special players ") + xlab("Player name") + ylab("FGA")
+graph02 + labs(title = "Differences in FG% for games lost/won of the three special players ") + xlab("Player name") + ylab("FG%")
+
+```
+
+The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
+
+Table xxx: Result for the logistic regression analysis for FGA and FG% of the 3 special players.
 | | Estimate | Std. Error | t value | Pr(>t)   
 |-|-|-|-| - 
 |(Intercept)   | 0.042259 |  0.164816 |  0.256  |  0.798    
 |FGA          | -0.002679 |  0.006468|  -0.414  |    0.679    
 |FG.percentage|  0.012329|   0.002736|   4.506  |1.35e-05 ***
 
-The box plots above shows the performances the three special players in terms of FGA and FG% respectively. The red (blue) boxes contain the data when the team lost (won) the match. 
+Table xxx: Result for the anova for FGA and FG% for the 3 special players.
+
+| |         Df| Deviance| Resid. Df| Resid. Dev
+|-|-|-|-| - 
+|NULL         |   |         |       147|     36.669
+|FGA          |  1|   0.0498|       146|     36.619
+|FG.percentage|  1|   4.4978|       145|     32.121
 
 ###Discussion
 
-From the correlation tests between the match results and players’ performances, it can be noticed that the increase in number of field goal attempts from top scorers is unlikely to make any impact on the results of the game. The correlation coefficient between the results of the game and FG% is sightly higher but these two factors are still not correlated since r(832) < .01. Meanwhile, the p-values of both correlation tests are too higher to reach the default level of significance (p = .05).
+From the correlation tests between the match results and players’ performances, it can be noticed that the increase in number of field goal attempts from top scorers is unlikely to make any impact on the results of the game. The p-values of both correlation tests are too high to reach the level of significance (p = .05).
 
-From the logistic regression test for FGA and FG%. It was found that FGA did not have any impact on the result of the match. FG% had significant correlation with the result of match. However, the anova test showed that the deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
+From the logistic regression analysis for FGA and FG%, it was found that FGA did not have any impact on the result of the match. FG% is a significant predictor for the result of match. However, the anova showed that the residual deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
 
 There was no correlation found between field goal attempts of top scorers and game results. A possible explanation is that it is easier for the opponents to focus on a certain player on defensive side. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelyhood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This is due to fact that once a player is being efficient on the offensive side, that player can help the team by not only keeping shooting but also creating more opportunities for his teammates. 
 
@@ -1268,14 +1302,22 @@ summary(linreg_fgm2)
 
 ```
 
-
+***
 #Conclusion
 
+This report has demonstrated results of mathematical and statistical analysis of the dataset containing information of shots from NBA season 2014-2015. The report specifically focused on number of research areas covering teams and players performance. The report described steps taken to produce the results, discussed and evaluated the produced results and suggested potential areas for future research.  
 
+
+***
 #References
 
   Ahart (1973). In Kendall, P. and Hollon, S. (1979). Cognitive-behavioral interventions. New York: Academic Press.
+  Economist: As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).
   Erculj, F. and Supej, M. (2009). Impact of Fatigue on the Position of the Release Arm and Shoulder Girdle over a Longer Shooting Distance for an Elite Basketball Player. Journal of Strength and Conditioning Research, 23(3), pp.1029-1036.
   Mascret, N., Ibáñez-Gijón, J., Bréjard, V., Buekers, M., Casanova, R., Marqueste, T., Montagne, G., Rao, G., Roux, Y. and Cury, F. (2016). The Influence of the ‘Trier Social Stress Test’ on Free Throw Performance in Basketball: An Interdisciplinary Study. PLOS ONE, 11(6), p.e0157215.
+<<<<<<< HEAD
 
 ECONOMIST. As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).
+=======
+  
+>>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
