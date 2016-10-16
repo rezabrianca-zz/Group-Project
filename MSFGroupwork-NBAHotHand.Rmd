@@ -449,7 +449,13 @@ Stress: The Null hypothesis states that there is no significant difference (p < 
 
 ###Methods
 
-In this analysis fatigue was measured as the period of the game, as it can be assumed that the later in the game the higher the fatigue of the players.
+In this analysis fatigue was measured as the period of the game, as it can be assumed that the later in the game the higher the fatigue of the players. The descriptive statistics of the shots per period can be seen below. 
+
+```{r, echo=FALSE}
+bar.period <- ggplot(df) + geom_bar(aes(x = PERIOD))
+bar.period + labs(title = "Number of shots taken per period") + scale_x_discrete(name ="Period", limits=c("1","2","3","4", "5", "6", "7")) + ylab("Number of shots")
+```
+
 
 The steps to test the first hypothesis were as follows:
   1. The overall accuracy for each period was calculated, based on the number of shots made (FGM = 1) and the number of shots taken for the specific period (FGM = 1 & FGM = 0)
@@ -614,12 +620,16 @@ Additionally, further reasons that lead to distinction between top players and a
 
 ###Limitations 
 
+
+As there are much more shots taken in periods 1 to 4 than in 5 to 7 the differences in the accuracy have to be treat with caution.
 The shot clock variable had missing values for 5567 shots, equal to 4.34% of all shots on the dataset, limiting the meaningfulness of the findings in the accuracy per second part. 
 
-***
+<<<<<<< HEAD
 
-## Shooting Percentage Analysis
+## Shooting Percentage Analysis (James)
+
 ###Introduction  
+>>>>>>> 6a1c84a12652eedf6027627edee3f70ed439beb1
 
 The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The Null hypothesis is that there is no difference regarding the likelyhood of winning if the top scorer of a team has more field goal attempts. The second Null hypothesis is there is no difference regarding the likelyhood of winning if the top scorer of a team has a higher shot percentage than on average. As this is such a niche area research a literature review did not reveal sufficient results so this analysis aims to fill this gap.
 
@@ -709,8 +719,11 @@ anova(model)
 
 <<<<<<< HEAD
 There was no correlation found between the result of a match and the number of attempts of the player made in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach level of significance (p = .05). 
+<<<<<<< HEAD
 
 There was no correlation found between the outcome of the matches in this season and the number of attempts of the players made. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach the level of significance (p = .05). 
+=======
+>>>>>>> f989f5f8887c39521a651bb317a805dbc5ade12d
 
 
 ####b.  Field Goal Percentage (FG%)
@@ -770,14 +783,16 @@ Table xxx: Result for the anova for FGA and FG% for 15 players.
 
 An ad hoc data analysis was used as 3 of the 15 players stood out in particular. To examine whether their data result in a better model, another logistic regression analysis was performed with the same dependent and independent variables for three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward.
 
-```{r}
+```{r, echo=FALSE}
 graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
-
-graph01 + labs(title = "Differences in FGA for games lost/won of the three special players ") + xlab("Player name") + ylab("FGA")
-graph02 + labs(title = "Differences in FG% for games lost/won of the three special players ") + xlab("Player name") + ylab("FG%")
-
+graph01 + labs(title = "Differences in FGA for games lost/won of the three special players") + xlab("Player name") + ylab("FGA")
 ```
+ Graph xx1: Differences in FGA for games lost/won of the three special players.
+```{r, echo=FALSE}
+graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
+graph02 + labs(title = "Differences in FG% for games lost/won of the three special players") + xlab("Player name") + ylab("FG%")
+```
+Graph xx2: Differences in FG% for games lost/won of the three special players.
 
 The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
 
@@ -802,17 +817,16 @@ From the correlation tests between the match results and players’ performances
 
 From the logistic regression analysis for FGA and FG%, it was found that FGA did not have any impact on the result of the match. FG% is a significant predictor for the result of match. However, the anova showed that the residual deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
 
-There was no correlation found between field goal attempts of top scorers and game results. A possible explanation is that it is easier for the opponents to focus on a certain player on defensive side. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelyhood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This is due to fact that once a player is being efficient on the offensive side, that player can help the team by not only keeping shooting but also creating more opportunities for his teammates. 
+There was no correlation found between field goal attempts of top scorers and outcome of the matches. A possible explanation is that it is easier for the opponent to focus on a certain player on defensive side and then the overall efficiency of the team will start to decrease. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelyhood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This is due to fact that once a player is being efficient on the offensive side, that player can help the team by not only keeping shooting but also creating more opportunities for his teammates. 
 
-Based on results above, an additional research has been done regarding to the performances of three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. These three players were chosen because their teams are more likely to take the victory when they score more in single game according to the bar plot and t-test. 
+Based on results above, an additional research has been done regarding to the performances of three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. These three players were chosen because their teams are more likely to take the victory when they score more in single game according to Graph xx2 and t-test. 
 
-For these three players, the p-values still did not reach the level of significance (p = .05) for FGA. However, all p-values are smaller than 0.05 when their FG%s were tested. Based on these findings, another logistic regression was done with these three players. It was shown that p < .001 and residual deviance from anova dropped by 4.498 which is about 12.3% when FG% was considered. In comparison, the deviance was above 200 when 15 players were tested. 
+For these three players, the p-values still did not reach the level of significance (p = .05) for FGA. However, all p-values are smaller than 0.05 when their FG%s were tested. Based on these findings, another logistic regression was done with these three players. It was shown that p < .05 and residual deviance from anova dropped by 4.498 which is about 12.3% when FG% was considered. In comparison, the deviance was above 180 when 15 players were analysed.
 
-Therefore, these three players are somehow different from others as they can contribute more to the win rates of their teams by their increasing shooting accuracy. There could be many reasons behind this, including their team compositions and the roles of the players. Further research has to be done to if one wants to find out the differences of these players and others.
+Therefore, the analysis on these three players has shown that there is a  difference between them and the others as they can contribute more to the win rates of their teams by their increasing shooting accuracy. There could be various reasons behind this observation, such as their team compositions and the roles of these players. Further research has to be done to in order to find out why the performances of these special players are more decisive on the outcome.
 
 ###Limitations
-
-The data set only contains 904 out of 1230 matches in the entire regular season. So there might be a chance that the highlight performances of certain players are missed out in our analysis. Meanwhile, it would be ideal if the contributions of all players can be analysed in more aspects including number of rebounds and assists. 
+The data set only covers 904 of 1230 matches in the regular season. So there might be a chance that the highlight performances of certain players are missed out in the analysis. Meanwhile, it would be ideal if more sepects of data, such as rebounds and assists, could be analysed. 
 
 ***
 
