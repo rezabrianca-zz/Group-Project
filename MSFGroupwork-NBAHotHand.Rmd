@@ -30,7 +30,7 @@ Date submitted: 16/10/2016
 
 The purpose of this report is to analyse a chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focused on analysis of a number of areas, demonstrate how the analysis has been conducted, discusses theory used, demonstrate and evaluate produced results. In addition this report will highlight potential areas of future research. 
 
-The chosen dataset for this report is a summary of shots made during NBA season 2015-2016. The following areas of research have been selected:
+The chosen dataset for this report is a summary of shots made during NBA season 2014-2015. The following areas of research have been selected:
 
 #Report structure 
 
@@ -53,7 +53,7 @@ a.
 ##Methods
 ###Dataset Description:  
   
-  Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. The data comprise of 128,609 rows and 22 columns with 16 MB data size with several value in some column is missing. The column titles are generally self-explanatory. It has the following data:   
+  Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. The data comprise of 128,609 rows and 22 columns with 16 MB data size with several value in some column missing. The column titles are generally self-explanatory. It has the following data:   
     1.  Match ID  
     2.  Match date  
     3.  Which team plays as home and away  
@@ -74,7 +74,7 @@ a.
 
 ###Dataset Strengths  
     
-    The dataset comprise of comprehensive observational data to start to work with. In general, the dataset only have small percentage of missing value (0.19%) so we do not need to remove or assign many data points to default values. And since the column name is not ambiguous it really helps us to understand dataset from the beginning. 
+    The dataset comprises of comprehensive observational data to start to work with. In general, the dataset has only a small percentage of missing value (0.19%) so there was not need to remove or assign many data points to default values. Since the column name is not ambiguous it was really helpful to understand the dataset right from the beginning. 
 
 ###Dataset Limitations  
   There are several constraints we need to mentioned in order to provide same understandings for this group work analysis as follows:  
@@ -356,7 +356,7 @@ To better understand effects of rest and home/away advantage it would be interes
 
 The potential effects of fatigue and stress on the accuracy of shots are investigated in this part of the analysis.
 
-Fatigue in basketball is a broadly analysed topic in physiological research. Latest literature suggests that elite basketball players cope well with the effects of fatigue so it does not affect their shooting kinematics. This results in no difference for their shot accuracy even if the players are fatigued (Erčul, Frane & Supej, 2006; Uygur et al., 2010). This research paper analyses whether these previous findings can be confirmed for the NBA season 2015-2016.  
+Fatigue in basketball is a broadly analysed topic in physiological research. Latest literature suggests that elite basketball players cope well with the effects of fatigue so it does not affect their shooting kinematics. This results in no difference for their shot accuracy even if the players are fatigued (Erčul, Frane & Supej, 2006; Uygur et al., 2010). This research paper analyses whether these previous findings can be confirmed for the NBA season 2014-2015.  
 
 Regarding the effect of psychological stress on shot accuracy, previous research is not as decisive as for the effects of fatigue. While Arhart(1973) concluded that stressful events like small or big margins for the game score have an effect on players free-throw accuracy, latest research introducing more controlled conditions states that there is no effect of stress on players shot accuracy (Mascret et al., 2016). The indecisiveness of previous literature led to a deeper analysis in this research paper.
 
@@ -446,34 +446,33 @@ for (i in (1:nrow(df.acc.players))){
 }
 
 
-ap<- df.acc.players
-head(ap)
+df.acc.secondsplayers<- df.acc.players
 
-ap$SHOT_CLOCK <- NULL
+df.acc.secondsplayers$SHOT_CLOCK <- NULL
 
-colnames(ap)<- c( "player_id", "player_name","X0", "X1","seconds.left") 
+colnames(df.acc.secondsplayers)<- c( "player_id", "player_name","X0", "X1","seconds.left") 
 
 
-ap2 <- ddply(ap, c("player_id", "player_name","seconds.left"), summarise,
+df.acc.secondsplayers2 <- ddply(df.acc.secondsplayers, c("player_id", "player_name","seconds.left"), summarise,
 X0= sum(X0),
 X1= sum(X1))
 
-ap2$acc<- ap2$X1/(ap2$X0+ap2$X1)
+df.acc.secondsplayers2$acc <-  df.acc.secondsplayers2$X1/(df.acc.secondsplayers2$X0+df.acc.secondsplayers2$X1)
 
-ap2[ap2 == 99] <- NA
+df.acc.secondsplayers2[df.acc.secondsplayers2 == 99] <- NA
 
-ap3 <- data.frame(row.names = c(0:24))
-ap3$seconds.left <- c(0:24)
+df.acc.secondsplayers3 <- data.frame(row.names = c(0:24))
+df.acc.secondsplayers3$seconds.left <- c(0:24)
 
-for (i in ap3$seconds.left){
-  ap3$acc.top[ap3$seconds.left == i] <- sum(ap2$acc[ap2$seconds.left == i & ap2$player_name == "james harden"][!is.na(ap2$acc[ap2$seconds.left == i & ap2$player_name == "james harden"])], ap2$acc[ap2$seconds.left == i & ap2$player_name == "lebron james"][!is.na(ap2$acc[ap2$seconds.left == i & ap2$player_name == "lebron james"])], ap2$acc[ap2$seconds.left == i & ap2$player_name == "russell westbrook"][!is.na(ap2$acc[ap2$seconds.left == i & ap2$player_name == "russell westbrook"])])/3}
-
-
-
-ggplot(NULL) + geom_smooth(data = ap3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
+for (i in df.acc.secondsplayers3$seconds.left){
+  df.acc.secondsplayers3$acc.top[df.acc.secondsplayers3$seconds.left == i] <- sum(df.acc.secondsplayers2$acc[df.acc.secondsplayers2$seconds.left == i & df.acc.secondsplayers2$player_name == "james harden"][!is.na(df.acc.secondsplayers2$acc[df.acc.secondsplayers2$seconds.left == i & df.acc.secondsplayers2$player_name == "james harden"])], df.acc.secondsplayers2$acc[df.acc.secondsplayers2$seconds.left == i & df.acc.secondsplayers2$player_name == "lebron james"][!is.na(df.acc.secondsplayers2$acc[df.acc.secondsplayers2$seconds.left == i & df.acc.secondsplayers2$player_name == "lebron james"])], df.acc.secondsplayers2$acc[df.acc.secondsplayers2$seconds.left == i & df.acc.secondsplayers2$player_name == "russell westbrook"][!is.na(df.acc.secondsplayers2$acc[df.acc.secondsplayers2$seconds.left == i & df.acc.secondsplayers2$player_name == "russell westbrook"])])/3}
 
 
-t.test(acc$accuracy, ap3$acc.top)
+
+ggplot(NULL) + geom_smooth(data = df.acc.secondsplayers3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
+
+
+t.test(acc$accuracy, df.acc.secondsplayers3$acc.top)
 
 ```
 
@@ -509,7 +508,7 @@ graph.acc + labs(title = "Overall Accuracy per second left on shot clock") + xla
 
 ### Discussion
 
-The results of the T-tests show a significant difference for the overall accuracy between period 1 and period 2, between period 3 and period 4 and between regular game time and overtime. As the table shows the changes in accuracy are really small (from 46% to 44% over the regular game time) and often located on digit-level, so eventhough the changes are significant they are negligible. After all, there is not enought evidence to reject the Null hypothesis, statingthat there is no difference in the accuracy for later periods, in regular game time but it can be rejected for overtime. It can be concluded that accuracy does not suffer for later game periods as long as the game ends in regular time. For games that reach overtime a highly significant drop in the accuracy of over 5% (45% to below 40%) is observale. 
+The results of the T-tests show a significant difference for the overall accuracy between period 1 and period 2, between period 3 and period 4 and between regular game time and overtime. This means that player have a higher accuracy in periods 1 and 3 than in the following one. As the table shows, the changes in accuracy are minor (from 46% to 44% over the regular game time) and often located on digit-level, so although the changes are significant they are negligible. After all, the Null hypothesis must be rejected as the statistical methods used show differences for accuracy in later periods of the game, but as they are negligible in the regular game time but it can be concluded that accuracy does not suffer for later game periods as long as the game ends in regular time. For games that reach overtime a highly significant drop in the accuracy of over 5% (45% to below 40%) is observale, stating that players are less likely to score in overtime periods that in the regular game time.
 This means that elite basketball players cope really well with any occurance of fatigue regarding their shot accuracy on a regular basis. As soon as the game reaches an intensity which is beyond the regular level effects of fatigue can be found leading to lower shot accuracy. 
 
 
@@ -520,16 +519,23 @@ An ad hoc data analysis was undertaken to investigate whether this pattern of st
 
 ```{r}
 
-graph2 <- ggplot(NULL) + geom_smooth(data = ap3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
+graph2 <- ggplot(NULL) + geom_smooth(data = df.acc.secondsplayers3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
 graph2 + labs(title = "Comparison - Accuracy per second on shot clock left for Top Players vs Overall Average") + xlab("Seconds left on shot clock") + ylab("Accuracy")
 
 ```
 
-The graph shows many similarities for top players to the average graph. The most visual differences are the slightly lower accuracy around the 15 seconds mark for the top players and the much lower decrease below 5 seconds left. Explanations for these differences could be that around the 15 second mark top players feel more obligated to shoot than the average player, even when they are not in the optimal position to do so - leading to lower accuracies. Further it seems like Top players dont get affected by last seconds stress as much as average players. They keep up a quite high accuracy even for the last second of the shot clock (40%).
+The graph shows many similarities for top players to the average graph. The most visual differences are the slightly lower accuracy around the 15 seconds mark for the top players and the much lower decrease below 5 seconds left. Explanations for these differences could be that around the 15 second mark top players feel more obligated to shoot than the average player, even when they are not in the optimal position to do so - leading to lower accuracies. Further it seems like Top players dont get affected by last seconds stress as much as average players. They keep up a quite high accuracy even for the last second of the shot clock (40%). However, as there are many similarities for the accuracy of Top players and average players there must be other things than the accuracy that seperates those two groups. 
 
 ### Future research
 
-Future research could focus on this difference between Top players and average players. While this analysis revealed a difference for shot clock pressure it would be interesting to look at more events that induce stress like the margin of the game or the placement in the standings of the own and the enemy team.
+Future research could focus on this difference between Top players and average players. While this analysis revealed a difference for shot clock pressure it would be interesting to look at more events that induce stress like the margin of the game or the placement in the standings of the own and the enemy team. Further an investigation of the reasons that lead to the higher accuracy would be interesting. Do top players keep up their usual shot kinematics when under pressure while average players dont? Is it a different mindset that helps them to cope better with stress? Or do they simply have a higher stress tolerance as the result of continuous high expectations top players have to endure.
+
+Additionally, further reasons that lead to distinction between top players and average players should be investigated.
+
+
+###Limitations 
+
+The shot clock variable had missing values for 5567 shots, equal to 4.34% of all shots on the dataset, limiting the meaningfulness of the findings in the accuracy per second part. 
 
 ## Shooting Percentage Analysis (James)
 
