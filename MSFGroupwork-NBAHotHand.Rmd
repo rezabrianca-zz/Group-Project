@@ -27,8 +27,8 @@ The chosen dataset for this report is a summary of shots made during NBA season 
 **2. Player related**  
   2.1 Effects on Accuracy  
     2.1.1 Fatigue Effect (Quarter Accuracy Rate) & Shot Clock Pressure     
-    2.1.2 Defender Proximity Analysis
-    2.1.3 Shooting Distance vs Shot Accuracy
+    2.1.2 Defender Proximity Analysis  
+    2.1.3 Shooting Distance vs Shot Accuracy  
   2.2 Hot Hand Theory  
   2.3 Game result impact by field goal attempts  
    
@@ -43,10 +43,10 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
     4.  Match result  
     5.  Final score difference  
     6.  shot number  
-    7.  FGM: Shot result: success or miss 
+    7.  FGM: Shot result: success or miss   
     8.  Type of shot attempt (2 points or 3 points)  
     9.  Quarter number (1 to 4, or higher for overtime)  
-    10. Game clock for each quarter when the shot has been made 
+    10. Game clock for each quarter when the shot has been made   
     11. Shot clock (time left for a shot)  
     12. Name and ID of a player who took the shot  
     13. Shot distance from basket  
@@ -1051,6 +1051,7 @@ summary(realshooter_df$streaks)
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar(fill = 'blue') + labs(title = 'sample shooter')
 g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar(fill = 'red') + labs(title = 'Kyrie Irving')
+grid.arrange(g1, g2, ncol = 2)
 ```
 
 ####Plot Result
@@ -1306,7 +1307,7 @@ anova(special.model)
 An ad hoc data analysis was used as 3 of the 15 players stood out in particular. To examine whether their data result in a better model, another logistic regression analysis was performed with the same dependent and independent variables for three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward.
 
 ```{r, echo=FALSE}
-graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))+ graph01 + labs(title = "Differences in FGA for games lost/won for particular players") + xlab("Player name") + ylab("FGA")
+graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W)) + labs(title = "Differences in FGA for games lost/won for particular players") + xlab("Player name") + ylab("FGA")
 graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) + labs(title = "Differences in FG% for games lost/won for particular players") + xlab("Player name") + ylab("FG%")
 graph01
 graph02
@@ -1358,8 +1359,12 @@ This report has demonstrated results of mathematical and statistical analysis of
 
 ##References
 
-  Ahart (1973). In Kendall, P. and Hollon, S. (1979). Cognitive-behavioral interventions. New York: Academic Press.  
+  Ahart (1973). In Kendall, P. and Hollon, S. (1979). Cognitive-behavioral interventions. New York: Academic Press.
+  
   Economist: As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).  
+  
   Erculj, F. and Supej, M. (2009). Impact of Fatigue on the Position of the Release Arm and Shoulder Girdle over a Longer Shooting Distance for an Elite Basketball Player. Journal of Strength and Conditioning Research, 23(3), pp.1029-1036.  
+  
   Gilovich, T., Vallone, R. and Tversky, A. (1985) ‘The hot hand in basketball: On the misperception of random sequences’, Cognitive Psychology, 17(3), pp. 295–314. doi: 10.1016/0010-0285(85)90010-6.  
+  
   Mascret, N., Ibáñez-Gijón, J., Bréjard, V., Buekers, M., Casanova, R., Marqueste, T., Montagne, G., Rao, G., Roux, Y. and Cury, F. (2016). The Influence of the ‘Trier Social Stress Test’ on Free Throw Performance in Basketball: An Interdisciplinary Study. PLOS ONE, 11(6), p.e0157215.  
