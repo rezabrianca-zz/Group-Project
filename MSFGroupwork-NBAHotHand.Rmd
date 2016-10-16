@@ -247,10 +247,12 @@ The plot shows that out of 30 teams:
 ```{r}
 
 ```
+**JUSTING TO SEE IF THERE IS ANYTHING WE CAN INCLUDE HERE
+
 
 ###regression analysis
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 margreg<- lm(FINAL_MARGIN ~ LOCATION, restdays2)
 summary(margreg)
 ```
