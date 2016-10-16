@@ -164,7 +164,6 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game location (home/away) on winning ratio.
 
 
-The NULL Hypothesis: Teams playing at home is more likely to win then when playing away. 
 The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference 
 
 ###Methods
@@ -873,6 +872,10 @@ for (i in 1:nrow(distance_level)){
 #Calculate shooting accuracy for each distance
 distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 4)
 
+#change distance level to numeric type for correlation test function
+distance_level$Var1 <- as.numeric(distance_level$Var1)
+distance_level$Var1 <- distance_level$Var1 * 0.1 - 0.1 #to keep the distance point as it is
+
 library(ggplot2)
 library(scales)
 ggplot(data = df) + geom_bar(aes(x = df[, "CLOSE_DEF_DIST"])) +
@@ -907,9 +910,7 @@ ggplot(data = distance_level) +
   There was medium to strong positive correlation found between the defender distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Defender Distance and Accuracy was r(297) = .59, p < .05, as part of level of significance (p = .05).  
   
 ```{r, include=FALSE}
-#change distance level to numeric type for correlation test function
-distance_level$Var1 <- as.numeric(distance_level$Var1)
-distance_level$Var1 <- distance_level$Var1 * 0.1 - 0.1 #to keep the distance point as it is
+
 
 #populate data points from data frame
 distanceZerotoAll <- c()
@@ -983,6 +984,10 @@ for (i in 1:nrow(shooting_distance_level)){
 
 #Calculate shooting accuracy for each distance
 shooting_distance_level$Accuracy <- round(shooting_distance_level$SCORED / shooting_distance_level$Freq, 4)
+
+#change distance level to numeric type for correlation test function
+shooting_distance_level$Var1 <- as.numeric(shooting_distance_level$Var1)
+shooting_distance_level$Var1 <- shooting_distance_level$Var1 * 0.1 - 0.1 #to maintain distance data point as it is
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -999,21 +1004,6 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
 ```
 
 ###Plot Result
-<<<<<<< HEAD
-  The explanation from the plot above are as follows. The shooter distance ranges and accuracy:   
-  1.  0 to 2 feet: the accuracy varied between 62% to 68%  
-  2.  2 to 4 feet: the accuracy rate for this distance range from 61% to 67%  
-  3.  4 to 6 feet: the accuracy rate for this distance range from 44% to 58%  
-  4.  6 to 8 feet: the accuracy rate for this distance range from 38% to 51%  
-  5.  8 to 10 feet: the accuracy rate for this distance range from 35% to 42%  
-  6.  10 to 12 feet: the accuracy rate for this distance range from 34% to 42%  
-  7.  12 to 14 feet: the accuracy rate for this distance range from 37% to 47%  
-  8.  14 to 16 feet: the accuracy rate for this distance range from 33% to 51%  
-  9.  16 to 18 feet: the accuracy rate for this distance range from 37% to 48%  
-  10. 18 to 24 feet: the accuracy rate for this distance range from 33% to 43%  
-  11. 24 to 28 feet: the accuracy rate for this distance range from 18% to 38%  
-  12. more than 28 feet: the accuracy varies greater than previous distance range, starting from 0% (no shots scored from that distance) to 50%  
-=======
 
 **Table 13**: The relationship between the shooter distance ranges and accuracy
 
@@ -1031,14 +1021,12 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
   18 - 24 | 33 - 43
   24 - 28 | 18 - 38
   28+ | 0 - 50
->>>>>>> 1dd00f3587e08e68ec99465d3cf26193d0b6d99e
+
 
   Analysis has also produced a correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:  
   There was strong negative correlation found between the shooting distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(446) = -0.87, p < .05, as part of level of significance (p = .05).
 ```{r, include=FALSE}
-#change distance level to numeric type for correlation test function
-shooting_distance_level$Var1 <- as.numeric(shooting_distance_level$Var1)
-shooting_distance_level$Var1 <- shooting_distance_level$Var1 * 0.1 - 0.1 #to maintain distance data point as it is
+
 
 #populate data for every shooting distance
 shootingDistanceZerotoAll <- c()
@@ -1088,9 +1076,6 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
 ###Introduction
   The analysis aims to investigate whether the effect of the 'hot hand theory' is valid based on the given dataset. The 'hothand theory' states that if the shooter makes his first shot, the probability of making his next shot is higher. 
   
-  NULL Hypothesis: There is no significant difference between streaks of consequently scored shots and randomly simulated streaks for these players.  
-  
-
 ###Methods
 The steps to analyse this are are as follows:
   1. Calculate streaks achieved in all games and from all players
