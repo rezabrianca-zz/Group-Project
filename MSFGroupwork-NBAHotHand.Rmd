@@ -590,20 +590,18 @@ Additionally, further reasons that lead to distinction between top players and a
 
 The shot clock variable had missing values for 5567 shots, equal to 4.34% of all shots on the dataset, limiting the meaningfulness of the findings in the accuracy per second part. 
 
-<<<<<<< HEAD
-## Shooting Percentage Analysis
-=======
+
 ## Shooting Percentage Analysis (James)
 ###Introduction
 
-The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The hypothesis is that a team will be more likely to win the game if the top scorer have more opportunities to shot in a single match as this player tend to score than others players in the team. Furthermore, a team is more likely to win when the key player has higher shot percentage than normal. 
+The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The Null hypothesis is that there is no difference regarding the likelyhood of winning if the top scorer of a team has more field goal attempts. The second Null hypothesis is there is no difference regarding the likelyhood of winning if the top scorer of a team has a higher shot percentage than on average. As this is such a niche area research a literature review did not reveal sufficient results so this analysis aims to fill this gap.
 
 
 ###Methods
 
 The measurements are calculated in the following steps:
 
-1. “Made” and “missed”  in “FGM” column were replaced by 1 and 0 respectively.
+1. “Made” and “missed” in “FGM” column were replaced by 1 and 0 respectively.
 2. A new subset  was created so that each row contained the player’s name, match details and shooting performance of that player.
 3. The number of attempts and field goal percentage of all players were calculated according to the shooting data. 
 4. The players with most outstanding performances were picked out and another subset was generated for these players.
