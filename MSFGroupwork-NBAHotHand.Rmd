@@ -609,7 +609,7 @@ The measurements are calculated in the following steps:
 6. Investigate the correlation between the results of the matches and the performances of top scorers. 
 7. A further logistic regression test was run in order to examine three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. 
 
-```{r}
+```{r, include=FALSE}
 # Replace "made" and "missed" with 1 and 0 respectively
 
 df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
@@ -626,7 +626,7 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 ### Find field goal percentage (FG percentage) for each match
 
 
-```{r}
+```{r, include=FALSE}
 # Reshape the dataframe
 
 shot.stats <- cast(data = df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
@@ -649,7 +649,7 @@ for (i in 1:nrow(shot.stats)){
 <<<<<<< HEAD
 ### Impact of Top Scorers
 
-```{r}
+```{r, include=FALSE}
 # Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
 top.scorers.list <- c("mnta ellis", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "dwayne wade", "carmelo anthony", "eric bledsoe", "demarcus cousins", "kawhi leonard", "gordon hayward", "john wall") # 15 players picked out from all players
@@ -687,7 +687,7 @@ There was no correlation found between the result of a match and the number of a
 
 There was no correlation found between the result of a match and the field goal percentage of the player in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach level of significance (p = .05). 
 
-```{r}
+```{r, include=FALSE}
 # Find out "special" players by t-test
 # Russell Westbrook
 t.test(top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "0"])
@@ -722,6 +722,22 @@ summary(special.model)
 anova(special.model)
 
 ```
+Table xxx: The logistic regression for FGA and FG% of 15 players.
+
+   |   |Estimate | Std. Error | t value | Pr(>t)   
+|-|-|-|- | -             
+|(Intercept)  | 0.042259|   0.164816 |  0.256  |  0.798    
+|FGA   |-0.002679|   0.006468 | -0.414  |  0.679    
+|FG.percentage | 0.012329|   0.002736 |  4.506  |1.35e-05 ***
+
+
+Table xxx: The logistic regression for FGA and FG% of the 3 special players.
+| | Estimate | Std. Error | t value | Pr(>t)   
+|-|-|-|-| - 
+|(Intercept)   | 0.042259 |  0.164816 |  0.256  |  0.798    
+|FGA          | -0.002679 |  0.006468|  -0.414  |    0.679    
+|FG.percentage|  0.012329|   0.002736|   4.506  |1.35e-05 ***
+
 The box plots above shows the performances the three special players in terms of FGA and FG% respectively. The red (blue) boxes contain the data when the team lost (won) the match. 
 
 ###Discussion
@@ -730,7 +746,7 @@ From the correlation tests between the match results and players’ performances
 
 From the logistic regression test for FGA and FG%. It was found that FGA did not have any impact on the result of the match. FG% had significant correlation with the result of match. However, the anova test showed that the deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
 
-There was no correlation found between field goal attempts of top scorers and game results. A possible explanation is that it is easier for a team to focus on a certain player on defensive side. Thus, over-using the scoring ability of a super star player is not likely to be a good approach if the team wants to win the game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This is due to fact that once a player is being efficient on the offensive side, that player can help the team by not only keeping shooting but also creating more opportunities for his teammates. 
+There was no correlation found between field goal attempts of top scorers and game results. A possible explanation is that it is easier for a team to focus on a certain player on defensive side. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to win the game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This is due to fact that once a player is being efficient on the offensive side, that player can help the team by not only keeping shooting but also creating more opportunities for his teammates. 
 
 Based on results above, further research has been done regarding to the performances of three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. These three players were chosen because their teams are more likely to take the victory when they score more in single game according to the bar plot and t-test. 
 
