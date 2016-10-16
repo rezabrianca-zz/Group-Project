@@ -822,22 +822,22 @@ An ad hoc data analysis was used as 3 of the 15 players stood out in particular.
 graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
 graph01 + labs(title = "Differences in FGA for games lost/won of the three special players") + xlab("Player name") + ylab("FGA")
 ```
-Graph xx1: Differences in FGA for games lost/won of the three special players.
+Diagram xx1: Differences in FGA for games lost/won of the three special players.
 ```{r, echo=FALSE}
 graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
 graph02 + labs(title = "Differences in FG% for games lost/won of the three special players") + xlab("Player name") + ylab("FG%")
 ```
-Graph xx2: Differences in FG% for games lost/won of the three special players.
+Diagram xx2: Differences in FG% for games lost/won of the three special players.
 
 The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
 
 **Table 11**: Result for the logistic regression analysis for FGA and FG% of the 3 special players
 
 | | Estimate | Std. Error | t value | Pr(>t)   
-|-|-|-|-| - 
+-|-|-|-| - 
 |(Intercept)   | 0.042259 |  0.164816 |  0.256  |  0.798    
-|FGA          | -0.002679 |  0.006468|  -0.414  |    0.679    
-|FG.percentage|  0.012329|   0.002736|   4.506  |1.35e-05 ***
+|FGA          | -0.002679 |  0.006468 |  -0.414  |    0.679    
+|FG.percentage |  0.012329 |   0.002736 |   4.506  | 1.35e-05 ***
 
 **Table 12**: Result for the anova for FGA and FG% for the 3 special players
 
@@ -855,7 +855,7 @@ From the logistic regression analysis for FGA and FG%, it was found that FGA did
 
 There was no correlation found between field goal attempts of top scorers and outcome of the matches. A possible explanation is that it is easier for the opponent to focus on a certain player on defensive side and then the overall efficiency of the team will start to decrease. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelyhood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This could be explained by that once a player is being efficient on the offensive side, that player can help the team not only by shooting but also by creating more opportunities for his teammates. 
 
-Based on the results above, an additional analysis was done regarding the performance of three particular players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. These three players were chosen because their teams are more likely to take the victory when they score more in single game according to Graph xx2 and t-test. 
+Based on the results above, an additional analysis was done regarding the performance of three particular players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. These three players were chosen because their teams are more likely to take the victory when they score more in single game according to Diagram and t-test. 
 
 For these three players, the p-values still did not reach the level of significance (p = .05) for FGA. However, all p-values are smaller than 0.05 when their FG%s were tested. Based on these findings, another logistic regression was done with these three players. It was shown that p < .05 and residual deviance from anova dropped by 4.498 which is about 12.3% when FG% was considered. In comparison, the deviance was above 180 when 15 players were analysed. For these three players, their teams are more likely to win by 1.2% when their FG% increase by 1.
 
