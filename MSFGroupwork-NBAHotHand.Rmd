@@ -612,8 +612,7 @@ The measurements are calculated in the following steps:
   3. The number of attempts and field goal percentage of all players were calculated according to the shooting data. 
   4. The players with most outstanding performances were picked out and another subset was generated for these players.
   5. The correlation (p = .05) between the results of the matches and the performances of top scorers was investigated. 
-  6. A logistic regression with the outcome of the match as dependent variable and FGA and percentage of FG made as independent variables. 
-  7. Another logistic regression test was run in order to examine three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. 
+  6. A logistic regression analysis with the outcome of the match as dependent variable and FGA and percentage of FG made as independent variables was conducted.
 
 ```{r, include=FALSE}
 # Replace "made" and "missed" with 1 and 0 respectively
@@ -628,8 +627,6 @@ for (i in 1:nrow(df)) {
 df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 
 ```
-
-### Find field goal percentage (FG percentage) for each match
 
 
 ```{r, include=FALSE}
@@ -652,13 +649,7 @@ for (i in 1:nrow(shot.stats)){
 }
 ```
 
-<<<<<<< HEAD
-### Impact of Top Scorers
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 30a99b72c77aee586827ca60570eb176b1e55b10
 ```{r, include=FALSE}
 # Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
@@ -689,17 +680,16 @@ summary(model)
 anova(model)
 
 ```
+###Results
+
 ##a. Field Goal Attempts (FGA)
 
-<<<<<<< HEAD
-=======
-There was no correlation found between the result of a match and the number of attempts of the player made in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach level of significance (p = .05). 
+There was no correlation found between the outcome of the matches in this season and the number of attempts of the players made. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach the level of significance (p = .05). 
 
 ##b.  Field Goal Percentage (FG%)
 
-There was no correlation found between the result of a match and the field goal percentage of the player in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach level of significance (p = .05). 
+There was no correlation found between the outcome of the matches in this seaon and the field goal percentage of the players. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach the level of significance (p = .05). 
 
->>>>>>> 30a99b72c77aee586827ca60570eb176b1e55b10
 ```{r, include=FALSE}
 # Find out "special" players by t-test
 # Russell Westbrook
@@ -735,7 +725,7 @@ summary(special.model)
 anova(special.model)
 
 ```
-Table xxx: The logistic regression for FGA and FG% of 15 players.
+Table xxx: Result for the logistic regression analysis for FGA and FG% of 15 players.
 
    |   |Estimate | Std. Error | t value | Pr(>t)   
 |-|-|-|- | -             
@@ -743,21 +733,47 @@ Table xxx: The logistic regression for FGA and FG% of 15 players.
 |FGA   |-0.002679|   0.006468 | -0.414  |  0.679    
 |FG.percentage | 0.012329|   0.002736 |  4.506  |1.35e-05 ***
 
+Table xxx: Result for the anova for FGA and FG% for 15 players.
 
-Table xxx: The logistic regression for FGA and FG% of the 3 special players.
+   | |           Df| Deviance| Resid. Df| Resid. Dev
+|-|-|-|-| - 
+|NULL        |     |              | 777   |  188.73
+|FGA         |   1  | 0.0014   |    776  |   188.73
+|FG.percentage | 1 |  7.4664   |    775  |   181.26
+
+An ad hoc data analysis was used as 3 of the 15 players stood out in particular. To examine whether their data result in a better model, another logistic regression analysis was performed with the same dependent and independent variables for three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward.
+
+```{r}
+graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
+
+graph01 + labs(title = "Differences in FGA for games lost/won of the three special players ") + xlab("Player name") + ylab("FGA")
+graph02 + labs(title = "Differences in FG% for games lost/won of the three special players ") + xlab("Player name") + ylab("FG%")
+
+```
+
+The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
+
+Table xxx: Result for the logistic regression analysis for FGA and FG% of the 3 special players.
 | | Estimate | Std. Error | t value | Pr(>t)   
 |-|-|-|-| - 
 |(Intercept)   | 0.042259 |  0.164816 |  0.256  |  0.798    
 |FGA          | -0.002679 |  0.006468|  -0.414  |    0.679    
 |FG.percentage|  0.012329|   0.002736|   4.506  |1.35e-05 ***
 
-The box plots above shows the performances the three special players in terms of FGA and FG% respectively. The red (blue) boxes contain the data when the team lost (won) the match. 
+Table xxx: Result for the anova for FGA and FG% for the 3 special players.
+
+| |         Df| Deviance| Resid. Df| Resid. Dev
+|-|-|-|-| - 
+|NULL         |   |         |       147|     36.669
+|FGA          |  1|   0.0498|       146|     36.619
+|FG.percentage|  1|   4.4978|       145|     32.121
 
 ###Discussion
 
-From the correlation tests between the match results and players’ performances, it can be noticed that the increase in number of field goal attempts from top scorers is unlikely to make any impact on the results of the game. The correlation coefficient between the results of the game and FG% is sightly higher but these two factors are still not correlated since r(832) < .01. Meanwhile, the p-values of both correlation tests are too higher to reach the default level of significance (p = .05).
+From the correlation tests between the match results and players’ performances, it can be noticed that the increase in number of field goal attempts from top scorers is unlikely to make any impact on the results of the game. The p-values of both correlation tests are too high to reach the level of significance (p = .05).
 
-From the logistic regression test for FGA and FG%. It was found that FGA did not have any impact on the result of the match. FG% had significant correlation with the result of match. However, the anova test showed that the deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
+From the logistic regression analysis for FGA and FG%, it was found that FGA did not have any impact on the result of the match. FG% is a significant predictor for the result of match. However, the anova showed that the residual deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
 
 There was no correlation found between field goal attempts of top scorers and game results. A possible explanation is that it is easier for the opponents to focus on a certain player on defensive side. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelyhood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This is due to fact that once a player is being efficient on the offensive side, that player can help the team by not only keeping shooting but also creating more opportunities for his teammates. 
 
