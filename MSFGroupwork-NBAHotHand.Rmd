@@ -163,7 +163,11 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game location (home/away) on winning ratio.
 
+<<<<<<< HEAD
+The NULL Hypothesis: Teams playing at home is more likely to win then when playing away. 
+=======
 The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference 
+>>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 ###Methods
 Steps to test the hypothesis are as follows:  
@@ -171,9 +175,10 @@ Steps to test the hypothesis are as follows:
     2. Compare the total win numbers to identify whether home advantage is evident using means of the variables
     3. Extend the analysis to review of the home/away wins on a team level 
     4. Plot the team level data 
-    5. Discuss the findings of the analysis
+    5. Perform a t-test (p .05) to examine whether there is a difference in the means between teams winning at home and teams winning away
+    6. Linear regression with Final margin as dependent variable and Location as independent variable to examine whether playing at home results predicts a higher final margin
 
-The graph below shows descriptive variables for home/away wins:
+The graph below shows descriptive statistics for home/away wins: 
 
 
 
@@ -217,6 +222,10 @@ advdf3$TEAM <- factor(advdf3$TEAM, levels = advdf3$TEAM[order(-advdf3$WIN_PCT_HO
 #creating a column which shows a difference between home and away winning percentage rate
 advdf3$WIN_PCT_DIFF<- advdf3$WIN_PCT_HOME - advdf3$WIN_PCT_AWAY
 
+
+#t tests
+
+t.test(advdf3$AWAY.y, advdf3$HOME.x)
 ```
 
 
@@ -228,8 +237,13 @@ ggplot(advdf, aes(x = advdf$WINNER)) + geom_bar(aes()) + ylab("game count") + xl
 
 
 
+<<<<<<< HEAD
+###Results
+Table 1: Proportion of total games split by Location win factor
+=======
 ###Findings
 **Table 1**: Proportion of total games split by Location win factor
+>>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 X     | Home Win | Away Win
 ----- | -------- | ---
@@ -263,12 +277,7 @@ The plot shows that out of 30 teams:
   2 teams home and away win ratios are almost equal (difference of less than or equal to 1%)
 
 
-###Variance test Analysis
-```{r}
-
-```
-**JUSTING TO SEE IF THERE IS ANYTHING WE CAN INCLUDE HERE**
-
+The T-test used to verify the differences in the means seen in the plot reached significance, t(58) = -2.39, p = .02.
 
 ###Regression analysis
 
@@ -290,9 +299,9 @@ Adjusted R-squared = 0.02392
 
 ###Discussion
 
-The analysis shown that there is a clear evidence that a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis conducted on a team level where 25 teams are winning more games at home than away. The result shown that the NULL hypothesis should be rejected as a team playing at home is more likely to win then an away team. Regression analysis shown that playing at home gives teams on average additional 4.29 margin points. 
+The analysis shows that there is a clear evidence that a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis conducted on a team level where 25 teams are winning more games at home than away. The results show that the NULL hypothesis should be rejected as a team playing at home is more likely to win than an away team. Linear regression analysis shows that playing at home gives teams on average additional 4.29 margin points. 
 
-The result of this research also confirms recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to around 58.5% for 2011-15. Home win ratio was 57.4% win in 2014-2015 season. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2015-2016 season. Based on the literature review this trend could be potentially explained by the following factors (Economist, 2015):
+The result of this research also confirms the recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to around 58.5% for 2011-14. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2014-2015 season. Based on the literature review this trend could be potentially explained by the following factors (Economist, 2015):
 
   1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly charterd planes more often than in the past. These changes result in teams being less tired as a consequence of travel and being better physically prepared for the games.
   
@@ -304,22 +313,32 @@ The result of this research also confirms recent trend of decline in home advant
 
 ###Introduction
 
-This area of analysis focuses on investigation of whether a number of rest days between games affect performance and more importantly winning ratio of a team. 
+This area of analysis focuses on investigation of whether a number of rest days between games affect the performance and more importantly winning ratio of a team. 
 
+<<<<<<< HEAD
+The Null Hypothesis is: By having more restdays rest a team is likely to have a higher winning ratio. 
+=======
 The Null Hypothesis is: Teams' mean values of wins are not significantly different based on the number of rest days between games 
 
+>>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 ###Methods
+
 The steps to calculate this measurement are as follows:  
     1. Calculating number of rest days between games for all teams
     2. Calculating ratios for effects of rest days on win/loss
+<<<<<<< HEAD
+    3. Calculating ratios for effects of rest days on win/loss form home/away
+    4. Perform a Chi-square test to examine whether there is a difference in the distributon for games won and games lost for the different restdays
+    
+=======
     3. Calculating ratios for effects of rest days on win/loss form home/awayCalculating ratios for effects of rest days on win/loss
     4. Run a regression analysis
     5. Discuss the findings of the data
 
 The table below shows descriptive statistics for Rest Days:
 
-Table 5: Distribution of number of games per rest days
+**Table 5**: Distribution of number of games per rest days
 
  Rest Days| Games | Distribution
 ----------|-------|---
@@ -336,6 +355,7 @@ Table 5: Distribution of number of games per rest days
    1st game of season  |  30|  1.66
 
 The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections.    
+>>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 ```{r, include=FALSE}
 
@@ -389,22 +409,38 @@ print (restdays3[1:3,c(1,7,9)])
 
 
 #Testing of rest data
-
-#t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
-#chisq.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+qqqq<-as.matrix(sapply(restdays4, as.numeric))
 
 
-#restdays2$W[restdays2$rest==0,]
+chisq.test(qqqq[2,], qqqq[3,])
+
+
+
 
 ```
 
 ###Findings
 
 <<<<<<< HEAD
-**Table 5**: Distribution of number of games per rest days
-=======
->>>>>>> 6371eb427fa60b2f0ec29e8cb8efc2568f97fa78
+Table 5: Distribution of number of games per rest days
 
+ Rest Days| Games | Distribution
+----------|-------|---
+    0  | 427 | 23.62
+    1  | 990 | 54.76
+    2  | 254 | 14.05
+    3  |  59 |  3.26
+    4  |  13 |  0.72
+    5  |   3 | 0.17
+    7  |   6 | 0.33
+    8  |  20 | 1.11
+    9  |   3 | 0.17
+    10 |   3 | 0.17
+   1st game of season  |  30|  1.66
+
+The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections. 
+=======
+>>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 **Table 6**: Win rate split by number of rest days between games
 
@@ -422,18 +458,20 @@ print (restdays3[1:3,c(1,7,9)])
     0|   53.54 |44.33 
     1 | 54.68 |  44.24
     2  | 59.57 | 46.90
-
+ 
+The Pearson's Chi-Square test failed to reach the level of significance, X2 (36) = 42, p= .23.
+ 
 ###Discussion
 
-The analysis demonstrated that overall winning ratio improves with increase in  rest days: back-to-back games had 47.07% winning ratio, 1 day rest increased winning ratio to 50.10% and with 2 days rest the winning ration has increased even further to 53.94%.
+The analysis demonstrates that overall the winning ratio stays the same with increase in  rest days. However, when looking at invididual restdays the findings are different: back-to-back games have 47.07% winning ratio, 1 day rest increases winning ratio to 50.1% and with 2 days rest the winning ration increases even further to 53.94%.
 
-By extending the analysis to the team level, the results have demonstrated similar tendency for home  games where winning ratio has increased from 53.54% to 54.68% and 59.57% respectively with 0, 1 and 2 days of rest. Somewhat interestingly the analysis of effect of rest days on winning ratio of away games demonstrated that there is hardly any difference between 0 and 1 days of rest (44.33% and 44.24%). However with 2 days of rest teams' average winning ratio have increased to 46.90% (2.66% increase). This perhaps could be explained by the fact that teams were able to minimise effect of travelling when having a bigger window between games.
+By extending the analysis to the team level, the results demonstrate similar tendency for home games where winning ratio increased from 53.54% to 54.68% and 59.57% respectively with 0, 1 and 2 days of rest. Somewhat interestingly the analysis of effect of rest days on winning ratio of away games demonstrates that there is hardly any difference between 0 and 1 days of rest (44.33% and 44.24%). However with 2 days of rest teams' average winning ratio increases to 46.90% (2.66% increase). This perhaps could be explained by the fact that teams were able to minimise effect of travelling when having a bigger window between games.
 
-Based on the above, the analysis shown that the null hypothesis should be rejected as there is a clear evidence that the higher rest days correspond to higher winning ratio
+Based on the above, the analysis shows that the null hypothesis should be rejected as there is a clear evidence that the higher rest days correspond to higher winning ratio.
 
 ###Further research
 
-To better understand effects of rest and home/away advantage the future research should focus on distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away gamein New Jersey.
+To better understand effects of rest and home/away advantage future research should focus on distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away game in New Jersey.
 
 ***
 
@@ -784,21 +822,22 @@ An ad hoc data analysis was used as 3 of the 15 players stood out in particular.
 graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
 graph01 + labs(title = "Differences in FGA for games lost/won of the three special players") + xlab("Player name") + ylab("FGA")
 ```
-Graph xx1: Differences in FGA for games lost/won of the three special players.
+Diagram xx1: Differences in FGA for games lost/won of the three special players.
 ```{r, echo=FALSE}
 graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
 graph02 + labs(title = "Differences in FG% for games lost/won of the three special players") + xlab("Player name") + ylab("FG%")
 ```
-Graph xx2: Differences in FG% for games lost/won of the three special players.
+Diagram xx2: Differences in FG% for games lost/won of the three special players.
 
 The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
 
 **Table 11**: Result for the logistic regression analysis for FGA and FG% of the 3 special players
+
 | | Estimate | Std. Error | t value | Pr(>t)   
-|-|-|-|-| - 
+-|-|-|-| - 
 |(Intercept)   | 0.042259 |  0.164816 |  0.256  |  0.798    
-|FGA          | -0.002679 |  0.006468|  -0.414  |    0.679    
-|FG.percentage|  0.012329|   0.002736|   4.506  |1.35e-05 ***
+|FGA          | -0.002679 |  0.006468 |  -0.414  |    0.679    
+|FG.percentage |  0.012329 |   0.002736 |   4.506  | 1.35e-05 ***
 
 **Table 12**: Result for the anova for FGA and FG% for the 3 special players
 
@@ -814,16 +853,16 @@ From the correlation tests between the match results and players’ performances
 
 From the logistic regression analysis for FGA and FG%, it was found that FGA did not have any impact on the result of the match. FG% is a significant predictor for the result of match. However, the anova showed that the residual deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
 
-There was no correlation found between field goal attempts of top scorers and outcome of the matches. A possible explanation is that it is easier for the opponent to focus on a certain player on defensive side and then the overall efficiency of the team will start to decrease. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelyhood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This is due to fact that once a player is being efficient on the offensive side, that player can help the team by not only keeping shooting but also creating more opportunities for his teammates. 
+There was no correlation found between field goal attempts of top scorers and outcome of the matches. A possible explanation is that it is easier for the opponent to focus on a certain player on defensive side and then the overall efficiency of the team will start to decrease. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelyhood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This could be explained by that once a player is being efficient on the offensive side, that player can help the team not only by shooting but also by creating more opportunities for his teammates. 
 
-Based on results above, an additional research has been done regarding to the performances of three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. These three players were chosen because their teams are more likely to take the victory when they score more in single game according to Graph xx2 and t-test. 
+Based on the results above, an additional analysis was done regarding the performance of three particular players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. These three players were chosen because their teams are more likely to take the victory when they score more in single game according to Diagram and t-test. 
 
-For these three players, the p-values still did not reach the level of significance (p = .05) for FGA. However, all p-values are smaller than 0.05 when their FG%s were tested. Based on these findings, another logistic regression was done with these three players. It was shown that p < .05 and residual deviance from anova dropped by 4.498 which is about 12.3% when FG% was considered. In comparison, the deviance was above 180 when 15 players were analysed.
+For these three players, the p-values still did not reach the level of significance (p = .05) for FGA. However, all p-values are smaller than 0.05 when their FG%s were tested. Based on these findings, another logistic regression was done with these three players. It was shown that p < .05 and residual deviance from anova dropped by 4.498 which is about 12.3% when FG% was considered. In comparison, the deviance was above 180 when 15 players were analysed. For these three players, their teams are more likely to win by 1.2% when their FG% increase by 1.
 
-Therefore, the analysis on these three players has shown that there is a  difference between them and the others as they can contribute more to the win rates of their teams by their increasing shooting accuracy. There could be various reasons behind this observation, such as their team compositions and the roles of these players. Further research has to be done to in order to find out why the performances of these special players are more decisive on the outcome.
+Therefore, the analysis on these three players has shown that there is a difference between them and the others as they can contribute more to the win rates of their teams by their increasing shooting accuracy. There could be various reasons behind this observation, such as their team compositions and the roles of these players. Further research has to be done to in order to find out why the performances of these special players are more decisive on the outcome.
 
 ###Limitations
-The data set only covers 904 of 1230 matches in the regular season. So there might be a chance that the highlight performances of certain players are missed out in the analysis. Meanwhile, it would be ideal if more sepects of data, such as rebounds and assists, could be analysed. 
+The data set only covers 904 of 1230 matches in the regular season. So there might be a chance that the highlight performances of certain players are missed out in the analysis. Meanwhile, it would be ideal if more aspects of data, such as rebounds and assists, could be analysed. 
 
 ##Defender Proximity Analysis  
 ###Closest Defender Distance vs Shot Accuracy
@@ -1047,7 +1086,7 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
   
 ##Hot Hand Theory
 ###Introduction
-  The analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is based on the hypothesis that a shooter with a hot hand will have shots that are dependent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
+  The specific analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is based on the hypothesis that a shooter with a hot hand will have shots that are dependent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
 
 ###Methods
 The steps to approximate this question are as follows:
@@ -1057,14 +1096,14 @@ The steps to approximate this question are as follows:
   4. Visualise streaks' length distribution - barplots
   5. Visualise streaks' length via boxplot
   6. Calculate the shooting percentage of the 3 players 
-  7. Create a sample independent shooter setting as shooting percentage the real player's shooting percentage
+  7. Create a sample independent shooter 
   8. Compare distributions of sample and real player 
 
 ```{r, include=FALSE}
 
 #From 'FGM' column: 1 represents a basket made and 0 represents a basket missed
 #Defining the length of a shooting streak to be the number of consecutive baskets made until a miss occurs
-#Createing a function that gives a vector with the number of total streaks(from all players and all games)
+#Creating a function that gives a vector with the number of total streaks(from all players and all games)
 number_of_streaks <- function(x) {
   x <- c(0, x, 0)
   which_zero <- which(x == 0)
@@ -1127,7 +1166,7 @@ grid.arrange(gg1, gg2, gg3, ncol = 3)
 ```
 
 ####Barplot result
-  The distribution of the three players is unimodal and left skewed. There are shown some extremely long shooting streaks made(i.e. Klay Thompson with 13 shots in a row).  
+  The distribution of the three players is unimodal and left skewed. There are shown some extremely long shooting streaks made (i.e. Klay Thompson with 13 shots in a row).  
 
 ###Boxplots
 
@@ -1147,7 +1186,7 @@ IQR(player1_df$streaks)
 ```
 #### Outcome for Kyrie Irnving:
 
-  1. The typical length of a streak is 1 (median = 1)
+  1. The typical length of a streak is 1 
   2. The Interquartile Range is 1 
   3. Streak length of 6 is unusually high compared to the rest of the distribution
   
@@ -1159,7 +1198,7 @@ IQR(player2_df$streaks)
 
 #### Outcome for Mo Williams
 
-  1. The typical length of a streak is 1.5 (median = 1.5)
+  1. The typical length of a streak is 1.5
   2. The Interquartile Range is 1
   3. Streak length of 4 is unusually high compared to the rest of the distribution
 
@@ -1171,13 +1210,13 @@ IQR(player3_df$streaks)
 
 #### Outcome for Klay Thompson
 
-  1. The typical length of a streak is 8 (median = 8)
+  1. The typical length of a streak is 8 
   2. The Interquartile Range is 5
-  3. There is a streak of length 13 (max = 13)
+  3. There is a streak of length 13 
 
 ### Plots Result
 
-  The distribution of all players is left skewed and all of them (especially player3) have some long shooting streaks. In order to prove/disprove the hot hand theory,  the examination of the indipendence of the shots is required. If each shot that a player takes is independent of the next shot, then the player has the same probability of hitting each shot regardless of the previous shot. If each shot that a player takes is dependent of the next shot, then the probability of making the next shot is higher - hot hand. Sampling an independent shooter having the same shooting percentage with the real one and comparing his distribution with real player's distribution gives further insight in the specific aera. 
+  The distribution of all players is left skewed and all of them (especially Klay Thompson) have some long shooting streaks. In order to prove/disprove the hot hand theory,  the examination of the indipendence of the shots is required. If each shot that a player takes is independent of the next shot, then the player has the same probability of hitting each shot regardless of the previous shot. If each shot that a player takes is dependent of the next shot, then the probability of making the next shot is higher - hot hand. Sampling an independent shooter having the same shooting percentage with the real one and comparing his distribution with real player's distribution gives further insight in the specific aera. 
 
 ```{r, include=FALSE}
 #Find the shooting percentage for each of the 3 players
@@ -1232,12 +1271,12 @@ grid.arrange(g1, g2, ncol = 2)
 ```
 
 ####Plot Result
-  After running many times the sample shooter, there are times that the distributions of sample and real shooter are quite similar. It can be concluded that Mo Williams does not have a hot hand.
+  After running many times the sample, there are several times when the distributions of sample and real shooter are quite similar. As a consequence, it can be concluded that Mo Williams does not have a hot hand.
 
 ### Mo Williams
 ```{r, include=FALSE}
 ###PLAYER 2 VS SAMPLE PLAYER###
-#Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
+#Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter2 
 set.seed(572)
 shot_results <- c('made', 'missed')
 simul_shooter <- sample(shot_results, size = length(streak_per_player[[2]]), replace = TRUE, 
@@ -1275,12 +1314,12 @@ grid.arrange(g1, g2, ncol = 2)
 
 ####Plot Result
 
-  After running many times the sample shooter, there are times that the distributions of sample and real shooter are quite similar. As a consequence, it can be concluded that Mo Williams does not have a hot hand.
+  After running many times the sample, there are several times when the distributions of sample and real shooter are quite similar. As a consequence, it can be concluded that Mo Williams does not have a hot hand.
 
 ###Klay Thompson
 ```{r, include=FALSE}
 ###PLAYER 3 VS SAMPLE PLAYER###
-#Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
+#Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter3 
 set.seed(57)
 shot_results <- c('made', 'missed')
 simul_shooter <- sample(shot_results, size = length(streak_per_player[[3]]), replace = TRUE, 
@@ -1318,15 +1357,19 @@ grid.arrange(g1, g2, ncol = 2)
 
 ####Plot Result
 
-  Klay Thompson is an exception making 13 shots in a row. There is no such distribution in the sample, so it could be assumed that he is likely to have a hot hand. Further statistical analysis - logistic regression - should be done in order to reach a conclusion.
+  Klay Thompson is an exception making 13 shots in a row. There is no such distribution in the sample, so it could be assumed that he is likely to have a hot hand. Further statistical analysis - logistic regression - should be done in order to reach a more accurate conclusion.
 
 ###Discussion
 
-  As the analysis shown, there are some extremely high shot streaks achieved from the players. Kyrie Irnving achieved six shots in a row, Mo Williams 4 shots in a row twice, while Klay Thompson 13 shots in a row. However, to assume that a player has a hot hand, it is required to prove that his continuous shots are dependent one of another. As the vectors of streaks do not contain continuous variables, a linear regression cannot be used. Creating a sample independent shooter with same number of attempts and same shooting percentage as the real's one, is the closest approach to the specific question. In the first two cases, there are several times when the distribution of streaks of the sample independent player is similar to the real shooter's distribution. As the sample shooter's distribution visualises independent shots, it can be concluded that Kyrie Irnving's and Mo Williams' shots are independent one of another and as a result they have not a hot hand. On the other hand, Klay Thompson is likely to have a hot hand, as his shots length distribution diverges significantly from the sample's distribution.   
+  As the analysis shown, there are some extremely high shot streaks achieved from the players. Kyrie Irnving achieved six shots in a row, Mo Williams 4 shots in a row - twice, while Klay Thompson 13 shots in a row. However, to assume that a player has a hot hand, it is required to prove that his continuous shots are dependent of one another. As the vectors of streaks do not contain continuous variables, a linear regression cannot be used. Creating a sample independent shooter with same number of attempts and same shooting percentage as the real's one, is the closest approach to the specific question. In the first two cases, there are several times when the distribution of streaks of the sample independent player is similar to the real shooter's distribution. As the sample shooter's distribution visualises independent shots, it can be concluded that Kyrie Irnving's and Mo Williams' continuous shots are independent of one another and as a result they have not a hot hand. On the other hand, Klay Thompson is likely to have a hot hand, as his shots length distribution diverges significantly from sample's distribution.   
  
 ###Limitations
 
-  The dataset is referred to only one season
+  Since the dataset is referred to only one season, the size of the vectors of streaks for each player is very small, a fact that can lead to misleading results. Moreover, streaks do not constitute continuous variables and as a result they cannot be used in a linear regression.
+  
+###Future research
+
+  Since the dataset is reffered to only one season and the analysis is not able to eliminate the hot hand theory, it would be an interesting topic to be investigated in future seasons. 
  
  
 
