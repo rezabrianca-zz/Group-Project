@@ -427,7 +427,13 @@ Stress: The Null hypothesis states that there is no significant difference (p < 
 
 ###METHOD
 
-In this analysis fatigue was measured as the period of the game, as it can be assumed that the later in the game the higher the fatigue of the players.
+In this analysis fatigue was measured as the period of the game, as it can be assumed that the later in the game the higher the fatigue of the players. The descriptive statistics of the shots per period can be seen below. 
+
+```{r, echo=FALSE}
+bar.period <- ggplot(df) + geom_bar(aes(x = PERIOD))
+bar.period + labs(title = "Number of shots taken per period") + scale_x_discrete(name ="Period", limits=c("1","2","3","4", "5", "6", "7")) + ylab("Number of shots")
+```
+
 
 The steps to test the first hypothesis were as follows:
   1. The overall accuracy for each period was calculated, based on the number of shots made (FGM = 1) and the number of shots taken for the specific period (FGM = 1 & FGM = 0)
@@ -592,16 +598,14 @@ Additionally, further reasons that lead to distinction between top players and a
 
 ###Limitations 
 
+
+As there are much more shots taken in periods 1 to 4 than in 5 to 7 the differences in the accuracy have to be treat with caution.
 The shot clock variable had missing values for 5567 shots, equal to 4.34% of all shots on the dataset, limiting the meaningfulness of the findings in the accuracy per second part. 
 
-<<<<<<< HEAD
-## Shooting Percentage Analysis
-=======
+
 ## Shooting Percentage Analysis (James)
 ###Introduction
 
-<<<<<<< HEAD
-=======
 The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The hypothesis is that a team will be more likely to win the game if the top scorer have more opportunities to shot in a single match as this player tend to score than others players in the team. Furthermore, a team is more likely to win when the key player has higher shot percentage than normal. 
 
 
