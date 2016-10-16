@@ -158,12 +158,9 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game location (home/away) on winning ratio.
 
-<<<<<<< HEAD
-The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference 
-=======
 
-The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference in the means.
->>>>>>> 48af33f906fad6f1db8c4b257aaeccfc2ac89cc6
+The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference 
+
 
 ###Methods
 Steps to test the hypothesis are as follows:  
@@ -1017,15 +1014,10 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
   18 - 24 | 33 - 43
   24 - 28 | 18 - 38
   28+ | 0 - 50
-<<<<<<< HEAD
 
 
-  Analysis has also produced a correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:  
-  There was strong negative correlation found between the shooting distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(446) = -0.87, p < .05, as part of level of significance (p = .05).
-=======
-   
   There is a strong negative correlation between the shooting distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(446) = -0.87, p < .05, with the level of significance of p = .05.
->>>>>>> 48af33f906fad6f1db8c4b257aaeccfc2ac89cc6
+
 ```{r, include=FALSE}
 
 
@@ -1074,15 +1066,9 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
   
 ##Hot Hand Theory
 ###Introduction
-<<<<<<< HEAD
 
   The analysis aims to investigate whether the effect of the 'hot hand theory' is valid based on the given dataset. The 'hothand theory' states that if the shooter makes his first shot, the probability of making his next shot is higher. (Gilovich, T., Vallone, R. and Tversky, A. (1985))
   
-=======
-  The analysis aims to investigate whether the effect of the 'hot hand theory' is valid based on the given dataset. The 'hothand theory' states that if the shooter makes his first shot, the probability of making his next shot is higher. 
-  
-  The specific analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is aimed to establish whether there are  the hypothesis that a shooter with a hot hand will have shots that are dependent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
->>>>>>> 48af33f906fad6f1db8c4b257aaeccfc2ac89cc6
 
 ###Methods
 The steps to approximate this question are as follows:
