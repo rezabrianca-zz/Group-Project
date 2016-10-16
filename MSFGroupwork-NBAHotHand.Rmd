@@ -1085,7 +1085,7 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
   
 ##Hot Hand Theory
 ###Introduction
-  The specific analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is based on the hypothesis that a shooter with a hot hand will have shots that are dependent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
+  The specific analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is aimed to establish whether there are  the hypothesis that a shooter with a hot hand will have shots that are dependent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
 
 ###Methods
 The steps to approximate this question are as follows:
