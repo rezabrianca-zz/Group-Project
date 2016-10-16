@@ -595,6 +595,22 @@ Additionally, further reasons that lead to distinction between top players and a
 The shot clock variable had missing values for 5567 shots, equal to 4.34% of all shots on the dataset, limiting the meaningfulness of the findings in the accuracy per second part. 
 
 ## Shooting Percentage Analysis (James)
+###Introduction
+
+The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The hypothesis is that a team will be more likely to win the game if the top scorer have more opportunities to shot in a single match as this player tend to score than others players in the team. Furthermore, a team is more likely to win when the key player has higher shot percentage than normal. 
+
+
+###Methods
+
+The measurements are calculated in the following steps:
+
+1. “Made” and “missed”  in “FGM” column were replaced by 1 and 0 respectively.
+2. A new subset  was created so that each row contained the player’s name, match details and shooting performance of that player.
+3. The number of attempts and field goal percentage of all players were calculated according to the shooting data. 
+4. The players with most outstanding performances were picked out and another subset was generated for these players.
+5. Plot results. 
+6. Investigate the correlation between the results of the matches and the performances of top scorers. 
+7. A further logistic regression test was run in order to examine three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. 
 
 ```{r}
 # Replace "made" and "missed" with 1 and 0 respectively
@@ -610,7 +626,6 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 
 ```
 
-### Find shooting percentage of each match
 ### Find field goal percentage (FG percentage) for each match
 
 
@@ -635,9 +650,7 @@ for (i in 1:nrow(shot.stats)){
 ```
 
 <<<<<<< HEAD
-### Impact of Super Star Players
 ### Impact of Top Scorers
-
 
 ```{r}
 # Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
@@ -669,6 +682,13 @@ summary(model)
 anova(model)
 
 ```
+##a. Field Goal Attempts (FGA)
+
+There was no correlation found between the result of a match and the number of attempts of the player made in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach level of significance (p = .05). 
+
+##b.  Field Goal Percentage (FG%)
+
+There was no correlation found between the result of a match and the field goal percentage of the player in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach level of significance (p = .05). 
 
 ```{r}
 # Find out "special" players by t-test
@@ -705,6 +725,21 @@ summary(special.model)
 anova(special.model)
 
 ```
+The box plots above shows the performances the three special players in terms of FGA and FG% respectively. The red (blue) boxes contain the data when the team lost (won) the match. 
+
+###Discussion
+
+From the correlation tests between the match results and players’ performances, it can be noticed that the increase in number of field goal attempts from top scorers is unlikely to make any impact on the results of the game. The correlation coefficient between the results of the game and FG% is sightly higher but these two factors are still not correlated since r(832) < .01. Meanwhile, the p-values of both correlation tests are too higher to reach the default level of significance (p = .05).
+
+From the logistic regression test for FGA and FG%. It was found that FGA did not have any impact on the result of the match. FG% had significant correlation with the result of match. However, the anova test showed that the deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
+
+There was no correlation found between field goal attempts of top scorers and game results. A possible explanation is that it is easier for a team to focus on a certain player on defensive side. Thus, over-using the scoring ability of a super star player is not likely to be a good approach if the team wants to win the game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This is due to fact that once a player is being efficient on the offensive side, that player can help the team by not only keeping shooting but also creating more opportunities for his teammates. 
+
+Based on results above, further research has been done regarding to the performances of three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. These three players were chosen because their teams are more likely to take the victory when they score more in single game according to the bar plot and t-test. 
+
+For these three players, the p-values still did not reach the level of significance (p = .05) for FGA. However, all p-values are smaller than 0.05 when their FG%s were tested. Based on these findings, another logistic regression was done with these three players. It was shown that p < .001 and residual deviance from anova dropped by 4.498 which is about 12.3% when FG% was introduced. In comparison, the deviance was above 200 when 15 players were tested. 
+
+Therefore, these three players are somehow different from others as they can contribute more to the win rates of their teams by their increasing shooting accuracy. There could be many reasons behind this, including their team compositions and the roles of the players.
 
 ##Defender Proximity Analysis  
 ###Closest Defender Distance vs Shot Accuracy
