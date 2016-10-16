@@ -7,14 +7,13 @@ output:
 ---
 
 ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ##Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
 ##Date submitted: 16/10/2016
 
 ***
-
-
 
 ##Introduction
 
@@ -64,11 +63,9 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
 
 ###Dataset Strengths  
     
-<<<<<<< HEAD
-=======
+
   The dataset comprises of comprehensive observational data to start to work with. In general, the dataset has only a small percentage of missing value (0.19%) so there was not need to remove or assign many data points to default values. Since the column name is not ambiguous it was really helpful to understand the dataset right from the beginning. 
 
->>>>>>> 6b2c354a4bdb097e3c4f65d733da52df1bac024e
   The dataset comprises of comprehensive observational data which enables efficient analysis without extensive 'clean up' of the data. The dataset only have small percentage of missing value (0.19%), therefore there is no need to remove or assign numerous data points to default values. The fact that initial dataset meant that only a small number of additional columns had to be added (see data clean-up part of the code for details. 
 
 
@@ -80,7 +77,6 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
     4. The dataset does not include information on free throw shots
     5. The dataset does not include final scores of the games
 
-***
 
 #Analysis
 
@@ -163,11 +159,9 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game location (home/away) on winning ratio.
 
-<<<<<<< HEAD
+
 The NULL Hypothesis: Teams playing at home is more likely to win then when playing away. 
-=======
 The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference 
->>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 ###Methods
 Steps to test the hypothesis are as follows:  
@@ -237,13 +231,11 @@ ggplot(advdf, aes(x = advdf$WINNER)) + geom_bar(aes()) + ylab("game count") + xl
 
 
 
-<<<<<<< HEAD
+
 ###Results
-Table 1: Proportion of total games split by Location win factor
-=======
+
 ###Findings
 **Table 1**: Proportion of total games split by Location win factor
->>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 X     | Home Win | Away Win
 ----- | -------- | ---
@@ -314,27 +306,18 @@ The result of this research also confirms the recent trend of decline in home ad
 ###Introduction
 
 This area of analysis focuses on investigation of whether a number of rest days between games affect the performance and more importantly winning ratio of a team. 
-
-<<<<<<< HEAD
-The Null Hypothesis is: By having more restdays rest a team is likely to have a higher winning ratio. 
-=======
-The Null Hypothesis is: Teams' mean values of wins are not significantly different based on the number of rest days between games 
-
->>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
+ 
+The NULL Hypothesis is: Teams' mean values of wins are not significantly different based on the number of rest days between games 
 
 ###Methods
 
 The steps to calculate this measurement are as follows:  
     1. Calculating number of rest days between games for all teams
-    2. Calculating ratios for effects of rest days on win/loss
-<<<<<<< HEAD
     3. Calculating ratios for effects of rest days on win/loss form home/away
     4. Perform a Chi-square test to examine whether there is a difference in the distributon for games won and games lost for the different restdays
-    
-=======
-    3. Calculating ratios for effects of rest days on win/loss form home/awayCalculating ratios for effects of rest days on win/loss
-    4. Run a regression analysis
-    5. Discuss the findings of the data
+    5. Calculating ratios for effects of rest days on win/loss form home/away
+    6. Run a regression analysis
+    7. Discuss the findings of the data
 
 The table below shows descriptive statistics for Rest Days:
 
@@ -355,7 +338,7 @@ The table below shows descriptive statistics for Rest Days:
    1st game of season  |  30|  1.66
 
 The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections.    
->>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
+
 
 ```{r, include=FALSE}
 
@@ -421,8 +404,7 @@ chisq.test(qqqq[2,], qqqq[3,])
 
 ###Findings
 
-<<<<<<< HEAD
-Table 5: Distribution of number of games per rest days
+**Table 5**: Distribution of number of games per rest days
 
  Rest Days| Games | Distribution
 ----------|-------|---
@@ -439,8 +421,6 @@ Table 5: Distribution of number of games per rest days
    1st game of season  |  30|  1.66
 
 The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections. 
-=======
->>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 **Table 6**: Win rate split by number of rest days between games
 
@@ -472,8 +452,6 @@ Based on the above, the analysis shows that the null hypothesis should be reject
 ###Further research
 
 To better understand effects of rest and home/away advantage future research should focus on distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away game in New Jersey.
-
-***
 
 ##Effects on accuracy
 
@@ -612,6 +590,7 @@ t.test(acc$accuracy, df.acc.secondsplayers3$acc.top)
 The accuracies for each period are detailed in the table below. 
 
 **Table 8**: Accuracy per period
+
 Period  | Accuracy
 ------- | ---------
 1       | 46%
@@ -820,14 +799,11 @@ An ad hoc data analysis was used as 3 of the 15 players stood out in particular.
 
 ```{r, echo=FALSE}
 graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-graph01 + labs(title = "Differences in FGA for games lost/won of the three special players") + xlab("Player name") + ylab("FGA")
-```
-Diagram xx1: Differences in FGA for games lost/won of the three special players.
-```{r, echo=FALSE}
+graph01 <- graph01 + labs(title = "Differences in FGA for games lost/won of the three special players") + xlab("Player name") + ylab("FGA")
 graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
-graph02 + labs(title = "Differences in FG% for games lost/won of the three special players") + xlab("Player name") + ylab("FG%")
+graph02 <- graph02 + labs(title = "Differences in FG% for games lost/won of the three special players") + xlab("Player name") + ylab("FG%")
+grid.arrange(graph01, graph02, ncol = 2)
 ```
-Diagram xx2: Differences in FG% for games lost/won of the three special players.
 
 The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
 
@@ -1019,19 +995,23 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
 ```
 
 ###Plot Result
-  The explanation from the plot above are as follows. The shooter distance ranges and accuracy:   
-  1.  0 to 2 feet: the accuracy varied between **62%** to **68%**  
-  2.  2 to 4 feet: the accuracy rate for this distance range from **61%** to **67%**  
-  3.  4 to 6 feet: the accuracy rate for this distance range from **44%** to **58%**  
-  4.  6 to 8 feet: the accuracy rate for this distance range from **38%** to **51%**  
-  5.  8 to 10 feet: the accuracy rate for this distance range from **35%** to **42%**  
-  6.  10 to 12 feet: the accuracy rate for this distance range from **34%** to **42%**  
-  7.  12 to 14 feet: the accuracy rate for this distance range from **37%** to **47%**  
-  8.  14 to 16 feet: the accuracy rate for this distance range from **33%** to **51%**  
-  9.  16 to 18 feet: the accuracy rate for this distance range from **37%** to **48%**  
-  10. 18 to 24 feet: the accuracy rate for this distance range from **33%** to **43%**  
-  11. 24 to 28 feet: the accuracy rate for this distance range from **18%** to **38%**  
-  12. more than 28 feet: the accuracy varies greater than previous distance range, starting from **0%** (no shots scored from that distance) to **50%**  
+
+**Table 13**: The relationship between the shooter distance ranges and accuracy
+
+  Distance (in feet) | Accuracy (range in %)
+  - | -
+  0 - 2 | 62 - 68
+  2 - 4 | 61 - 67
+  4 - 6 | 44 - 58
+  6 - 8 | 38 - 51
+  8 - 10 | 35 - 42
+  10 - 12 | 34 - 42
+  12 - 14 | 37 - 47
+  14 - 16 | 33 - 51
+  16 - 18 | 37 - 48
+  18 - 24 | 33 - 43
+  24 - 28 | 18 - 38
+  28+ | 0 - 50
 
   Analysis has also produced a correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:  
   There was strong negative correlation found between the shooting distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(446) = -0.87, p < .05, as part of level of significance (p = .05).
@@ -1395,7 +1375,6 @@ summary(linreg_fgm2)
 
 This report has demonstrated results of mathematical and statistical analysis of the dataset containing information of shots from NBA season 2014-2015. The report specifically focused on number of research areas covering teams and players performance. The report described steps taken to produce the results, discussed and evaluated the produced results and suggested potential areas for future research.  
 
-
 ***
 #References
 
@@ -1403,9 +1382,3 @@ This report has demonstrated results of mathematical and statistical analysis of
   Economist: As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).
   Erculj, F. and Supej, M. (2009). Impact of Fatigue on the Position of the Release Arm and Shoulder Girdle over a Longer Shooting Distance for an Elite Basketball Player. Journal of Strength and Conditioning Research, 23(3), pp.1029-1036.
   Mascret, N., Ibáñez-Gijón, J., Bréjard, V., Buekers, M., Casanova, R., Marqueste, T., Montagne, G., Rao, G., Roux, Y. and Cury, F. (2016). The Influence of the ‘Trier Social Stress Test’ on Free Throw Performance in Basketball: An Interdisciplinary Study. PLOS ONE, 11(6), p.e0157215.
-<<<<<<< HEAD
-
-ECONOMIST. As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).
-=======
-  
->>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
