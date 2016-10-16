@@ -838,11 +838,11 @@ The Null Hypothesis is that the distance to a closest defender does not have an 
 ###Methods  
 The steps to calculate this measurement are as follows:  
   1. Assign shot result to determine whether the shot is scored (1) or missed (0)  
-  2. Select and analyse subset of **all** closest defender distance values  
+  2. Select and analyse subset of all closest defender distance values  
   3. Count the occurence fOr every distance  
-  4. Calculate a number of uccessful shots for every distance point  
+  4. Calculate a number of successful shots for every distance point  
   5. Calculate accuracy ratio for every defender distance value  
-  6. Plot and discuss the result
+
 ```{r, include=FALSE}
 #Calculate accuracy against defender distance
 #Group the defender distance level
@@ -887,8 +887,8 @@ ggplot(data = distance_level) +
   7. Distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance)  
 
 ###Correlation Test
-  Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:
-  There was medium to strong positive correlation found between the defender distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Defender Distance and Accuracy was r(297) = .59, p < .05, as part of level of significance (p = .05).  
+  The next analysis calculates the correlation between both variables. If the analysis included all of the data points for every distance, the correlation result would be as follows:
+  There was medium to strong positive correlation found between the defender distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables "Defender Distance" and "Accuracy" was r(297) = .59, p < .05, as part of level of significance (p = .05).  
   
 ```{r, include=FALSE}
 #change distance level to numeric type for correlation test function
@@ -913,7 +913,7 @@ cor.test(dfZerotoAll$distanceZerotoAll, dfZerotoAll$accuracyDist1)
 ```
 
 ###Correlation Test Result  
-  The correlation test result produced slightly higher number of correlation between defender distance with shooting accuracy for all shot distance attempts (0.59). If the findings made only based on this number only, there would be obvious that further defender distance will **automatically** increase shooting accuracy. However, when analysing distance ranges the result was somewhat different. For example, for distance range between 0 (zero) to 8 feet, the correlation measurement will be as follows:  
+  The correlation test result produced slightly higher number of correlation between defender distance with shooting accuracy for all shot distance attempts (0.59). If the findings made only based on this number only, there would be obvious that further defender distance will automatically increase shooting accuracy. However, when analysing distance ranges the result was somewhat different. For example, for distance range between 0 (zero) to 8 feet, the correlation measurement will be as follows:  
   There was medium negative correlation found between the defender distance and shooting accuracy in this range. The Pearson’s correlation coefficient for the relationship between the variables Defender Distance and Accuracy was r(297) = -0.40, p < .05, as part of level of significance (p = .05).
 ```{r, include=FALSE}
 #populate data from data frame
@@ -936,7 +936,7 @@ cor.test(dfZerotoEight$distanceZerotoEight, dfZerotoEight$accuracyDist2)
   The correlation measurement between 0 (zero) to 8 feet would be negative (-0.40). This result was different with the previous calculation done for all data points (0.59).
   
 ###Discussion  
-  The analysis demonstrated that the accuracy rate for every player was **affected** by the defender distance for certain ranges. For defender distance starting from 0 (zero) to 8 (eight) feet, the shooting accuracy had negative correlations. For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance), which means that this part of the analysis should not be taken into account as the results were insignificant. It also shown from the dataset that only small attempt of shots were made from further defender distance. Therefore, it would affect the accuracy calculation result. However, from the correlation perspective, the result would be different if the analysis included all of the data points versus only short distance data points. This was arguably due to further defender distance did not mean the shooter distance from the basket was closer. Therefore, we **reject** the Null Hypothesis, since the defender distance affected shooting accuracy.  
+  The analysis demonstrated that the accuracy rate for every player was affected by the defender distance for certain ranges. For defender distance starting from 0 (zero) to 8 (eight) feet, the shooting accuracy had negative correlations. For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance), which means that this part of the analysis should not be taken into account as the results were insignificant. It also shown from the dataset that only small attempt of shots were made from further defender distance. Therefore, it would affect the accuracy calculation result. However, from the correlation perspective, the result would be different if the analysis included all of the data points versus only short distance data points. This was arguably due to further defender distance did not mean the shooter distance from the basket was closer. Therefore, we **reject** the Null Hypothesis, since the defender distance affected shooting accuracy.  
 
 ###Future Research
   As the dataset did not hold many data points for more than 20 feet defender distance, the accuracy analysis for these distances are limited. The future analysis could be enhanced further by including data for additional seasons. 
