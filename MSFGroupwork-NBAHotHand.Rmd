@@ -738,6 +738,10 @@ For these three players, the p-values still did not reach the level of significa
 
 Therefore, these three players are somehow different from others as they can contribute more to the win rates of their teams by their increasing shooting accuracy. There could be many reasons behind this, including their team compositions and the roles of the players.
 
+#Limitations
+
+The data set only contains 904 out of 1230 matches in the entire regular season. So there might be a chance that the highlight performances of certain players are missed out in our analysis. Meanwhile, it would be ideal if the contributions of all players can be analysed in more aspects including number of rebounds and assists. 
+
 ##Defender Proximity Analysis  
 ###Closest Defender Distance vs Shot Accuracy
 ####Introduction  
