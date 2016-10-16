@@ -14,7 +14,7 @@ knitr::opts_chunk$set(include = FALSE)
 
 ***
 
-#Report structure 
+
 
 ##Introduction
 
@@ -25,17 +25,17 @@ The chosen dataset for this report is a summary of shots made during NBA season 
 ** TO GET UPDATED AS A FINAL STEP**
 
 **1. Team related**
-  a. Home Advantage analysis
-  b. Effect of rest on teams' performance
+  a. Home Advantage analysis  
+  b. Effect of rest on teams' performance  
   
 **2. Player related**
-  a. Effects on Accuracy 
-  b. Shot Clock Pressure
-  c. Fatigue Effect (Quarter Accuracy Rate)  
-  d. Game result impact by field goal attempts
-  e. Defender Proximity Analysis
-  f. Shooting Distance vs Shot Accuracy 
-  g. Hot Hand Theory 
+  a. Effects on Accuracy  
+  b. Shot Clock Pressure  
+  c. Fatigue Effect (Quarter Accuracy Rate)    
+  d. Game result impact by field goal attempts  
+  e. Defender Proximity Analysis  
+  f. Shooting Distance vs Shot Accuracy   
+  g. Hot Hand Theory  
 
 
 ###Dataset Description:  
@@ -64,9 +64,9 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
 
 ###Dataset Strengths  
     
-    The dataset comprises of comprehensive observational data to start to work with. In general, the dataset has only a small percentage of missing value (0.19%) so there was not need to remove or assign many data points to default values. Since the column name is not ambiguous it was really helpful to understand the dataset right from the beginning. 
+  The dataset comprises of comprehensive observational data to start to work with. In general, the dataset has only a small percentage of missing value (0.19%) so there was not need to remove or assign many data points to default values. Since the column name is not ambiguous it was really helpful to understand the dataset right from the beginning. 
 
-    The dataset comprises of comprehensive observational data which enables efficient analysis without extensive 'clean up' of the data. The dataset only have small percentage of missing value (0.19%), therefore there is no need to remove or assign numerous data points to default values. The fact that initial dataset meant that only a small number of additional columns had to be added (see data clean-up part of the code for details. 
+  The dataset comprises of comprehensive observational data which enables efficient analysis without extensive 'clean up' of the data. The dataset only have small percentage of missing value (0.19%), therefore there is no need to remove or assign numerous data points to default values. The fact that initial dataset meant that only a small number of additional columns had to be added (see data clean-up part of the code for details. 
 
 
 ###Dataset Limitations  
@@ -79,7 +79,7 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
 
 ***
 
-##Analysis
+#Analysis
 
 
 ```{r, eval=FALSE, include=FALSE}
@@ -153,7 +153,7 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 
 ```
 
-***
+
 
 ## Home Advantage analysis
 ###Introduction
@@ -174,8 +174,6 @@ The graph below shows descriptive variables for home/away wins:
 
 ```{r, echo=FALSE}
 #plot showing home and away win ratio per team
-ggplot()
-
 ggplot(advdf, aes(x = advdf$WINNER)) + geom_bar(aes()) + ylab("game count") + xlab("winner")
 ```
 
@@ -269,7 +267,7 @@ The plot shows that out of 30 teams:
 **JUSTING TO SEE IF THERE IS ANYTHING WE CAN INCLUDE HERE**
 
 
-###regression analysis
+###Regression analysis
 
 ```{r, include=FALSE}
 margreg<- lm(FINAL_MARGIN ~ LOCATION, restdays2)
@@ -297,7 +295,7 @@ The result of this research also confirms recent trend of decline in home advant
   
   2. Change in style of play in NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees (Economist, 2015).
 
-
+***
 
 ##Effect of rest on teams' performance
 
@@ -312,8 +310,28 @@ The steps to calculate this measurement are as follows:
     1. Calculating number of rest days between games for all teams
     2. Calculating ratios for effects of rest days on win/loss
     3. Calculating ratios for effects of rest days on win/loss form home/awayCalculating ratios for effects of rest days on win/loss
-    4. Discuss the findings of the data
-    
+    4. Run a regression analysis
+    5. Discuss the findings of the data
+
+The table below shows descriptive statistics for Rest Days:
+
+Table 5: Distribution of number of games per rest days
+
+ Rest Days| Games | Distribution
+----------|-------|---
+    0  | 427 | 23.62
+    1  | 990 | 54.76
+    2  | 254 | 14.05
+    3  |  59 |  3.26
+    4  |  13 |  0.72
+    5  |   3 | 0.17
+    7  |   6 | 0.33
+    8  |  20 | 1.11
+    9  |   3 | 0.17
+    10 |   3 | 0.17
+   1st game of season  |  30|  1.66
+
+The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections.    
 
 ```{r, include=FALSE}
 
@@ -378,23 +396,7 @@ print (restdays3[1:3,c(1,7,9)])
 
 ###Findings
 
-Table 5: Distribution of number of games per rest days
 
- Rest Days| Games | Distribution
-----------|-------|---
-    0  | 427 | 23.62
-    1  | 990 | 54.76
-    2  | 254 | 14.05
-    3  |  59 |  3.26
-    4  |  13 |  0.72
-    5  |   3 | 0.17
-    7  |   6 | 0.33
-    8  |  20 | 1.11
-    9  |   3 | 0.17
-    10 |   3 | 0.17
-   1st game of season  |  30|  1.66
-
-The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections.
 
 Table 6: Win Rate split by number of rest days between games
 
@@ -428,6 +430,8 @@ To better understand effects of rest and home/away advantage the future research
 ***
 
 ##Effects on accuracy
+
+###Introduction
 
 The potential effects of fatigue and stress on the accuracy of shots are investigated in this part of the analysis.
 
@@ -575,7 +579,7 @@ The T-test for regular time and overtime was highly significant, t(383) = 2.77, 
 
 The changes in the overall accuracy per second are shown in the graph below.
 
-```{r}
+```{r, echo=FALSE}
 graph.acc <- ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
 
 graph.acc + labs(title = "Overall Accuracy per second left on shot clock") + xlab("Seconds left on shot clock") + ylab("Overall Accuracy")
@@ -592,7 +596,7 @@ The effects of psychological stress are highly visible as shown in the graph abo
 
 An ad hoc data analysis was undertaken to investigate whether this pattern of stress-inducted accuracy declination can be found as well for "superstar" players. The players were Lebron James, James Harden and Russel Westbrook, chosen because they were the top 3 shooters in the season. Their combined average accuracy per second can be seen in the graphic below. 
 
-```{r}
+```{r, echo=FALSE}
 
 graph2 <- ggplot(NULL) + geom_smooth(data = df.acc.secondsplayers3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
 graph2 + labs(title = "Comparison - Accuracy per second on shot clock left for Top Players vs Overall Average") + xlab("Seconds left on shot clock") + ylab("Accuracy")
@@ -665,10 +669,9 @@ for (i in 1:nrow(shot.stats)){
 }
 ```
 
-<<<<<<< HEAD
+
 ### Impact of Top Scorers
-=======
->>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
+
 
 ```{r, include=FALSE}
 # Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
@@ -702,15 +705,15 @@ anova(model)
 ```
 ###Results
 
-##a. Field Goal Attempts (FGA)
+####a. Field Goal Attempts (FGA)
 
 <<<<<<< HEAD
 There was no correlation found between the result of a match and the number of attempts of the player made in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach level of significance (p = .05). 
-=======
-There was no correlation found between the outcome of the matches in this season and the number of attempts of the players made. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach the level of significance (p = .05). 
->>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
 
-##b.  Field Goal Percentage (FG%)
+There was no correlation found between the outcome of the matches in this season and the number of attempts of the players made. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach the level of significance (p = .05). 
+
+
+####b.  Field Goal Percentage (FG%)
 
 There was no correlation found between the outcome of the matches in this seaon and the field goal percentage of the players. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach the level of significance (p = .05). 
 
@@ -760,7 +763,7 @@ Table xxx: Result for the logistic regression analysis for FGA and FG% of 15 pla
 Table xxx: Result for the anova for FGA and FG% for 15 players.
 
    | |           Df| Deviance| Resid. Df| Resid. Dev
-|-|-|-|-| - 
+-|-|-|-|- 
 |NULL        |     |              | 777   |  188.73
 |FGA         |   1  | 0.0014   |    776  |   188.73
 |FG.percentage | 1 |  7.4664   |    775  |   181.26
@@ -850,20 +853,19 @@ library(scales)
 ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
   geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
   scale_y_continuous(labels = percent, breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0), limits = c(0, 1)) +
-  scale_x_discrete("Closest Defender Distance", limits = 0:24) +
-  ylab("Shooting Accuracy (%)") +
-  ggtitle("Closest Defender Distance vs Shooting Accuracy")
+  scale_x_discrete("Closest Defender Distance", limits = 0:24) +  
+  ylab("Shooting Accuracy (%)") +   ggtitle("Closest Defender Distance vs Shooting Accuracy")
 ```
 
 ###Plot Result
   The explanation from the plot above are as follows:   
-  1. Defender distance range from 0 to 2 feet, the accuracy varied between **42%** to **50%**  
-  2. Defender distance range from 2 to 4 feet, the accuracy rate for this distance range from **44%** to **49%**  
-  3. Defender distance range from 4 to 6 feet, the accuracy rate for this distance range from **41%** to **46%**
-  4. Defender distance range from 6 to 8 feet, the accuracy rate for this distance range from **37%** to **42%**
-  5. Defender distance range from 8 to 10 feet, the accuracy rate for this distance range from **37%** to **54%**
-  6. Defender distance more than 10 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from **33%** to **60%**.  
-  7. Distance greater than 16 feet, the data varies between **0%** (no shots scored from that distance) to **100%** (certain successfull shot from that distance)  
+  1. Defender distance range from 0 to 2 feet, the accuracy varied between 42% to 50%  
+  2. Defender distance range from 2 to 4 feet, the accuracy rate for this distance range from 44% to 49%  
+  3. Defender distance range from 4 to 6 feet, the accuracy rate for this distance range from 41% to 46%
+  4. Defender distance range from 6 to 8 feet, the accuracy rate for this distance range from 37% to 42%
+  5. Defender distance range from 8 to 10 feet, the accuracy rate for this distance range from 37% to 54%
+  6. Defender distance more than 10 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from 33% to 60%.  
+  7. Distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance)  
 
 ###Correlation Test
   Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:
