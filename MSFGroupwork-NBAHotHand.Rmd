@@ -633,12 +633,10 @@ Additionally, further reasons that lead to distinction between top players and a
 As there are much more shots taken in periods 1 to 4 than in 5 to 7 the differences in the accuracy have to be treat with caution.
 The shot clock variable had missing values for 5567 shots, equal to 4.34% of all shots on the dataset, limiting the meaningfulness of the findings in the accuracy per second part. 
 
-<<<<<<< HEAD
 
 ## Shooting Percentage Analysis (James)
 
 ###Introduction  
->>>>>>> 6a1c84a12652eedf6027627edee3f70ed439beb1
 
 The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The Null hypothesis is that there is no difference regarding the likelyhood of winning if the top scorer of a team has more field goal attempts. The second Null hypothesis is there is no difference regarding the likelyhood of winning if the top scorer of a team has a higher shot percentage than on average. As this is such a niche area research a literature review did not reveal sufficient results so this analysis aims to fill this gap.
 
@@ -667,7 +665,6 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 
 ```
 
-
 ```{r, include=FALSE}
 # Reshape the dataframe
 
@@ -688,9 +685,7 @@ for (i in 1:nrow(shot.stats)){
 }
 ```
 
-
 ### Impact of Top Scorers
-
 
 ```{r, include=FALSE}
 # Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
@@ -726,11 +721,7 @@ anova(model)
 
 ####a. Field Goal Attempts (FGA)
 
-
 There was no correlation found between the outcome of the matches in this season and the number of attempts of the players made. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach the level of significance (p = .05). 
-=======
->>>>>>> f989f5f8887c39521a651bb317a805dbc5ade12d
-
 
 ####b.  Field Goal Percentage (FG%)
 
@@ -833,8 +824,6 @@ Therefore, the analysis on these three players has shown that there is a  differ
 
 ###Limitations
 The data set only covers 904 of 1230 matches in the regular season. So there might be a chance that the highlight performances of certain players are missed out in the analysis. Meanwhile, it would be ideal if more sepects of data, such as rebounds and assists, could be analysed. 
-
-***
 
 ##Defender Proximity Analysis  
 ###Closest Defender Distance vs Shot Accuracy
