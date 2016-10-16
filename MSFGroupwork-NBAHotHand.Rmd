@@ -623,13 +623,7 @@ The shot clock variable had missing values for 5567 shots, equal to 4.34% of all
 <<<<<<< HEAD
 
 ## Shooting Percentage Analysis (James)
-###Introduction
 
-The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The hypothesis is that a team will be more likely to win the game if the top scorer have more opportunities to shot in a single match as this player tend to score than others players in the team. Furthermore, a team is more likely to win when the key player has higher shot percentage than normal. 
-=======
-***
-
-## Shooting Percentage Analysis
 ###Introduction  
 >>>>>>> 6a1c84a12652eedf6027627edee3f70ed439beb1
 
@@ -722,9 +716,6 @@ anova(model)
 
 <<<<<<< HEAD
 There was no correlation found between the result of a match and the number of attempts of the player made in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach level of significance (p = .05). 
-=======
-There was no correlation found between the outcome of the matches in this season and the number of attempts of the players made. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach the level of significance (p = .05). 
->>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
 
 ##b.  Field Goal Percentage (FG%)
 
