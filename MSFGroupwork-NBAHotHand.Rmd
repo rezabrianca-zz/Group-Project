@@ -20,53 +20,49 @@ The purpose of this report is to analyse the chosen dataset and to produce meani
 
 The chosen dataset for this report is a summary of shots made during NBA season 2015-2016. The following areas of research have been selected:
 
-1. Team related:
+**1. Team related**
   a. Home Advantage analysis
   b. Effect of rest on teams' performance
   
-2. Player related
-  a. Defender Proximity Analysis
+**2. Player related**
+  a. Effects on Accuracy 
   b. Shot Clock Pressure
   c. Fatigue Effect (Quarter Accuracy Rate)  
   d. Game result impact by field goal attempts
+  e. Defender Proximity Analysis
+  f. Shooting Distance vs Shot Accuracy 
+  g. Hot Hand Theory 
 
 
-a. Hot Hand Theory 
-
-##Theory
-I   What do you expect to find?
-a. 
-
-##Methods
 ###Dataset Description:  
   
-  Data on shots taken during the NBA 2014-2015 season for regular matches throughout the year. The data comprise of 128,609 rows and 22 columns with 16 MB data size with several value in some column is missing. The column titles are generally self-explanatory. It has the following data:   
+Data  contains full set of shot attempts by each team/player during the NBA 2014-2015 season for regular matches throughout the year. The data comprise of 128,609 rows and 22 columns with. The column titles (variables) are as follows:   
     1.  Match ID  
-    2.  Match date  
-    3.  Which team plays as home and away  
+    2.  Match date and names of contestants  
+    3.  Location: home and away  
     4.  Match result  
     5.  Final score difference  
-    6.  Every shots attempt per game for each player  
-    7.  Shot result whether it is success or not  
-    8.  Type of shoot attempt (2 points or 3 points)  
-    9.  Quarter number data (1 to 4)  
-    10. Game clock for each quarter  
-    11. Time left for a shot (shot clock)  
-    12. Who took the shot  
+    6.  shot number  
+    7.  Shot result: success or miss 
+    8.  Type of shot attempt (2 points or 3 points)  
+    9.  Quarter number (1 to 4, or higher for overtime)  
+    10. Game clock for each quarter when the shot has been made 
+    11. Shot clock (time left for a shot)  
+    12. Name and ID of a player who took the shot  
     13. Shot distance from basket  
-    14. Who was the nearest defender  
+    14. Name and ID of the nearest defender  
     15. Distance from the nearest defender  
   
-  The dataset is useful for evaluating who the best shooter is, who the best defender is, the hot-hand hypothesis, affect of home playing team, close game effect, shooting accuracy from best players, and defender distance effect on shooting accuracy. Data was taken from NBA's REST API provided by [Kaggle](https://www.kaggle.com/dansbecker/nba-shot-logs) and acquired at 30 September 2016.  
+ The data has been acquired from Kaggle website **(https://www.kaggle.com/dansbecker/nba-shot-logs)** on 30 September 2016.  
 
 ###Dataset Strengths  
     
-    The dataset comprise of comprehensive observational data to start to work with. In general, the dataset only have small percentage of missing value (0.19%) so we do not need to remove or assign many data points to default values. And since the column name is not ambiguous it really helps us to understand dataset from the beginning. 
+    The dataset comprises of comprehensive observational data which enables efficient analysis without extensive 'clean up' of the data. The dataset only have small percentage of missing value (0.19%), therefore there is no need to remove or assign numerous data points to default values. The fact that initial dataset meant that only a small number of additional columns had to be added (see data clean-up part of the code for details. 
 
 ###Dataset Limitations  
-  There are several constraints we need to mentioned in order to provide same understandings for this group work analysis as follows:  
-    1. The dataset consists only for 1 year NBA season (2014-2015)  
-    2. The dataset comprise only with regular match (82 matches per team for both home and away matches)  
+  There are several limitations of the dataset:  
+    1. The dataset consists only 1 year NBA season stats (2014-2015)  
+    2. The dataset comprise only of regular season matches  
     3. The playoff and other matches during the year is not included
     4. The dataset does not include free throw shot and results
 
