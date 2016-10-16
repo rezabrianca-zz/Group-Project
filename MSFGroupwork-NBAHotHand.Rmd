@@ -87,17 +87,16 @@ a.
 
 ### Installing libraries
 
-```{r}
 install.packages('reshape')
 install.packages('gridExtra')
-```
-
 
 ### Calling libraries
 ```{r}
 library(reshape)
 library(ggplot2)
 library(gridExtra)
+library(plyr)
+
 ```
 
 
@@ -133,8 +132,8 @@ for (i in 1:nrow(df)) {
     if (W[i] == "L") df$WINNER[i] <- "AWAY"
   }
   if (LOCATION[i] == "A") {
-    df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], ""))[7] 
-    df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], ""))[5]
+    df$HOME_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[7] 
+    df$AWAY_TEAM [i] <- unlist(strsplit(df$MATCHUP[i], " "))[5]
     if (W[i] == "L") df$WINNER[i] <- "HOME"  
     if (W[i] == "W") df$WINNER[i] <- "AWAY"
   }
@@ -144,16 +143,14 @@ for (i in 1:nrow(df)) {
 df1[, "MATCHUP"] <- as.character(df1[, "MATCHUP"])
 for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$MATCHUP[i], " -"))[1], format = "%B %d, %Y"))
 
-restdays <- cast(df1, DATE + HOME_TEAM + AWAY_TEAM + WINNER ~ FGM, value = 'FGM')
+#creating a column for 'TEAM' regardless whether they played at home or not as the original dataframe consists of both home and away teams
+for (i in 1:nrow(df1)) df1$TEAM[i] <-unlist(strsplit(df1$MATCHUP[i], " "))[5]
 
-#this code is supposed to produce a list of dates when teams play at HOME in DATES column. for some reason it is not working.
+#cleaning-up data for rest days calculation
+df1$BLANK2<-""
+restdays2 <- cast(df1, TEAM + DATE + LOCATION + W + FINAL_MARGIN ~ FGM)
+restdays2$DATE<- as.Date(restdays2$DATE)
 
-for (i in aa3$TEAM) {
-  for (j in 1:nrow(restdays)) {
-    aa3$DATES <- as.list(aa3$DATES)
-    if (restdays$HOME_TEAM[j] == i) aa3$DATES[aa3$TEAM == i] <- c(aa3$DATES[aa3$TEAM == i], restdays$DATE[j])
-  }
-}
 ```
 
 ## Home Advantage analysis
@@ -161,9 +158,15 @@ for (i in aa3$TEAM) {
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
 
-Literature review demonstrates that 
+The NULL Hypothesis is: Teams performance at home is more likely to win at home then when playing away.
 
-The NULL Hypothesis is: 
+###Methods
+The steps to calculate this measurement are as follows:  
+    1. Calculate a total number of games, which has been won by a home or away team
+    2. Compare the total win numbers to identify whether home advantage is evident using means of the variables
+    3. Extend the analysis to review of the home/away wins on a team level 
+    4. Plot the team level data 
+    5. Discuss the findings of the analysis
 
 
 ```{r}
@@ -175,8 +178,8 @@ hh <- sum(aa$WINNER == "HOME")
 #Away wins:
 aw <- sum(aa$WINNER == "AWAY")
 #percentage of home team winning: 
-round(hh / (hh + aw), 2)
-round(aw / (hh + aw), 2)
+round(hh / (hh + aw), 4)
+round(aw / (hh + aw), 4)
 
 ```
 
@@ -198,30 +201,200 @@ for (i in 1:nrow(aa3)) {
 head(aa3)
 
 aa3 <- aa3[order(aa3$WIN_PCT_HOME, decreasing = TRUE),]
-rownames(aa4) <- NULL
+t(aa3[,c(1,4,7,10)])
 
 aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
 
+aa3$WIN_PCT_DIFF<- aa3$WIN_PCT_HOME - aa3$WIN_PCT_AWAY
 
 ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "AWAY")) 
  
 ```
 
-##Close Game Effect (Justin)
+###Findings
+Table 1: Proportion of total games split by Location win factor
+
+X     | HOME WIN | AWAY WIN
+----- | -------- | ---
+Game  | 506      | 398
+Perc  | 55.97%   | 44.03%
+TEAM        | GSW | ATL | POR | MEM | SAS | CLE | HOU | LAC | OKC | DAL | NOP | WAS | TOR | CHI | MIL  
+------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----
+Win % HOME  |   93| 88  | 81  | 77  | 75  | 72  | 72  | 72  | 71  | 68  | 68  | 68  | 66  | 59  | 59 
+Win % AWAY  |   69| 71  | 54  | 67  | 50  | 53  | 61  | 57  | 42  | 61  | 40  | 43  | 59  | 66  | 45 
+Win % Diff  |   24| 17  | 27  | 10  | 25  | 19  | 11  | 15  | 29  | 7   | 28  | 25  | 7   | -7  | 14
 
 
-The potential effects of tiredness and stress on the accuracy of shots are investigated in this part of the analysis. 
+TEAM        | PHX | IND | BOS | CHA | UTA | DEN | BKN | SAC | MIA | DET | LAL | ORL | PHI | NYK |MI 
+------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----
+Win % HOME  | 57  | 52  | 48  | 47  | 45  | 42  | 41  | 41  | 39  | 38  | 31  | 30  | 28  | 27  | 26 
+Win % AWAY  | 47  | 35  | 32  | 41  | 35  | 30  | 44  | 30  | 48  | 39  | 23  | 31  | 16  | 14  | 18 
+Win % Diff  | 10  | 17  | 16  | 6   | 10  | 12  |-3   | 11  |-9   |-1   |    8|   -1|   12|   13| 8
+
+
+
+The plot shows that out of 30 teams:
+  25 teams have won more games at home than away
+  3 teams have won more games away than at home
+  2 teams home and away win ratios are almost equal (difference of less than 0.01%)
+
+
+###Variance test Analysis
+```{r}
+
+```
+
+###regression analysis
+
+```{r}
+margreg<- lm(FINAL_MARGIN ~ LOCATION, restdays2)
+summary(margreg)
+```
+
+###Discussion
+
+The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis on a team level where 25 teams are clearly winning more games at home and away. The result shown that the NULL hypothesis should be rejected as a team playing at home is more likely to win then an away team. Regression analysis shown that playing at home gives teams on average additional 4.29 margin points. 
+
+The result of this research also confirms recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to a figure around the 2011-15 mean of 58.8%. Home win ratio was 57.4% win in 2014-2015 season. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2015-2016 season. Based on the literature review this trend could be potentially explained by the following factors http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball:
+
+  1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly charterd planes more often than in the past. This results in teams being less tired as a result of travel and better prepared for the games.
+  
+  2. Change in style of play in the NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees.
+
+
+##Effect of rest on teams' performance
+
+###Introduction
+
+This area of analysis focuses on investigation of whether a number of rest days between games affect performance and more importantly winning ratio of a team. 
+
+The Null Hypothesis is: By having longer rest a team is likely to have a higher winning ratio.
+
+###Methods
+The steps to calculate this measurement are as follows:  
+    1. Calculating number of rest days between games for all teams
+    2. Calculating ratios for effects of rest days on win/loss
+    3. Calculating ratios for effects of rest days on win/loss form home/awayCalculating ratios for effects of rest days on win/loss
+    4. Discuss the findings of the data
+    
+
+```{r}
+
+
+#calulating number of rest days between teams
+for (i in 2: nrow (restdays2)) {
+  if (restdays2$TEAM[i]==restdays2$TEAM[i-1])
+    restdays2$rest[i]<- as.numeric(restdays2$DATE[i] - restdays2$DATE[i-1]-1)
+  else 
+    (restdays2$rest[i]<- "NA")  
+}
+restdays2$BLANK<-""
+
+restdays2$rest <- as.numeric (restdays2$rest)
+
+#regression analysis
+margreg<- lm(FINAL_MARGIN ~ LOCATION + rest, restdays2)
+summary(margreg)
+
+
+#creating dataframe for total rest days
+restdays4<- cast (restdays2, rest ~  W)
+colnames(restdays4)<- c( "rest", "L","W") 
+
+restdays4$total<-restdays4$L + restdays4$W
+restdays4$dist <-   round (restdays4$total * 100 /sum (restdays4$total) ,2)
+
+restdays4[,c(1,4,5)]
+
+#The distribution of rest days show that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections
+
+restdays4$ L.pct <-   round(restdays4$L*100/(restdays4$L+restdays4$W),2) 
+restdays4$ W.pct <-   round(restdays4$W*100/(restdays4$L+restdays4$W),2)
+
+print (restdays4[1:3,c(1,3,7)])
+
+#creating a new dataframe for summary of home/away win losses based on number of rest days.
+restdays3<- cast (restdays2, rest ~ LOCATION + W) ; 
+
+colnames(restdays3)<- c( "rest", "AL","AW","HL", "HW") 
+restdays3$ AL.pct <-   round(restdays3$AL*100/(restdays3$AL+restdays3$AW),2) 
+restdays3$ AW.pct <-   round(restdays3$AW*100/(restdays3$AL+restdays3$AW),2)
+restdays3$ HL.pct <-   round(restdays3$HL*100/(restdays3$HL+restdays3$HW),2)
+restdays3$ HW.pct <-   round(restdays3$HW*100/(restdays3$HL+restdays3$HW),2)
+
+print (restdays3[1:3,c(1,7,9)])
+
+
+#Testing of rest data
+<<<<<<< HEAD
+t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+=======
+#t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+>>>>>>> 334f80c223b5add4579e9efe4c07028e7197c743
+#chisq.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
+
+
+#restdays2$W[restdays2$rest==0,]
+
+```
+
+###Findings
+
+TO INCLUDE THE TABLES FROM THE ABOVE CODE
+
+
+###Discussion
+
+The analysis demonstrated that overall winning ratio improves with increase in  rest days: back-to-back games had 47.07% winning ratio, 1 day rest increased winning ratio to 50.10% and with 2 days rest the winning ration has increased even further to 53.94%.
+
+By extending the analysis to the team level, the results have demonstrated similar tendency for home  games where winning ratio has increased from 53.54% to 54.68% and 59.57% respectively with 0, 1 and 2 days of rest. Somewhat interestingly the analysis of effect of rest days on winning ratio of away games demonstrated that there is hardly any difference between 0 and 1 days of rest (44.33% and 44.24%). However with 2 days of rest teams' average winning ratio have increased to 46.90% (2.66% increase). This perhaps could be explained by the fact that teams were able to minimise effect of travelling when having a bigger window between games.
+
+Based on the above, the analysis shown that the null hypothesis should be rejected as there is a clear evidence that the higher rest days correspond to higher winning ratio
+
+###Further research
+
+To better understand effects of rest and home/away advantage it would be interesting to take into account distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York travelling to play an away gamein New Jersey
+
+##Effects on accuracy (Justin)
+
+
+The potential effects of fatigue and stress on the accuracy of shots are investigated in this part of the analysis.
+
+Fatigue in basketball is a broadly analysed topic in physiological research. Latest literature suggests that elite basketball players cope well with the effects of fatigue so it does not affect their shooting kinematics. This results in no difference for their shot accuracy even if the players are fatigued (Erčul, Frane & Supej, 2006; Uygur et al., 2010). This research paper analyses whether these previous findings can be confirmed for the NBA season 2015-2016.  
+
+Regarding the effect of psychological stress on shot accuracy, previous research is not as decisive as for the effects of fatigue. While Arhart(1973) concluded that stressful events like small or big margins for the game score have an effect on players free-throw accuracy, latest research introducing more controlled conditions states that there is no effect of stress on players shot accuracy (Mascret et al., 2016). The indecisiveness of previous literature led to a deeper analysis in this research paper.
+
+
+Hypotheses for this area of analysis are:
+
+Fatigue: The Null hypothesis states that there is no significant difference (p < .05) for the shot accuracy in later periods of the game.
+
+Stress: The Null hypothesis states that there is no significant difference (p < .05) for the shot accuracy in more stressful events.
+
+
+###METHOD
+
+In this analysis fatigue was measured as the period of the game, as it can be assumed that the later in the game the higher the fatigue of the players.
+
+The steps to test the first hypothesis were as follows:
+  1. The overall accuracy for each period was calculated, based on the number of shots made (FGM = 1) and the number of shots taken for the specific period (FGM = 1 & FGM = 0)
+  2. This results in a percentage value of shots made for each of the periods
+  3. A variable called "Overtime" was introduced to distinguish between periods in the regular game time and overtime
+  4. The average accuracy for regular time and overtime was calculated
+  5. A T-test was used to examine whether or not these values were significant different at a level of significance of 5%.
+  
+  
+Psychological stress was measured through the remaining time on the shot clock for each shot taken. It was assumed that a player would experience more stress the lower the shot clock goes.
+
+The steps to test the second hypothesis were as follows:
+  1. As the shot clock variable contained 5567 missing values, those were excluded from the analysis
+  2. To simplify the shot clock variable, decimals were removed from the data so every shot taken was assigned to 0 to 24 seconds left on the shot clock
+  3. The overall accuracy for each second was calculated using the FGM variable
 
 
 ```{r}
-# create new variable to seperate overtime
 
-df[, "overtime"] <- as.numeric()
-
-for (i in 1:nrow(df)) {
-  if (df[i, "PERIOD"] >= 5) df[i, "overtime"] <- 1
-  if (df[i, "PERIOD"] <= 4) df[i, "overtime"] <- 0
-}
+### FATIGUe
 
 # accuracy per period
 
@@ -234,36 +407,29 @@ for (i in (1:7)){
   if (df.acc$period[i] >= 5) df.acc[i, "overtime"] <- 1
 }
 
+regular <- sum(df.acc$accuracy[df.acc$period <= 4])/4
+overtime <- sum(df.acc$accuracy[df.acc$period >=5])/3
+
 
 t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 2])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 3], df$FGM[df$PERIOD == 4])
 t.test(df$FGM[df$PERIOD == 1], df$FGM[df$PERIOD == 3])
 t.test(df$FGM[df$PERIOD == 2], df$FGM[df$PERIOD == 4])
+t.test(df$FGM[df$PERIOD == c(1:4)], df$FGM[df$PERIOD == c(5:7)])
 
 
-# accuracy per player per period
-
-df.period <- cast(df, player_id + player_name + PERIOD ~ FGM)
-
-df.period[, "accuracy"] <- as.numeric()
-
-for (i in 1:nrow(df.period)){
-  df.period[i, "accuracy"] <- df.period[i, "1"] / sum(df.period[i, "1"], df.period[i, "0"] ) 
-}
-  
-# do analysis for top players per team in regards of accuracy per period
-
+### STRESS
 # accuracy for Shot Clock
 
 # dealing with missing values
-df[is.na(df)] <- 99
+df1[is.na(df1)] <- 99
 
-acc <- data.frame(seconds.left = c(0:23))
+acc <- data.frame(seconds.left = c(0:24))
 
 #accuracy for every second
-for (i in (0:23)){
-  acc[i, "accuracy"] <- (sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i + 1 & df$SHOT_CLOCK != 99 & df$FGM == 1) / sum(df$SHOT_CLOCK >= i & df$SHOT_CLOCK < i + 1 & df$SHOT_CLOCK != 99))
+for (i in (0:24)){
+  acc[i, "accuracy"] <- (sum(df1$SHOT_CLOCK >= i & df1$SHOT_CLOCK < i + 1 & df1$SHOT_CLOCK != 99 & df1$FGM == 1) / sum(df1$SHOT_CLOCK >= i & df1$SHOT_CLOCK < i + 1 & df1$SHOT_CLOCK != 99))
 }
 
 ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
@@ -274,42 +440,100 @@ ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
 
 ##simplifying shot clock to seconds left
   
-df.acc.players <- cast(df, player_id + player_name + SHOT_CLOCK ~ FGM)
+df.acc.players <- cast(df1, player_id + player_name + SHOT_CLOCK ~ FGM)
 
 for (i in (1:nrow(df.acc.players))){
-  for (j in (0:23)){
+  for (j in (0:24)){
     if (df.acc.players$SHOT_CLOCK[i] >= j & df.acc.players$SHOT_CLOCK[i] < j + 1) df.acc.players[i, "seconds.left"] <- j
     if (df.acc.players$SHOT_CLOCK[i] == 99) df.acc.players[i, "seconds.left"] <- 99
   }
 }
 
-df.acc.players[, "acc.per.sec"] <- as.numeric()
 
-### doesnt work as I would like it:
+ap<- df.acc.players
+head(ap)
 
-for (i in (1:nrow(df.acc.players))){
-  for (j in (0:23)){
-    df.acc.players[i, "acc.per.sec"] <- sum(df.acc.players$'1'[df.acc.players$seconds.left == j])
-  }
-}
-  
+ap$SHOT_CLOCK <- NULL
 
-ggplot(df.acc.players, aes(x = seconds.left, y = ))
+colnames(ap)<- c( "player_id", "player_name","X0", "X1","seconds.left") 
 
-#Assign accuracy per second to main dataframe
-df[, "acc.per.sec"] <- as.numeric()
 
-for (i in 1:nrow(df)){
-  for (j in 0:23){
-    if (df$SHOT_CLOCK[i] > j & df$SHOT_CLOCK[i] <= j + 1 & df$SHOT_CLOCK[i] != 99) df[i, "acc.per.sec"] <- acc[j, "accuracy"]
-  }
-}
+ap2 <- ddply(ap, c("player_id", "player_name","seconds.left"), summarise,
+X0= sum(X0),
+X1= sum(X1))
 
+ap2$acc<- ap2$X1/(ap2$X0+ap2$X1)
+
+ap2[ap2 == 99] <- NA
+
+ap3 <- data.frame(row.names = c(0:24))
+ap3$seconds.left <- c(0:24)
+
+for (i in ap3$seconds.left){
+  ap3$acc.top[ap3$seconds.left == i] <- sum(ap2$acc[ap2$seconds.left == i & ap2$player_name == "james harden"][!is.na(ap2$acc[ap2$seconds.left == i & ap2$player_name == "james harden"])], ap2$acc[ap2$seconds.left == i & ap2$player_name == "lebron james"][!is.na(ap2$acc[ap2$seconds.left == i & ap2$player_name == "lebron james"])], ap2$acc[ap2$seconds.left == i & ap2$player_name == "russell westbrook"][!is.na(ap2$acc[ap2$seconds.left == i & ap2$player_name == "russell westbrook"])])/3}
+
+
+
+ggplot(NULL) + geom_smooth(data = ap3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
+
+
+t.test(acc$accuracy, ap3$acc.top)
 
 ```
 
+###Results
+
+The accuracies for each period are detailed in the table below. 
+
+Period  | Accuracy
+------- | ---------
+1       | 46%
+2       | 45%
+3       | 46%
+4       | 44%
+5       | 39%
+6       | 43%
+7       | 37%
+regular | 45%
+overtime | 40%
 
 
+
+The T-tests for period 1 and period 2 was significant, t(65301) = 2.42, p = .015, as well as the T-test for period 3 and 4, t(60757) = 4.24, p < .01. Further the T-test for period 2 and 3 was not significant, t(63843) = -1.53, p = .126, as well as the T-test for period 1 and 3, t(65989) = 0.87, p = .38. 
+The T-test for regular time and overtime was highly significant, t(383) = 2.77, p < .01.
+
+
+The changes in the overall accuracy per second are shown in the graph below.
+
+```{r}
+graph.acc <- ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
+
+graph.acc + labs(title = "Overall Accuracy per second left on shot clock") + xlab("Seconds left on shot clock") + ylab("Overall Accuracy")
+```
+
+### Discussion
+
+The results of the T-tests show a significant difference for the overall accuracy between period 1 and period 2, between period 3 and period 4 and between regular game time and overtime. As the table shows the changes in accuracy are really small (from 46% to 44% over the regular game time) and often located on digit-level, so eventhough the changes are significant they are negligible. After all, there is not enought evidence to reject the Null hypothesis, statingthat there is no difference in the accuracy for later periods, in regular game time but it can be rejected for overtime. It can be concluded that accuracy does not suffer for later game periods as long as the game ends in regular time. For games that reach overtime a highly significant drop in the accuracy of over 5% (45% to below 40%) is observale. 
+This means that elite basketball players cope really well with any occurance of fatigue regarding their shot accuracy on a regular basis. As soon as the game reaches an intensity which is beyond the regular level effects of fatigue can be found leading to lower shot accuracy. 
+
+
+The effects of psychological stress are highly visible as shown in the graph above. While the accuracy in the first 10 seconds of the shot clock is exceeding the overall accuracy in the regular game time (60-45% vs 45% in regular game time), it declines quite fast in the last 5 seconds of the shot clock (from 42% to 32%), leading to the rejection of the Null hypothesis, that there are no differences in the accuracy for more stressful events. These results imply that as the shot clock runs out, so as the psychological pressure on the shooter increases, their shot performance suffers. ??????
+
+
+An ad hoc data analysis was undertaken to investigate whether this pattern of stress-inducted accuracy declination can be found as well for "superstar" players. The players were Lebron James, James Harden and Russel Westbrook, chosen because they were the top 3 shooters in the season. Their combined average accuracy per second can be seen in the graphic below. 
+
+```{r}
+
+graph2 <- ggplot(NULL) + geom_smooth(data = ap3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
+graph2 + labs(title = "Comparison - Accuracy per second on shot clock left for Top Players vs Overall Average") + xlab("Seconds left on shot clock") + ylab("Accuracy")
+
+```
+
+The graph shows many similarities for top players to the average graph. The most visual differences are the slightly lower accuracy around the 15 seconds mark for the top players and the much lower decrease below 5 seconds left. Explanations for these differences could be that around the 15 second mark top players feel more obligated to shoot than the average player, even when they are not in the optimal position to do so - leading to lower accuracies. Further it seems like Top players dont get affected by last seconds stress as much as average players. They keep up a quite high accuracy even for the last second of the shot clock (40%).
+
+### Future research
+
+Future research could focus on this difference between Top players and average players. While this analysis revealed a difference for shot clock pressure it would be interesting to look at more events that induce stress like the margin of the game or the placement in the standings of the own and the enemy team.
 
 ## Shooting Percentage Analysis (James)
 
@@ -334,7 +558,7 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 ```{r}
 # Reshape the dataframe
 
-shot.stats <- cast(data = df, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
+shot.stats <- cast(data = df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
 
 # Field Goal Attempts
 
@@ -357,39 +581,71 @@ for (i in 1:nrow(shot.stats)){
 
 
 ```{r}
-# Pick out 8 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
+# Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
-top.scorers.list <- c("paul millsap", "isaiah thomas", "brook lopez", "kemba walker", "jimmy butler", "mnta ellis", "ty lawson", "reggie jackson", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "cj miles", "kobe bryant", "marc gasol", "dwayne wade", "brandon knight", "andrew wiggins", "carmelo anthony", "nikola vucevic", "michael carter-williams", "eric bledsoe", "demarcus cousins", "kawhi leonard", "kyle lowry", "gordon hayward", "john wall") # players picked out
+top.scorers.list <- c("mnta ellis", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "dwayne wade", "carmelo anthony", "eric bledsoe", "demarcus cousins", "kawhi leonard", "gordon hayward", "john wall") # 15 players picked out from all players
 top.scorers <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
+top.scorers2 <- shot.stats[shot.stats$player_name %in% top.scorers.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")] # create a subset for these players
 
-# Replace "W" and "L" with 1 and 0 respectively, 
-top.scorers[, "W"] <- as.character(top.scorers[, "W"])
+# Replace 1 and 0 with "W" and "L" respectively, 
+top.scorers2[, "W"] <- as.numeric(top.scorers2[, "W"])
 for (i in 1:nrow(top.scorers)) {
-  if (top.scorers[i, "W"] == "W") top.scorers[i, "W"] <- 1
-  if (top.scorers[i, "W"] == "L") top.scorers[i, "W"] <- 0
+  if (top.scorers2[i, "W"] == 1) top.scorers2[i, "W"] <- "W"
+  if (top.scorers2[i, "W"] == 0) top.scorers2[i, "W"] <- "L"
 }
-top.scorers[, "W"] <- as.numeric(top.scorers[, "W"])
-
-ggplot(top.scorers) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-ggplot(top.scorers) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W))
-ggplot(top.scorers) + geom_point(aes(x = FINAL_MARGIN, y = FGA, colour = player_name))
-ggplot(top.scorers) + geom_boxplot(aes(x = LOCATION, y = FINAL_MARGIN))
-
-# t.test(top.scorers$FINAL_MARGIN[top.scorers$LOCATION == "H"], top.scorers$FINAL_MARGIN[top.scorers$LOCATION == "A"])
+top.scorers2[, "W"] <- as.character(top.scorers2[, "W"])
 
 # Correlation test
-cor.test(top.scorers$FINAL_MARGIN, top.scorers$FGA)
-cor.test(top.scorers$FINAL_MARGIN, top.scorers$FG.percentage) # cor = 0.272
+cor.test(top.scorers$W, top.scorers$FGA)
+cor.test(top.scorers$W, top.scorers$FG.percentage)
 
 # Linear regression
-summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ FGA and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
-summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data= top.scorers)) 
+# summary(lm(FINAL_MARGIN ~ FGA + LOCATION, data = top.scorers)) # Final margin ~ FGA and location
+# summary(lm(FINAL_MARGIN ~ FG.percentage + LOCATION, data = top.scorers)) # Final margin ~ FG% and location
+# summary(lm(FINAL_MARGIN ~ FG.percentage + FGA + LOCATION, data = top.scorers)) 
 
-summary(lm(FINAL_MARGIN ~ LOCATION, data = top.scorers)) # Final margin ~ FGA and location
+# Logistic regression
+model <- glm(W ~ FGA + FG.percentage, data = top.scorers)
+summary(model)
+anova(model)
 
 ```
 
+```{r}
+# Find out "special" players by t-test
+# Russell Westbrook
+t.test(top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "0"])
+t.test(top.scorers$FG.percentage[top.scorers$player_name == "russell westbrook" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "russell westbrook" & top.scorers$W == "0"])
+# Gordon Heyward
+t.test(top.scorers$FGA[top.scorers$player_name == "gordon hayward" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "gordon hayward" & top.scorers$W == "0"])
+t.test(top.scorers$FG.percentage[top.scorers$player_name == "gordon hayward" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "gordon hayward" & top.scorers$W == "0"])
+# Kawhi Leonard
+t.test(top.scorers$FGA[top.scorers$player_name == "kawhi leonard" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "kawhi leonard" & top.scorers$W == "0"])
+t.test(top.scorers$FG.percentage[top.scorers$player_name == "kawhi leonard" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "kawhi leonard" & top.scorers$W == "0"])
+# Mnta Ellis
+t.test(top.scorers$FGA[top.scorers$player_name == "mnta ellis" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "mnta ellis" & top.scorers$W == "0"])
+t.test(top.scorers$FG.percentage[top.scorers$player_name == "mnta ellis" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "mnta ellis" & top.scorers$W == "0"])
+# Lebron James
+t.test(top.scorers$FGA[top.scorers$player_name == "lebron james" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "lebron james" & top.scorers$W == "0"])
+t.test(top.scorers$FG.percentage[top.scorers$player_name == "lebron james" & top.scorers$W == "1"], top.scorers$FG.percentage[top.scorers$player_name == "lebron james" & top.scorers$W == "0"])
+
+special.list <- c("gordon hayward", "russell westbrook", "kawhi leonard")
+special <- shot.stats[shot.stats$player_name %in% special.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")]
+special2 <- shot.stats[shot.stats$player_name %in% special.list, c("player_name", "W", "LOCATION", "FINAL_MARGIN", "FGA", "FG.percentage")]
+special2[, "W"] <- as.numeric(special2[, "W"])
+for (i in 1:nrow(special2)) {
+  if (special2[i, "W"] == 1) special2[i, "W"] <- "W"
+  if (special2[i, "W"] == 0) special2[i, "W"] <- "L"
+}
+
+ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
+
+special.model <- glm(W ~ FGA + FG.percentage, data = special)
+summary(special.model)
+anova(special.model)
+
+```
 
 ##Defender Proximity Analysis  
 ###Closest Defender Distance vs Shot Accuracy
@@ -407,7 +663,7 @@ The steps to calculate this measurement are as follows:
 ```{r}
 #Calculate accuracy against defender distance
 #Group the defender distance level
-distance_level <- as.data.frame(table(factor(ClosestDefenderDistance)))
+distance_level <- as.data.frame(table(factor(df[, "CLOSE_DEF_DIST"])))
 head(distance_level)
 
 #Calculate how many times players scored in every defender distance
@@ -458,7 +714,7 @@ for (i in 0:nrow(distance_level)){
 dfZerotoAll <- data.frame(distanceZerotoAll, accuracyDist1)
 
 #calculate correlation
-cor.test(dfZerotoFive$distanceZerotoAll, dfZerotoFive$accuracyDist1)
+cor.test(dfZerotoAll$distanceZerotoAll, dfZerotoAll$accuracyDist1)
 ```
 ###Correlation Test Result  
   The correlation test result produced slightly high number of correlation between defender distance with shooting accuracy for all shot distance attempt in the last seasons's NBA (0.59). If the findings made only based on this number only, there would be obvious that further defender distance will **automatically** increase shooting accuracy. However, after the analysis went into smaller piece of distance, ther result will be difference. For example, for distance range between 0 (zero) to 8 feet, the correlation measurement will be as follows:  
@@ -501,7 +757,7 @@ The steps to calculate this measurement are as follows:
 ```{r}
 #Calculate accuracy against shooting distance
 #Group the shooting distance level
-shooting_distance_level <- as.data.frame(table(factor(ShotDistance)))
+shooting_distance_level <- as.data.frame(table(factor(df[, "SHOT_DIST"])))
 head(shooting_distance_level)
 
 #Calculate how many times players scored in every shooting distance
@@ -555,7 +811,7 @@ cor.test(dfShootingZerotoAll$shootingDistanceZerotoAll, dfShootingZerotoAll$shoo
   The correlation test result shown strong negative correlation between shooting distance and shooting accuracy (-0.87). This meant that for all data points, the further a shooter from the basket, it was unlikely the shooter's attempt was success, regardless who was the shooter. However, if the correlation test taken for certain range distance based on the diagram, for example range from 10 feet to 20 feet, the correlation result would be different as follows:
 
 ```{r}
-#populate data for shooting distance in range 10 to 24 feet
+#populate data for shooting distance in range 10 to 20 feet
 shootingDistance10to20 <- c()
 shootingAccuracyDist2 <- c()
 for (i in 100:200){
@@ -573,16 +829,7 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
 
 ###Limitations  
  Since the dataset mostly return 0% for shooting distance greater than 30 feet, it would better if the dataset could be enriched with previous season statistics, or even the last 10 seasons to exercise in more detail about the pattern for long distance shots attempt.  
-```{r}
-#Summary of total points
-ptssum <- cast(df1, GAME_ID1+ player_id + player_name  ~ PTS); head(ptssum)
-#creating "total points per player, per game" column
-ptssum$totalpts <- ptssum[, "2"] * 2 + ptssum[, "3"] * 3
-
-pttsum2 <- ptssum[order(ptssum$totalpts, decreasing = TRUE), ]
-head(pttsum2, 10)
-```
-
+  
 ##Hot Hand Theory
 ###Introduction
   The analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is based on the hypothesis that a shooter with a hot hand will have shots that are not independent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
@@ -592,7 +839,7 @@ The steps to approximate this question are as follows:
   1. Calculate streaks achieved in all games and from all players
   2. Categorize streaks per player and game, focusing on the 3 players with the top 3 performances in terms of points
   3. Extract zeros and keep only streaks above 1
-  4. Visualise streaks' length distribution - barplots
+  4. Visualise streaks' length distribution - barrplots
   5. Visualise streaks' length via boxplot
   6. Calculate the shooting percentage of the 3 players 
   7. Create a sample independent shooter setting as shooting percentage the real player's shooting percentage
@@ -600,9 +847,9 @@ The steps to approximate this question are as follows:
 
 ```{r}
 
-#From 'FGM' column: 1 represents a basket made and 0 represents a basket missed
+#From 'FGM' column we have that 1 represents a basket made and 0 represents a basket missed
 #Define the length of a shooting streak to be the number of consecutive baskets made until a miss occurs
-#Create a function that gives a vector with the number of total streaks(from all players and for all games)
+#Create a function that gives us a vector with the number of total streaks(from all players and all games)
 number_of_streaks <- function(x) {
   x <- c(0, x, 0)
   which_zero <- which(x == 0)
@@ -615,17 +862,16 @@ number_of_streaks(df$FGM)
 #Set a new data frame for the 3 players with best performances(higher points)
 best_players_df <- head(pttsum2, 3)
 
-#Create a function that gives a vector of streaks for a specific player and game
+#Create a function that gives us a vector of streaks for a specific player and game
 player_and_game <- function(x, y) {
    player <- df[df[, 'player_id'] == x & df[,'GAME_ID1'] == y, 'FGM']
    number_of_streaks(as.vector(player))
 }
-
 #For the first player and game try:
 #player_and_game('202681', '21400681')
 
 
-#Create a list that gives the streaks of each player and game (3 best performances)
+#Create a list that gives us the streaks of each player and game (5 best performances)
 streak_per_player <- list()
 j <- 1
 for(i in best_players_df$player_id) {
@@ -634,7 +880,7 @@ for(i in best_players_df$player_id) {
 }
 streak_per_player
 
-#Remove 0 from streak_per_player in order to show only the streaks achieved (streaks >= 1)
+#Remove 0 from streak_per_player in order to show only the streaks achieved
 streak_per_player[[1]] <- streak_per_player[[1]][streak_per_player[[1]] != 0]
 for(i in 1:length(streak_per_player)) {
   streak_per_player[[i]] <- streak_per_player[[i]][streak_per_player[[i]] != 0]
@@ -645,12 +891,11 @@ streak_per_player
 ###Barplots
 ```{r}
 
-#Create a data frame for the streaks of each one of the 3 players (cannot create a data frame including all of them, because each list has different length)
+#Create a data frame for the strikes of each one of the 3 players (cannot create a data frame including all of them, because each list has different length)
 player1_df <- data.frame('streaks' = streak_per_player[[1]])
 player2_df <- data.frame('streaks' = streak_per_player[[2]])
 player3_df <- data.frame('streaks' = streak_per_player[[3]])
-
-
+best_players_df
 #Show distribution for each player's streak lengths
 gg1 <- ggplot(data = player1_df, aes(x = streaks)) + geom_bar(fill = 'brown') + labs(title = 'Kyrie Irnving')
 gg2 <- ggplot(data = player2_df, aes(x = streaks)) + geom_bar(fill = 'red') + labs(title = 'Mo Williams')
@@ -662,11 +907,10 @@ grid.arrange(gg1, gg2, gg3, ncol = 3)
 
 ###Boxplots
 ```{r}
-attach(mtcars)
-par(mfrow=c(1, 3))
-boxplot(player1_df$streaks, main = 'Kyrie Irnving') 
-boxplot(player2_df$streaks, main = 'Mo Williams')
-boxplot(player3_df$streaks, main = 'Klay Thompson')
+#Create a boxplot for each player's streak lengths 
+boxplot(player1_df$streaks) 
+summary(player1_df$streaks) #Check that boxplot is valid
+IQR(player1_df$streaks) #Check that boxplot is valid
 ```
 
 
@@ -678,11 +922,11 @@ IQR(player1_df$streaks)
 ```
 
 Outcome for Kyrie Irnving:
+
   1. The typical length of a streak is 1 (median = 1)
   2. The Interquartile Range is 1 
   3. Streak length of 6 is unusually high compared to the rest of the distribution
-
-
+  
 ```{r}
 #Further detail
 #Mo Williams
@@ -690,7 +934,6 @@ summary(player2_df$streaks)
 IQR(player2_df$streaks)
 ```
 
-Outcome for Mo Williams:
   1. The typical length of a streak is 1.5 (median = 1.5)
   2. The Interquartile Range is 1
   3. Streak length of 4 is unusually high compared to the rest of the distribution
@@ -702,10 +945,9 @@ summary(player3_df$streaks)
 IQR(player3_df$streaks)
 ```
 
-Outcome for Klay Thompson:
   1. The typical length of a streak is 8 (median = 8)
   2. The Interquartile Range is 5
-  3. Extremely high streak - Streak length of 13 
+  3. Streak length of 13 is unsually high compared to the rest of the distribution
 
 ### Plots Result
 
@@ -716,7 +958,7 @@ Outcome for Klay Thompson:
 j <- 1
 shooting_percentage <- list()
 for(i in best_players_df$player_id) {
-  shooting_percentage[j] <- sum(df[df[ ,'player_id'] == i, 'FGM']) / nrow(df[df[, 'player_id'] == i, ])
+  shooting_percentage[j] <- sum(df[df[, 'player_id'] == i, 'FGM']) / nrow(df[df[, 'player_id'] == i, ])
   j <- j + 1
 }
 shooting_percentage
@@ -753,9 +995,7 @@ realshooter_df <- data.frame('streaks' = streak_per_player[[1]])
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
 summary(realshooter_df$streaks)
-```
 
-```{r}
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
@@ -795,9 +1035,7 @@ realshooter_df <- data.frame('streaks' = streak_per_player[[2]])
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
 summary(realshooter_df$streaks)
-```
 
-```{r}
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
@@ -838,9 +1076,7 @@ realshooter_df <- data.frame('streaks' = streak_per_player[[3]])
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
 summary(realshooter_df$streaks)
-```
 
-```{r}
 #Compare barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(title = 'sample shooter')
@@ -872,32 +1108,18 @@ summary(linreg_fgm2)
 ```
 
 
-##Discussion  
-###What results did you find?  
+#Conclusion
 
-###Why is this interesting?
 
-###What would be the next steps?
+#References
+=======
 
 ```{r}
-#AR: analysis for Justin's shot acc (not to be included in the final report)
 
-library(plyr)
-
-ap<- read.csv("accuracy.players.csv")
-head(ap)
-
-ap$SHOT_CLOCK <- NULL
-
-ap2 <- ddply(ap, c("player_id", "player_name","seconds.left"), summarise,
-X0= sum(X0),
-X1= sum(X1))
-
-head(ap2)
-ap2$acc<- ap2$X1/(ap2$X0+ap2$X1)
 
 ```
 
 
 
+>>>>>>> f09f38865de02686a7fc1576fd100ecf266b031c
 ---
