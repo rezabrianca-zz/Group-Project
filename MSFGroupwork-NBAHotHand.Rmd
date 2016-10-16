@@ -959,8 +959,10 @@ The steps to calculate this measurement are as follows:
   1. Assign shot result to determine whether the shot is scored (1) or missed (0)  
   2. Select subsets of all shooting distances from the basket  
   3. Count the occurence fOr every distance to basket value  
-  4. Allocate shot success rate to every distance from basket value  
-  5. Plot and discuss the result
+  4. Allocate shot success rate to every distance from basket value 
+  5. Examine the relationship between distance to the basket and shot outcome with a correlation test
+  6. Seperate data into ranges
+
 ```{r, include=FALSE}
 #Calculate accuracy against shooting distance
 #Group the shooting distance level
@@ -1011,9 +1013,8 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
   18 - 24 | 33 - 43
   24 - 28 | 18 - 38
   28+ | 0 - 50
-
-  Analysis has also produced a correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:  
-  There was strong negative correlation found between the shooting distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(446) = -0.87, p < .05, as part of level of significance (p = .05).
+   
+  There is a strong negative correlation between the shooting distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(446) = -0.87, p < .05, with the level of significance of p = .05.
 ```{r, include=FALSE}
 
 
@@ -1033,8 +1034,8 @@ cor.test(dfShootingZerotoAll$shootingDistanceZerotoAll, dfShootingZerotoAll$shoo
 ```
 
 ###Correlation Test Result  
-  The correlation test result shown strong negative correlation between shooting distance and shooting accuracy (-0.87). This meant that for all data points, the further a shooter from the basket, the shooter's accuracy would decrease. However, if the correlation test taken for certain range distance based on the diagram, the correlation result would be different as follows:
-  There was low positive correlation found between the shooting distance and shooting accuracy between range 10 to 20 feet. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(99) = .11, p > .05, fail to reach level of significance (p = .05).
+  If the correlation test taken for a certain range of distance based on the diagram, the correlation result would be different as follows:
+  There was low positive correlation found between the shooting distance and shooting accuracy for the range 10 to 20 feet distance. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(99) = .11, p > .05, fail to reach level of significance (p = .05).
 ```{r, include=FALSE}
 #populate data for shooting distance in range 10 to 20 feet
 shootingDistance10to20 <- c()
@@ -1051,10 +1052,9 @@ dfShooting10to20 <- data.frame(shootingDistance10to20, shootingAccuracyDist2)
 cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccuracyDist2)
 ```
 
-  The second correlation test produced a small positive correlation between range 10 to 20 feet (0.11). This result was different with previous measurement (-0.87)  
   
 ###Discussion  
-  Based on the diagram and correlation above, it could be concluded that although the shooting distance directly affects shooting accuracy, the relationship between these variables are not perfectly linear. This was shown in the diagram where there is a relatively **similar** shooting accuracy for shots taken from 10 feet to 20 feet, regardless the shooter's performance. The success rate for longer distances, it could be arguably inferred that the shooters tried to attempt a shot in closing game time (buzzer beater) when the shot clock or game clock nearly reach zero- hence a longer distances. Therefore, the analysis would reject the  Null Hypothesis.
+  Based on the diagram and correlation above, it could be concluded that although the shooting distance affects the shooting accuracy, the relationship between these variables is not perfectly linear. This was shown in the diagram where the accuracy for shots taken from 10 to 20 feet is relatively similar, regardless the shooter's performance. Regarding the low success rate for higher distances, it could be arguably inferred that the shooter tried to attempt a shot in closing game time (buzzer beater) or when the shot clock or game clock nearly reach zero - Therefore, the analysis would reject the Null Hypothesis.
 
 ###Future Research
  The dataset mostly returns 0% for shooting distance greater than 30 feet. Therefore the future research could be enriched with statistics from other seasons to see if these findings hold.  
