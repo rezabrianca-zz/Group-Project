@@ -7,11 +7,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-<<<<<<< HEAD
 knitr::opts_chunk$set(echo=TRUE)
-=======
 knitr::opts_chunk$set(echo = TRUE)
->>>>>>> 91b4c1b9b8689ebb1022b0a84a2b6b48aeaef358
 ```
 ##Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
 ##Date submitted: 16/10/2016
@@ -66,11 +63,9 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
 
 ###Dataset Strengths  
     
-<<<<<<< HEAD
-=======
+
   The dataset comprises of comprehensive observational data to start to work with. In general, the dataset has only a small percentage of missing value (0.19%) so there was not need to remove or assign many data points to default values. Since the column name is not ambiguous it was really helpful to understand the dataset right from the beginning. 
 
->>>>>>> 6b2c354a4bdb097e3c4f65d733da52df1bac024e
   The dataset comprises of comprehensive observational data which enables efficient analysis without extensive 'clean up' of the data. The dataset only have small percentage of missing value (0.19%), therefore there is no need to remove or assign numerous data points to default values. The fact that initial dataset meant that only a small number of additional columns had to be added (see data clean-up part of the code for details. 
 
 
@@ -82,7 +77,6 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
     4. The dataset does not include information on free throw shots
     5. The dataset does not include final scores of the games
 
-***
 
 #Analysis
 
@@ -165,11 +159,9 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 
 This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game location (home/away) on winning ratio.
 
-<<<<<<< HEAD
+
 The NULL Hypothesis: Teams playing at home is more likely to win then when playing away. 
-=======
 The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference 
->>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 ###Methods
 Steps to test the hypothesis are as follows:  
@@ -239,13 +231,11 @@ ggplot(advdf, aes(x = advdf$WINNER)) + geom_bar(aes()) + ylab("game count") + xl
 
 
 
-<<<<<<< HEAD
+
 ###Results
-Table 1: Proportion of total games split by Location win factor
-=======
+
 ###Findings
 **Table 1**: Proportion of total games split by Location win factor
->>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 X     | Home Win | Away Win
 ----- | -------- | ---
@@ -316,27 +306,18 @@ The result of this research also confirms the recent trend of decline in home ad
 ###Introduction
 
 This area of analysis focuses on investigation of whether a number of rest days between games affect the performance and more importantly winning ratio of a team. 
-
-<<<<<<< HEAD
-The Null Hypothesis is: By having more restdays rest a team is likely to have a higher winning ratio. 
-=======
-The Null Hypothesis is: Teams' mean values of wins are not significantly different based on the number of rest days between games 
-
->>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
+ 
+The NULL Hypothesis is: Teams' mean values of wins are not significantly different based on the number of rest days between games 
 
 ###Methods
 
 The steps to calculate this measurement are as follows:  
     1. Calculating number of rest days between games for all teams
-    2. Calculating ratios for effects of rest days on win/loss
-<<<<<<< HEAD
     3. Calculating ratios for effects of rest days on win/loss form home/away
     4. Perform a Chi-square test to examine whether there is a difference in the distributon for games won and games lost for the different restdays
-    
-=======
-    3. Calculating ratios for effects of rest days on win/loss form home/awayCalculating ratios for effects of rest days on win/loss
-    4. Run a regression analysis
-    5. Discuss the findings of the data
+    5. Calculating ratios for effects of rest days on win/loss form home/away
+    6. Run a regression analysis
+    7. Discuss the findings of the data
 
 The table below shows descriptive statistics for Rest Days:
 
@@ -357,7 +338,7 @@ The table below shows descriptive statistics for Rest Days:
    1st game of season  |  30|  1.66
 
 The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections.    
->>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
+
 
 ```{r, include=FALSE}
 
@@ -423,8 +404,7 @@ chisq.test(qqqq[2,], qqqq[3,])
 
 ###Findings
 
-<<<<<<< HEAD
-Table 5: Distribution of number of games per rest days
+**Table 5**: Distribution of number of games per rest days
 
  Rest Days| Games | Distribution
 ----------|-------|---
@@ -441,8 +421,6 @@ Table 5: Distribution of number of games per rest days
    1st game of season  |  30|  1.66
 
 The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections. 
-=======
->>>>>>> 1b25eccc761c66f3124934ae91783c80cf6ab6fa
 
 **Table 6**: Win rate split by number of rest days between games
 
@@ -474,8 +452,6 @@ Based on the above, the analysis shows that the null hypothesis should be reject
 ###Further research
 
 To better understand effects of rest and home/away advantage future research should focus on distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away game in New Jersey.
-
-***
 
 ##Effects on accuracy
 
@@ -614,6 +590,7 @@ t.test(acc$accuracy, df.acc.secondsplayers3$acc.top)
 The accuracies for each period are detailed in the table below. 
 
 **Table 8**: Accuracy per period
+
 Period  | Accuracy
 ------- | ---------
 1       | 46%
@@ -1394,7 +1371,6 @@ summary(linreg_fgm2)
 #Conclusion
 
 This report has demonstrated results of mathematical and statistical analysis of the dataset containing information of shots from NBA season 2014-2015. The report specifically focused on number of research areas covering teams and players performance. The report described steps taken to produce the results, discussed and evaluated the produced results and suggested potential areas for future research.  
-
 
 ***
 #References
