@@ -408,14 +408,14 @@ Based on the above, the analysis shown that the null hypothesis should be reject
 
 To better understand effects of rest and home/away advantage it would be interesting in future research papers to take into account distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away gamein New Jersey.
 
-##Effects on accuracy (Justin)
+##Effects on accuracy
 
 
 The potential effects of fatigue and stress on the accuracy of shots are investigated in this part of the analysis.
 
-Fatigue in basketball is a broadly analysed topic in physiological research. Latest literature suggests that elite basketball players cope well with the effects of fatigue so it does not affect their shooting kinematics. This results in no difference for their shot accuracy even if the players are fatigued (Erčul, Frane & Supej, 2006; Uygur et al., 2010). This research paper analyses whether these previous findings can be confirmed for the NBA season 2014-2015.  
+Fatigue in basketball is a broadly analysed topic in physiological research. Latest literature suggests that elite basketball players cope well with the effects of fatigue so it does not affect their shooting kinematics. This results in no difference for their shot accuracy even if the players are fatigued (Erculj and Supej, 2009). This research paper analyses whether these previous findings can be confirmed for the NBA season 2014-2015.  
 
-Regarding the effect of psychological stress on shot accuracy, previous research is not as decisive as for the effects of fatigue. While Arhart(1973) concluded that stressful events like small or big margins for the game score have an effect on players free-throw accuracy, latest research introducing more controlled conditions states that there is no effect of stress on players shot accuracy (Mascret et al., 2016). The indecisiveness of previous literature led to a deeper analysis in this research paper.
+Regarding the effect of psychological stress on shot accuracy, previous research is not as decisive as for the effects of fatigue. While Ahart(1973, in P.C. Kendall & S.D Hollon (1979) *Cognitive-Behavioral Interventions: Theory, Research, and Procedures*) concluded that stressful events like small or big margins for the game score have an effect on players free-throw accuracy, latest research introducing more controlled conditions states that there is no effect of stress on players shot accuracy (Mascret et al., 2016). The indecisiveness of previous literature led to a deeper analysis in this research paper.
 
 
 Hypotheses for this area of analysis are:
@@ -445,7 +445,7 @@ The steps to test the second hypothesis were as follows:
   3. The overall accuracy for each second was calculated using the FGM variable
 
 
-```{r}
+```{r, include=FALSE}
 
 ### FATIGUe
 
@@ -596,7 +596,7 @@ The shot clock variable had missing values for 5567 shots, equal to 4.34% of all
 
 ## Shooting Percentage Analysis (James)
 
-```{r}
+```{r, include=FALSE}
 # Replace "made" and "missed" with 1 and 0 respectively
 
 df[, "SHOT_RESULT"] <- as.character(df[, "SHOT_RESULT"])
@@ -614,7 +614,7 @@ df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 ### Find field goal percentage (FG percentage) for each match
 
 
-```{r}
+```{r, include=FALSE}
 # Reshape the dataframe
 
 shot.stats <- cast(data = df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + LOCATION  + W + player_name + FINAL_MARGIN ~ FGM)
@@ -639,7 +639,7 @@ for (i in 1:nrow(shot.stats)){
 ### Impact of Top Scorers
 
 
-```{r}
+```{r, include=FALSE}
 # Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
 top.scorers.list <- c("mnta ellis", "lebron james", "james harden", "russell westbrook", "stephen curry", "anthony davis", "blake griffin", "lamarcus aldridge", "dwayne wade", "carmelo anthony", "eric bledsoe", "demarcus cousins", "kawhi leonard", "gordon hayward", "john wall") # 15 players picked out from all players
@@ -670,7 +670,7 @@ anova(model)
 
 ```
 
-```{r}
+```{r, include=FALSE}
 # Find out "special" players by t-test
 # Russell Westbrook
 t.test(top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "1"], top.scorers$FGA[top.scorers$player_name == "russell westbrook" & top.scorers$W == "0"])
@@ -719,7 +719,7 @@ The steps to calculate this measurement are as follows:
   4. Calculate how many succesfull shot scored from every distance point  
   5. Calculate accuracy by dividing successfull shot scored with distance occurence for every defender distance point  
   6. Plot the result
-```{r}
+```{r, include=FALSE}
 #Calculate accuracy against defender distance
 #Group the defender distance level
 distance_level <- as.data.frame(table(factor(df[, "CLOSE_DEF_DIST"])))
@@ -756,7 +756,7 @@ ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Ac
   7. For the distance greater than 16 feet, the data varies between **0%** (no shots scored from that distance) to **100%** (certain successfull shot from that distance)  
 
   Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:
-```{r}
+```{r, include=FALSE}
 #change distance level to numeric type for correlation test function
 distance_level$Var1 <- as.numeric(distance_level$Var1)
 distance_level$Var1 <- distance_level$Var1 * 0.1 - 0.1 #to keep the distance point as it is
@@ -778,7 +778,7 @@ cor.test(dfZerotoAll$distanceZerotoAll, dfZerotoAll$accuracyDist1)
 ###Correlation Test Result  
   The correlation test result produced slightly high number of correlation between defender distance with shooting accuracy for all shot distance attempt in the last seasons's NBA (0.59). If the findings made only based on this number only, there would be obvious that further defender distance will **automatically** increase shooting accuracy. However, after the analysis went into smaller piece of distance, ther result will be difference. For example, for distance range between 0 (zero) to 8 feet, the correlation measurement will be as follows:  
   
-```{r}
+```{r, include=FALSE}
 #populate data from data frame
 distanceZerotoEight <- c()
 accuracyDist2 <- c()
@@ -813,7 +813,7 @@ The steps to calculate this measurement are as follows:
   4. Calculate how many succesfull shot scored from every distance point  
   5. Calculate accuracy by dividing successfull shot scored with particular distance occurence for every shooting distance point  
   6. Plot the result
-```{r}
+```{r, include=FALSE}
 #Calculate accuracy against shooting distance
 #Group the shooting distance level
 shooting_distance_level <- as.data.frame(table(factor(df[, "SHOT_DIST"])))
@@ -850,7 +850,7 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
   12. For shooting distance more than 28 feet, the accuracy varies greater than previous distance range, starting from **0%** (no shots scored from that distance) to **50%**  
 
   Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:  
-```{r}
+```{r, include=FALSE}
 #change distance level to numeric type for correlation test function
 shooting_distance_level$Var1 <- as.numeric(shooting_distance_level$Var1)
 shooting_distance_level$Var1 <- shooting_distance_level$Var1 * 0.1 - 0.1 #to maintain distance data point as it is
@@ -869,7 +869,7 @@ cor.test(dfShootingZerotoAll$shootingDistanceZerotoAll, dfShootingZerotoAll$shoo
 ###Correlation Test Result  
   The correlation test result shown strong negative correlation between shooting distance and shooting accuracy (-0.87). This meant that for all data points, the further a shooter from the basket, it was unlikely the shooter's attempt was success, regardless who was the shooter. However, if the correlation test taken for certain range distance based on the diagram, for example range from 10 feet to 20 feet, the correlation result would be different as follows:
 
-```{r}
+```{r, include=FALSE}
 #populate data for shooting distance in range 10 to 20 feet
 shootingDistance10to20 <- c()
 shootingAccuracyDist2 <- c()
@@ -904,7 +904,7 @@ The steps to approximate this question are as follows:
   7. Create a sample independent shooter setting as shooting percentage the real player's shooting percentage
   8. Compare distributions of sample and real player 
 
-```{r}
+```{r, include=FALSE}
 
 #From 'FGM' column we have that 1 represents a basket made and 0 represents a basket missed
 #Define the length of a shooting streak to be the number of consecutive baskets made until a miss occurs
@@ -956,7 +956,7 @@ streak_per_player
 ```
 
 ###Barplots
-```{r}
+```{r, include=FALSE}
 
 #Create a data frame for the strikes of each one of the 3 players (cannot create a data frame including all of them, because each list has different length)
 player1_df <- data.frame('streaks' = streak_per_player[[1]])
@@ -975,7 +975,7 @@ grid.arrange(gg1, gg2, gg3, ncol = 3)
 
 ###Boxplots
 
-```{r}
+```{r, include=FALSE}
 #Create a boxplot for each player's streak lengths 
 attach(mtcars)
 par(mfrow=c(1, 3))
@@ -984,7 +984,7 @@ boxplot(player2_df$streaks, main = 'Mo Williams')
 boxplot(player3_df$streaks, main = 'Klay Thompson')
 ```
 
-```{r}
+```{r, include=FALSE}
 #Kyrie Irnving
 summary(player1_df$streaks)
 IQR(player1_df$streaks) 
@@ -995,7 +995,7 @@ IQR(player1_df$streaks)
   2. The Interquartile Range is 1 
   3. Streak length of 6 is unusually high compared to the rest of the distribution
   
-```{r}
+```{r, include=FALSE}
 #Mo Williams
 summary(player2_df$streaks)
 IQR(player2_df$streaks)
@@ -1007,7 +1007,7 @@ IQR(player2_df$streaks)
   2. The Interquartile Range is 1
   3. Streak length of 4 is unusually high compared to the rest of the distribution
 
-```{r}
+```{r, include=FALSE}
 #Klay Thompson
 summary(player3_df$streaks)
 IQR(player3_df$streaks)
@@ -1023,7 +1023,7 @@ IQR(player3_df$streaks)
 
   The distribution of all players is left skewed and all of them (especially player3) have some long shooting streaks. In order to prove/disprove the hot hand theory,  the examination of the indipendence of the shots is required. If each shot that a player takes is independent of the next shot, then the player has the same probability of hitting each shot regardless of the previous shot. If each shot that a player takes is dependent of the next shot, then the probability of making the next shot is higher - hot hand. Sampling an independent shooter having the same shooting percentage with the real one and comparing his distribution with real player's distribution gives further insight in the specific aera. 
 
-```{r}
+```{r, include=FALSE}
 #Find the shooting percentage for each of the 3 players
 j <- 1
 shooting_percentage <- list()
@@ -1035,7 +1035,7 @@ shooting_percentage
 ```
 
 ###Kyrie Irving
-```{r}
+```{r, include=FALSE}
 ###PLAYER 1 VS SAMPLE PLAYER###
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(974)
@@ -1077,7 +1077,7 @@ grid.arrange(g1, g2, ncol = 2)
   After running many times the sample shooter, there are times that the distributions of sample and real shooter are quite similar. As a consequence, it can be concluded that Mo Williams does not have a hot hand.
 
 ### Mo Williams
-```{r}
+```{r, include=FALSE}
 ###PLAYER 2 VS SAMPLE PLAYER###
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(572)
@@ -1118,7 +1118,7 @@ grid.arrange(g1, g2, ncol = 2)
   After running many times the sample shooter, there are times that the distributions of sample and real shooter are quite similar. As a consequence, it can be concluded that Mo Williams does not have a hot hand.
 
 ###Klay Thompson
-```{r}
+```{r, include=FALSE}
 ###PLAYER 3 VS SAMPLE PLAYER###
 #Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(57)
@@ -1156,10 +1156,10 @@ grid.arrange(g1, g2, ncol = 2)
 
 ####Plot Result
 
-  Klay Thompson is an exception making 13 shots in a row. There is no such distribution in the sample, so it coulb be assumed that he is likely to have a hot hand. Further statistical analysis (logistic regression) should be done in order to reach a conclusion.
+  Klay Thompson is an exception making 13 shots in a row. There is no such distribution in the sample, so it could be assumed that he is likely to have a hot hand. Further statistical analysis (logistic regression) should be done in order to reach a conclusion.
 
 
-```{r}
+```{r, include=FALSE}
 #Regression Analysis
 
 df1$GAME_CLOCK <- as.numeric(df1$GAME_CLOCK)
@@ -1182,6 +1182,11 @@ summary(linreg_fgm2)
 
 
 #References
+
+  Ahart (1973). In Kendall, P. and Hollon, S. (1979). Cognitive-behavioral interventions. New York: Academic Press.
+  Erculj, F. and Supej, M. (2009). Impact of Fatigue on the Position of the Release Arm and Shoulder Girdle over a Longer Shooting Distance for an Elite Basketball Player. Journal of Strength and Conditioning Research, 23(3), pp.1029-1036.
+  Mascret, N., Ibáñez-Gijón, J., Bréjard, V., Buekers, M., Casanova, R., Marqueste, T., Montagne, G., Rao, G., Roux, Y. and Cury, F. (2016). The Influence of the ‘Trier Social Stress Test’ on Free Throw Performance in Basketball: An Interdisciplinary Study. PLOS ONE, 11(6), p.e0157215.
+
 =======
 
 ```{r}
