@@ -1321,7 +1321,11 @@ grid.arrange(g1, g2, ncol = 2)
  
 ###Limitations
 
-  The dataset is referred to only one season
+  Since the dataset is referred to only one season, the size of the vectors of streaks for each player is very small, a fact that can lead to misleading results. Moreover, streaks do not constitute continuous variables and as a result they cannot be used in a linear regression.
+  
+###Future research
+
+  Since the dataset is reffered to only one season and is not able to eliminate the hot hand theory, it would be an interesting topic to be investigated in future seasons. 
  
  
 
