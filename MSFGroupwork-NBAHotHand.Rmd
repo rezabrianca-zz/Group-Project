@@ -745,14 +745,16 @@ Table xxx: Result for the anova for FGA and FG% for 15 players.
 
 An ad hoc data analysis was used as 3 of the 15 players stood out in particular. To examine whether their data result in a better model, another logistic regression analysis was performed with the same dependent and independent variables for three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward.
 
-```{r}
+```{r, echo=FALSE}
 graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
-
-graph01 + labs(title = "Differences in FGA for games lost/won of the three special players ") + xlab("Player name") + ylab("FGA")
-graph02 + labs(title = "Differences in FG% for games lost/won of the three special players ") + xlab("Player name") + ylab("FG%")
-
+graph01 + labs(title = "Differences in FGA for games lost/won of the three special players") + xlab("Player name") + ylab("FGA")
 ```
+ Graph xx1: Differences in FGA for games lost/won of the three special players.
+```{r, echo=FALSE}
+graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
+graph02 + labs(title = "Differences in FG% for games lost/won of the three special players") + xlab("Player name") + ylab("FG%")
+```
+Graph xx2: Differences in FG% for games lost/won of the three special players.
 
 The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
 
