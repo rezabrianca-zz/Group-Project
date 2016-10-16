@@ -319,7 +319,7 @@ The steps to calculate this measurement are as follows:
 
 The table below shows descriptive statistics for Rest Days:
 
-Table 5: Distribution of number of games per rest days
+**Table 5**: Distribution of number of games per rest days
 
  Rest Days| Games | Distribution
 ----------|-------|---
@@ -399,11 +399,6 @@ print (restdays3[1:3,c(1,7,9)])
 ```
 
 ###Findings
-
-<<<<<<< HEAD
-**Table 5**: Distribution of number of games per rest days
-=======
->>>>>>> 6371eb427fa60b2f0ec29e8cb8efc2568f97fa78
 
 
 **Table 6**: Win rate split by number of rest days between games
@@ -794,6 +789,7 @@ Graph xx2: Differences in FG% for games lost/won of the three special players.
 The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
 
 **Table 11**: Result for the logistic regression analysis for FGA and FG% of the 3 special players
+
 | | Estimate | Std. Error | t value | Pr(>t)   
 |-|-|-|-| - 
 |(Intercept)   | 0.042259 |  0.164816 |  0.256  |  0.798    
