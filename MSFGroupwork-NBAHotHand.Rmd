@@ -12,6 +12,8 @@ knitr::opts_chunk$set(include = FALSE)
 ##Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
 ##Date submitted: 16/10/2016
 
+***
+
 #Report structure 
 
 ##Introduction
@@ -74,6 +76,8 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
     3. The playoff and other matches during the year are not included
     4. The dataset does not include information on free throw shots
     5. The dataset does not include final scores of the games
+
+***
 
 ##Analysis
 
@@ -148,6 +152,8 @@ restdays2 <- cast(df1, TEAM + DATE + LOCATION + W + FINAL_MARGIN ~ FGM)
 restdays2$DATE<- as.Date(restdays2$DATE)
 
 ```
+
+***
 
 ## Home Advantage analysis
 ###Introduction
@@ -419,10 +425,7 @@ Based on the above, the analysis shown that the null hypothesis should be reject
 
 To better understand effects of rest and home/away advantage the future research should focus on distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away gamein New Jersey.
 
-<<<<<<< HEAD
-##Effects on accuracy
-=======
->>>>>>> 30a99b72c77aee586827ca60570eb176b1e55b10
+***
 
 ##Effects on accuracy
 
@@ -440,7 +443,7 @@ Fatigue: The Null hypothesis states that there is no significant difference (p <
 Stress: The Null hypothesis states that there is no significant difference (p < .05) for the shot accuracy in more stressful events.
 
 
-###METHOD
+###Methods
 
 In this analysis fatigue was measured as the period of the game, as it can be assumed that the later in the game the higher the fatigue of the players.
 
@@ -609,11 +612,11 @@ Additionally, further reasons that lead to distinction between top players and a
 
 The shot clock variable had missing values for 5567 shots, equal to 4.34% of all shots on the dataset, limiting the meaningfulness of the findings in the accuracy per second part. 
 
+***
 
-## Shooting Percentage Analysis (James)
-###Introduction
+## Shooting Percentage Analysis
+###Introduction  
 
-<<<<<<< HEAD
 The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The Null hypothesis is that there is no difference regarding the likelyhood of winning if the top scorer of a team has more field goal attempts. The second Null hypothesis is there is no difference regarding the likelyhood of winning if the top scorer of a team has a higher shot percentage than on average. As this is such a niche area research a literature review did not reveal sufficient results so this analysis aims to fill this gap.
 
 ###Methods
@@ -625,8 +628,7 @@ The measurements are calculated in the following steps:
   3. The number of attempts and field goal percentage of all players were calculated according to the shooting data. 
   4. The players with most outstanding performances were picked out and another subset was generated for these players.
   5. The correlation (p = .05) between the results of the matches and the performances of top scorers was investigated. 
-  6. A logistic regression with the outcome of the match as dependent variable and FGA and percentage of FG made as independent variables. 
-  7. Another logistic regression test was run in order to examine three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. 
+  6. A logistic regression analysis with the outcome of the match as dependent variable and FGA and percentage of FG made as independent variables was conducted.
 
 ```{r, include=FALSE}
 # Replace "made" and "missed" with 1 and 0 respectively
@@ -641,8 +643,6 @@ for (i in 1:nrow(df)) {
 df[, "SHOT_RESULT"] <- as.numeric(df[, "SHOT_RESULT"])
 
 ```
-
-### Find field goal percentage (FG percentage) for each match
 
 
 ```{r, include=FALSE}
@@ -667,11 +667,9 @@ for (i in 1:nrow(shot.stats)){
 
 <<<<<<< HEAD
 ### Impact of Top Scorers
-
-<<<<<<< HEAD
-
 =======
->>>>>>> 30a99b72c77aee586827ca60570eb176b1e55b10
+>>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
+
 ```{r, include=FALSE}
 # Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
 
@@ -702,17 +700,20 @@ summary(model)
 anova(model)
 
 ```
+###Results
+
 ##a. Field Goal Attempts (FGA)
 
 <<<<<<< HEAD
-=======
 There was no correlation found between the result of a match and the number of attempts of the player made in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach level of significance (p = .05). 
+=======
+There was no correlation found between the outcome of the matches in this season and the number of attempts of the players made. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach the level of significance (p = .05). 
+>>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
 
 ##b.  Field Goal Percentage (FG%)
 
-There was no correlation found between the result of a match and the field goal percentage of the player in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach level of significance (p = .05). 
+There was no correlation found between the outcome of the matches in this seaon and the field goal percentage of the players. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach the level of significance (p = .05). 
 
->>>>>>> 30a99b72c77aee586827ca60570eb176b1e55b10
 ```{r, include=FALSE}
 # Find out "special" players by t-test
 # Russell Westbrook
@@ -748,7 +749,7 @@ summary(special.model)
 anova(special.model)
 
 ```
-Table xxx: The logistic regression for FGA and FG% of 15 players.
+Table xxx: Result for the logistic regression analysis for FGA and FG% of 15 players.
 
    |   |Estimate | Std. Error | t value | Pr(>t)   
 |-|-|-|- | -             
@@ -756,21 +757,47 @@ Table xxx: The logistic regression for FGA and FG% of 15 players.
 |FGA   |-0.002679|   0.006468 | -0.414  |  0.679    
 |FG.percentage | 0.012329|   0.002736 |  4.506  |1.35e-05 ***
 
+Table xxx: Result for the anova for FGA and FG% for 15 players.
 
-Table xxx: The logistic regression for FGA and FG% of the 3 special players.
+   | |           Df| Deviance| Resid. Df| Resid. Dev
+|-|-|-|-| - 
+|NULL        |     |              | 777   |  188.73
+|FGA         |   1  | 0.0014   |    776  |   188.73
+|FG.percentage | 1 |  7.4664   |    775  |   181.26
+
+An ad hoc data analysis was used as 3 of the 15 players stood out in particular. To examine whether their data result in a better model, another logistic regression analysis was performed with the same dependent and independent variables for three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward.
+
+```{r}
+graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
+graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
+
+graph01 + labs(title = "Differences in FGA for games lost/won of the three special players ") + xlab("Player name") + ylab("FGA")
+graph02 + labs(title = "Differences in FG% for games lost/won of the three special players ") + xlab("Player name") + ylab("FG%")
+
+```
+
+The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
+
+Table xxx: Result for the logistic regression analysis for FGA and FG% of the 3 special players.
 | | Estimate | Std. Error | t value | Pr(>t)   
 |-|-|-|-| - 
 |(Intercept)   | 0.042259 |  0.164816 |  0.256  |  0.798    
 |FGA          | -0.002679 |  0.006468|  -0.414  |    0.679    
 |FG.percentage|  0.012329|   0.002736|   4.506  |1.35e-05 ***
 
-The box plots above shows the performances the three special players in terms of FGA and FG% respectively. The red (blue) boxes contain the data when the team lost (won) the match. 
+Table xxx: Result for the anova for FGA and FG% for the 3 special players.
+
+| |         Df| Deviance| Resid. Df| Resid. Dev
+|-|-|-|-| - 
+|NULL         |   |         |       147|     36.669
+|FGA          |  1|   0.0498|       146|     36.619
+|FG.percentage|  1|   4.4978|       145|     32.121
 
 ###Discussion
 
-From the correlation tests between the match results and players’ performances, it can be noticed that the increase in number of field goal attempts from top scorers is unlikely to make any impact on the results of the game. The correlation coefficient between the results of the game and FG% is sightly higher but these two factors are still not correlated since r(832) < .01. Meanwhile, the p-values of both correlation tests are too higher to reach the default level of significance (p = .05).
+From the correlation tests between the match results and players’ performances, it can be noticed that the increase in number of field goal attempts from top scorers is unlikely to make any impact on the results of the game. The p-values of both correlation tests are too high to reach the level of significance (p = .05).
 
-From the logistic regression test for FGA and FG%. It was found that FGA did not have any impact on the result of the match. FG% had significant correlation with the result of match. However, the anova test showed that the deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
+From the logistic regression analysis for FGA and FG%, it was found that FGA did not have any impact on the result of the match. FG% is a significant predictor for the result of match. However, the anova showed that the residual deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
 
 There was no correlation found between field goal attempts of top scorers and game results. A possible explanation is that it is easier for the opponents to focus on a certain player on defensive side. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelyhood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This is due to fact that once a player is being efficient on the offensive side, that player can help the team by not only keeping shooting but also creating more opportunities for his teammates. 
 
@@ -784,6 +811,7 @@ Therefore, these three players are somehow different from others as they can con
 
 The data set only contains 904 out of 1230 matches in the entire regular season. So there might be a chance that the highlight performances of certain players are missed out in our analysis. Meanwhile, it would be ideal if the contributions of all players can be analysed in more aspects including number of rebounds and assists. 
 
+***
 
 ##Defender Proximity Analysis  
 ###Closest Defender Distance vs Shot Accuracy
@@ -813,19 +841,20 @@ for (i in 1:nrow(distance_level)){
 
 #Calculate shooting accuracy for each distance
 distance_level$Accuracy <- round(distance_level$SCORED / distance_level$Freq, 4)
+```
 
+```{r, echo=FALSE}
 #Plotting the result
 library(ggplot2)
 library(scales)
 ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
   geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
   scale_y_continuous(labels = percent, breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0), limits = c(0, 1)) +
-  scale_x_discrete("Closest Defender Distance", breaks = c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24)) +
-  geom_smooth() +
+  scale_x_discrete("Closest Defender Distance", limits = 0:24) +
   ylab("Shooting Accuracy (%)") +
   ggtitle("Closest Defender Distance vs Shooting Accuracy")
-
 ```
+
 ###Plot Result
   The explanation from the plot above are as follows:   
   1. Defender distance range from 0 to 2 feet, the accuracy varied between **42%** to **50%**  
@@ -836,8 +865,8 @@ ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Ac
   6. Defender distance more than 10 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from **33%** to **60%**.  
   7. Distance greater than 16 feet, the data varies between **0%** (no shots scored from that distance) to **100%** (certain successfull shot from that distance)  
 
-  *Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:* #NEED TO AMEND
-  
+###Correlation Test
+  Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:
   
 ```{r, include=FALSE}
 #change distance level to numeric type for correlation test function
@@ -854,15 +883,16 @@ for (i in 0:nrow(distance_level)){
 
 #combine data frame
 dfZerotoAll <- data.frame(distanceZerotoAll, accuracyDist1)
+```
 
+```{r, echo=FALSE}
 #calculate correlation
 cor.test(dfZerotoAll$distanceZerotoAll, dfZerotoAll$accuracyDist1)
 ```
 
 ###Correlation Test Result  
-  The correlation test result produced slightly higher number of correlation between defender distance with shooting accuracy for all shot distance attempts (0.59). If the findings made only based on this number only, there would be obvious that further defender distance will **automatically** increase shooting accuracy. However, when analysisng distance ranges the result is somewhat different. For example, for distance range between 0 (zero) to 8 feet, the correlation measurement will be as follows:  
+  The correlation test result produced slightly higher number of correlation between defender distance with shooting accuracy for all shot distance attempts (0.59). If the findings made only based on this number only, there would be obvious that further defender distance will **automatically** increase shooting accuracy. However, when analysing distance ranges the result was somewhat different. For example, for distance range between 0 (zero) to 8 feet, the correlation measurement will be as follows:  
 
-  
 ```{r, include=FALSE}
 #populate data from data frame
 distanceZerotoEight <- c()
@@ -874,16 +904,17 @@ for (i in 0:80){
 
 #combine data frame
 dfZerotoEight <- data.frame(distanceZerotoEight, accuracyDist2)
-
+```
+  
+```{r, echo=FALSE}
 #calculate correlation
 cor.test(dfZerotoEight$distanceZerotoEight, dfZerotoEight$accuracyDist2)
 ```
+
   The correlation measurement between 0 (zero) to 8 feet would be negative (-0.40). This result was different with the previous calculation done for all data points (0.59).
   
 ###Discussion  
-  The analysis demonstrated that the accuracy rate for every player was **affected** by the defender distance for certain ranges. For defender distance starting from 0 (zero) to 8 (eight) feet **TO BE UPDATED** For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance), which means that this part of the analysis should not be taken into account as the results are insignificant. It is also shown from the dataset that only small attempt of shots were made from further defender distance affecting the accuracy calculation result. However, from the correlation perspective, the result would be different if the analysis included all of the data points versus only short distance data points. This was perhaps due to further defender distance did not take into account the shooter distance from the basket. 
-
-**DO WE REJECT OR ACCEPT THE NULL HYPOTHESIS, PLEASE CONCLUDE**
+  The analysis demonstrated that the accuracy rate for every player was **affected** by the defender distance for certain ranges. For defender distance starting from 0 (zero) to 8 (eight) feet, the shooting accuracy had negative correlations. For the distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance), which means that this part of the analysis should not be taken into account as the results were insignificant. It also shown from the dataset that only small attempt of shots were made from further defender distance. Therefore, it would affect the accuracy calculation result. However, from the correlation perspective, the result would be different if the analysis included all of the data points versus only short distance data points. This was arguably due to further defender distance did not mean the shooter distance from the basket was closer. Therefore, we **reject** the Null Hypothesis, since the defender distance affected shooting accuracy.  
 
 ###Future Research
   As the dataset did not hold many data points for more than 20 feet defender distance, the accuracy analysis for these distances are limited. The future analysis could be enhanced further by including data for additional seasons. 
@@ -914,12 +945,19 @@ for (i in 1:nrow(shooting_distance_level)){
 
 #Calculate shooting accuracy for each distance
 shooting_distance_level$Accuracy <- round(shooting_distance_level$SCORED / shooting_distance_level$Freq, 4)
+```
 
+```{r, echo=FALSE}
 #Plotting the result
 library(ggplot2)
 library(scales)
-ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) + geom_point(aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) + scale_y_continuous(labels = percent, breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0), limits = c(0, 1)) + scale_x_discrete("Shooting Distance", breaks = c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48)) + geom_smooth() + ylab("Shooting Accuracy (%)") + ggtitle("Shooting Distance vs Shooting Accuracy")
-
+ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) + 
+  geom_point(aes(x = shooting_distance_level$Var1, y = shooting_distance_level$Accuracy)) + 
+  scale_y_continuous(labels = percent, breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0), limits = c(0, 1)) +
+  scale_x_discrete("Shooting Distance", limits = 0:43) + 
+  geom_smooth() + 
+  ylab("Shooting Accuracy (%)") + 
+  ggtitle("Shooting Distance vs Shooting Accuracy")
 ```
 
 ###Plot Result
@@ -952,8 +990,12 @@ for (i in 0:nrow(shooting_distance_level)){
 }
 
 dfShootingZerotoAll <- data.frame(shootingDistanceZerotoAll, shootingAccuracyDist1)
+```
+
+```{r, echo=FALSE}
 cor.test(dfShootingZerotoAll$shootingDistanceZerotoAll, dfShootingZerotoAll$shootingAccuracyDist1)
 ```
+
 ###Correlation Test Result  
   The correlation test result shown strong negative correlation between shooting distance and shooting accuracy (-0.87). This meant that for all data points, the further a shooter from the basket, the shooter's accuracy would decrease. However, if the correlation test taken for certain range distance based on the diagram, the correlation result would be different as follows:
 
@@ -967,20 +1009,21 @@ for (i in 100:200){
 }
 
 dfShooting10to20 <- data.frame(shootingDistance10to20, shootingAccuracyDist2)
+```
+  
+```{r, echo=FALSE}
 cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccuracyDist2)
 ```
+
   The second correlation test produced a small positive correlation between range 10 to 20 feet (0.11). This result was different with previous measurement (-0.87)  
   
 ###Discussion  
-  Based on the diagram and correlation, it can be concluded that although the shooting distance directly affects shooting accuracy, the relationship between these variables are not perfectly linear. This was shown in the diagram where there is a relatively **similar** shooting accuracy for shots taken from 10 feet to 20 feet, regardless the shooter's performance. The success rate for longer distances, it could be arguably inferred that the shooters tried to attempt a shot in closing game time (buzzer beater) when the shot clock or game clock nearly reach zero- hence a longer distances.    
-
-
-**DO WE REJECT OR ACCEPT THE NULL HYPOTHESIS, PLEASE CONCLUDE**
+  Based on the diagram and correlation above, it could be concluded that although the shooting distance directly affects shooting accuracy, the relationship between these variables are not perfectly linear. This was shown in the diagram where there is a relatively **similar** shooting accuracy for shots taken from 10 feet to 20 feet, regardless the shooter's performance. The success rate for longer distances, it could be arguably inferred that the shooters tried to attempt a shot in closing game time (buzzer beater) when the shot clock or game clock nearly reach zero- hence a longer distances. Therefore, the analysis would reject the  Null Hypothesis.
 
 ###Future Research
  The dataset mostly returns 0% for shooting distance greater than 30 feet. Therefore the future research could be enriched with statistics from other seasons to see if these findings hold.  
   
-  
+***  
   
 ##Hot Hand Theory
 ###Introduction
@@ -1283,4 +1326,9 @@ This report has demonstrated results of mathematical and statistical analysis of
   Economist: As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).
   Erculj, F. and Supej, M. (2009). Impact of Fatigue on the Position of the Release Arm and Shoulder Girdle over a Longer Shooting Distance for an Elite Basketball Player. Journal of Strength and Conditioning Research, 23(3), pp.1029-1036.
   Mascret, N., Ibáñez-Gijón, J., Bréjard, V., Buekers, M., Casanova, R., Marqueste, T., Montagne, G., Rao, G., Roux, Y. and Cury, F. (2016). The Influence of the ‘Trier Social Stress Test’ on Free Throw Performance in Basketball: An Interdisciplinary Study. PLOS ONE, 11(6), p.e0157215.
+<<<<<<< HEAD
+
+ECONOMIST. As sweet as ever (2015) Available at: http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball (Accessed: 16 October 2016).
+=======
   
+>>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
