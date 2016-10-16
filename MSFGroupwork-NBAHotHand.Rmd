@@ -158,9 +158,9 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 ## Home Advantage analysis
 ###Introduction
 
-This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game lovation (home/away) on winning ratio.
+This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game location (home/away) on winning ratio.
 
-The NULL Hypothesis: Teams playing at home is more likely to win then when playing away.
+The NULL Hypothesis: Analysis of means for home and away wins does not show any significant difference 
 
 ###Methods
 Steps to test the hypothesis are as follows:  
@@ -171,11 +171,6 @@ Steps to test the hypothesis are as follows:
     5. Discuss the findings of the analysis
 
 The graph below shows descriptive variables for home/away wins:
-
-```{r, echo=FALSE}
-#plot showing home and away win ratio per team
-ggplot(advdf, aes(x = advdf$WINNER)) + geom_bar(aes()) + ylab("game count") + xlab("winner")
-```
 
 
 
@@ -222,6 +217,13 @@ advdf3$WIN_PCT_DIFF<- advdf3$WIN_PCT_HOME - advdf3$WIN_PCT_AWAY
 ```
 
 
+```{r, echo=FALSE}
+#plot showing home and away win ratio per team
+ggplot(advdf, aes(x = advdf$WINNER)) + geom_bar(aes()) + ylab("game count") + xlab("winner")
+```
+
+
+
 
 ###Findings
 Table 1: Proportion of total games split by Location win factor
@@ -251,8 +253,6 @@ Win % Diff  | 10  | 17  | 16  | 6   | 10  | 12  |-3   | 11  |-9   |-1   |    8| 
 #plot showing home and away win ratio per team
 ggplot(advdf3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "wins at HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "wins  AWAY")) + ylab("Win ratio") + xlab("Team Names")
 ```
-
-
 
 The plot shows that out of 30 teams:
   25 teams have won more games at home than away
@@ -303,7 +303,8 @@ The result of this research also confirms recent trend of decline in home advant
 
 This area of analysis focuses on investigation of whether a number of rest days between games affect performance and more importantly winning ratio of a team. 
 
-The Null Hypothesis is: By having longer rest a team is likely to have a higher winning ratio.
+The Null Hypothesis is: Teams' mean values of wins are not significantly different based on the number of rest days between games 
+
 
 ###Methods
 The steps to calculate this measurement are as follows:  
