@@ -669,8 +669,9 @@ boxplot(player2_df$streaks, main = 'Mo Williams')
 boxplot(player3_df$streaks, main = 'Klay Thompson')
 ```
 
-###Further detail
+
 ```{r}
+#Further detail
 #Kyrie Irnving
 summary(player1_df$streaks)
 IQR(player1_df$streaks) 
@@ -683,6 +684,7 @@ Outcome for Kyrie Irnving:
 
 
 ```{r}
+#Further detail
 #Mo Williams
 summary(player2_df$streaks)
 IQR(player2_df$streaks)
@@ -694,6 +696,7 @@ Outcome for Mo Williams:
   3. Streak length of 4 is unusually high compared to the rest of the distribution
 
 ```{r}
+#Further detail
 #Klay Thompson
 summary(player3_df$streaks)
 IQR(player3_df$streaks)
@@ -760,6 +763,7 @@ g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title 
 grid.arrange(g1, g2, ncol = 2)
 ```
 
+####Plot Result
   The streak length distributions are quite similar, so it can be concluded that Kyrie Irving doesn't have a hot hand.
 
 ### Mo Williams
@@ -801,6 +805,8 @@ g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title 
 grid.arrange(g1, g2, ncol = 2)
 ```
 
+####Plot Result
+
   The streak length distributions are quite similar, so it can be concluded that Mo Williams doesn't have a hot hand.
 
 ###Klay Thompson
@@ -841,6 +847,8 @@ g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar() + labs(titl
 g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar() + labs(title = 'Klay Thompson')
 grid.arrange(g1, g2, ncol = 2)
 ```
+
+####Plot Result
 
   Klay Thompson is an exception making 13 shots in a row. There is no such distribution in the sample, so it coulb be assumed that he is likely to have a hot hand. Further statistical analysis (logistic regression) should be done in order to reach a conclusion.
 
