@@ -15,36 +15,23 @@ Date submitted: 16/10/2016
 #Report structure 
 
 ##Introduction
-###What is your theme or research question?
-    a. Hot Hand Theory (Artemis)
-    b. Defender Proximity Analysis (Reza)
-    c. Shot Clock Pressure  (Alex)
-    d. Close Game Effect - Small Margin affecting the scoring rate 
-    e. Home Advantage (Alex is working in this point)  
-    f. Fatigue Effect (Quarter Heat Rate)  
-    g. Shooting Percentage (James)
-    h. Fatigue Effect (Number of Rest Day)  
-    i. Regression Analysis (Alex)
 
-###Introduction/Summary
-
-The purpose of this report is to analyse a chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focused on analysis of a number of areas, demonstrate how the analysis has been conducted, discusses theory used, demonstrate and evaluate produced results. In addition this report will highlight potential areas of future research. 
+The purpose of this report is to analyse the chosen dataset and to produce meaningful results using statistical and mathematical analysis. These analyses have been conducted using RStudio software. This report will focused on analysis of a number of areas, demonstrate how the analysis has been conducted, discusses theory used, demonstrate and evaluate produced results. In addition, where relevant, this report will highlight potential areas of future research. 
 
 The chosen dataset for this report is a summary of shots made during NBA season 2015-2016. The following areas of research have been selected:
 
-#Report structure 
+1. Team related:
+  a. Home Advantage analysis
+  b. Effect of rest on teams' performance
+  
+2. Player related
+  a. Defender Proximity Analysis
+  b. Shot Clock Pressure
+  c. Fatigue Effect (Quarter Accuracy Rate)  
+  d. Game result impact by field goal attempts
 
-##Introduction
-I   What is your theme or research question?
-a. Hot Hand Theory (Artemis)
-b. Defender Proximity Analysis (Reza)
-c. Shot Clock Pressure  (Alex)
-d. Close Game Effect - Small Margin affecting the scoring rate 
-e. Home Advantage (Alex is working in this point)  
-f. Fatigue Effect (Quarter Heat Rate)  
-g. Shooting Percentage (James)
-h. Fatigue Effect (Number of Rest Day)  
-i. Regression Analysis (Alex)
+
+a. Hot Hand Theory 
 
 ##Theory
 I   What do you expect to find?
@@ -143,10 +130,10 @@ for (i in 1:nrow(df)) {
 df1[, "MATCHUP"] <- as.character(df1[, "MATCHUP"])
 for (i in 1:nrow(df1)) df1$DATE[i] <- as.character(as.Date(unlist(strsplit(df1$MATCHUP[i], " -"))[1], format = "%B %d, %Y"))
 
-#creating a column for 'TEAM' regardless whether they played at home or not as the original dataframe consists of both home and away teams
+#creating a column for 'TEAM'. This column relates to the team whose player made a shot described by the dataframe
 for (i in 1:nrow(df1)) df1$TEAM[i] <-unlist(strsplit(df1$MATCHUP[i], " "))[5]
 
-#cleaning-up data for rest days calculation
+#preparing dataframe for rest days calculation
 df1$BLANK2<-""
 restdays2 <- cast(df1, TEAM + DATE + LOCATION + W + FINAL_MARGIN ~ FGM)
 restdays2$DATE<- as.Date(restdays2$DATE)
@@ -156,12 +143,12 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 ## Home Advantage analysis
 ###Introduction
 
-This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to playing 'away'. 
+This area of analysis focuses on investigation of whether playing at 'home' gives the team advantage comparing to when playing 'away'. Esssentially, this analysis focuses on effect of the game lovation (home/away) on winning ratio.
 
-The NULL Hypothesis is: Teams performance at home is more likely to win at home then when playing away.
+The NULL Hypothesis: Teams playing at home is more likely to win then when playing away.
 
 ###Methods
-The steps to calculate this measurement are as follows:  
+Steps to test the hypothesis are as follows:  
     1. Calculate a total number of games, which has been won by a home or away team
     2. Compare the total win numbers to identify whether home advantage is evident using means of the variables
     3. Extend the analysis to review of the home/away wins on a team level 
@@ -170,13 +157,17 @@ The steps to calculate this measurement are as follows:
 
 
 ```{r}
+#preparing a dataframe for home advantage analysis
 aa <- cast(df1, GAME_ID1 + HOME_TEAM + AWAY_TEAM + WINNER ~ W)
 
+#table showing a number of games won by home and away teams in the whole season
 table(aa$WINNER)
+
 #home wins:
 hh <- sum(aa$WINNER == "HOME")
 #Away wins:
 aw <- sum(aa$WINNER == "AWAY")
+
 #percentage of home team winning: 
 round(hh / (hh + aw), 4)
 round(aw / (hh + aw), 4)
@@ -184,32 +175,33 @@ round(aw / (hh + aw), 4)
 ```
 
 ```{r}
-head(aa)
+#preparing a dataframe for analysis of games when a team played at home 
 aa1 <- cast(aa, HOME_TEAM ~ WINNER); names(aa1)[1] <- "TEAM"
 aa1$WIN_PCT_HOME <- round(aa1$HOME / (aa1$HOME + aa1$AWAY), 2)
 
+#preparing a dataframe for analysis of games when a team played at away 
 aa2 <- cast(aa, AWAY_TEAM ~ WINNER); names(aa2)[1] <- "TEAM"
 aa2$WIN_PCT_AWAY <- round(aa2$AWAY / (aa2$HOME + aa2$AWAY), 2)
 
+#merging two dataframes together to enable the effective analysis of win ratios for teams playing at home and away.
 aa3 <- merge (aa1, aa2, by ="TEAM")
 
-
-for (i in 1:nrow(aa3)) {
-  if(aa3$WIN_PCT_HOME[i] > aa3$WIN_PCT_AWAY[i]) aa3$HOME_ADV[i] <- "YES" 
-  else aa3$HOME_ADV[i] <- "NO"
-}
-head(aa3)
-
+#ordering the dataframe by win percentage at home.
 aa3 <- aa3[order(aa3$WIN_PCT_HOME, decreasing = TRUE),]
-t(aa3[,c(1,4,7,10)])
 
+#ordering factors of the dataframe by win percentage at home.
 aa3$TEAM <- factor(aa3$TEAM, levels = aa3$TEAM[order(-aa3$WIN_PCT_HOME)])
 
+#creating a column which shows a difference between home and away winning percentage rate
 aa3$WIN_PCT_DIFF<- aa3$WIN_PCT_HOME - aa3$WIN_PCT_AWAY
 
-ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "AWAY")) 
- 
 ```
+
+```{r}
+#plot showing home and away win ratio per team
+ggplot(aa3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "AWAY")) 
+```
+
 
 ###Findings
 Table 1: Proportion of total games split by Location win factor
@@ -218,6 +210,9 @@ X     | HOME WIN | AWAY WIN
 ----- | -------- | ---
 Game  | 506      | 398
 Perc  | 55.97%   | 44.03%
+
+Tables 2 & 3: Winning ratio of teams playing at home vs games playing away 
+
 TEAM        | GSW | ATL | POR | MEM | SAS | CLE | HOU | LAC | OKC | DAL | NOP | WAS | TOR | CHI | MIL  
 ------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----
 Win % HOME  |   93| 88  | 81  | 77  | 75  | 72  | 72  | 72  | 71  | 68  | 68  | 68  | 66  | 59  | 59 
@@ -236,7 +231,7 @@ Win % Diff  | 10  | 17  | 16  | 6   | 10  | 12  |-3   | 11  |-9   |-1   |    8| 
 The plot shows that out of 30 teams:
   25 teams have won more games at home than away
   3 teams have won more games away than at home
-  2 teams home and away win ratios are almost equal (difference of less than 0.01%)
+  2 teams home and away win ratios are almost equal (difference of less than or equal to 1%)
 
 
 ###Variance test Analysis
@@ -251,15 +246,27 @@ margreg<- lm(FINAL_MARGIN ~ LOCATION, restdays2)
 summary(margreg)
 ```
 
+Table 4: Regression Analysis
+
+  X         |Estimate |Std. Error| t value| Pr(>t)    
+------------|---------|--|--|------------------------
+(Intercept) |-2.12919 |   0.51589 | -4.127 |3.84e-05 ***
+LOCATIONH   |4.28556  |  0.63881  | 6.709 |2.63e-11 ***
+rest        |-0.01129 |   0.25992 | -0.043 |   0.965 
+  
+
+Adjusted R-squared = 0.02392
+
 ###Discussion
 
-The analysis shown that there is a clear evidence of a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis on a team level where 25 teams are clearly winning more games at home and away. The result shown that the NULL hypothesis should be rejected as a team playing at home is more likely to win then an away team. Regression analysis shown that playing at home gives teams on average additional 4.29 margin points. 
+The analysis shown that there is a clear evidence that a team playing at home is more likely to win with an average win probability of 55.97%. The same conclusion is evident from the analysis conducted on a team level where 25 teams are winning more games at home than away. The result shown that the NULL hypothesis should be rejected as a team playing at home is more likely to win then an away team. Regression analysis shown that playing at home gives teams on average additional 4.29 margin points. 
 
-The result of this research also confirms recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to a figure around the 2011-15 mean of 58.8%. Home win ratio was 57.4% win in 2014-2015 season. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2015-2016 season. Based on the literature review this trend could be potentially explained by the following factors http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball:
+The result of this research also confirms recent trend of decline in home advantage over the years: probability of a home team winning has reduced from around 65% in 1975-1992 to average of 60.3% in 1993-2011 and to around 58.5% for 2011-15. Home win ratio was 57.4% win in 2014-2015 season. The analysis demonstrated that the home win ratio went down even further to 56.0% in 2015-2016 season. Based on the literature review this trend could be potentially explained by the following factors (http://www.economist.com/blogs/gametheory/2015/06/home-advantage-basketball):
 
-  1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly charterd planes more often than in the past. This results in teams being less tired as a result of travel and better prepared for the games.
+  1. Improvement of travel conditions. This means that when playing away, teams are now more likely to stay at better hotels and fly charterd planes more often than in the past. These changes result in teams being less tired as a consequence of travel and being better physically prepared for the games.
   
-  2. Change in style of play in the NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees.
+  2. Change in style of play in NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees.
+
 
 
 ##Effect of rest on teams' performance
@@ -301,11 +308,12 @@ summary(margreg)
 restdays4<- cast (restdays2, rest ~  W)
 colnames(restdays4)<- c( "rest", "L","W") 
 
+#creating a column for total restdays for a team when lost and won to enable calculation of ratios
 restdays4$total<-restdays4$L + restdays4$W
 restdays4$dist <-   round (restdays4$total * 100 /sum (restdays4$total) ,2)
 
+#plotting distribution of rest days to establish which of the rows should be analysed
 restdays4[,c(1,4,5)]
-
 #The distribution of rest days show that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections
 
 restdays4$ L.pct <-   round(restdays4$L*100/(restdays4$L+restdays4$W),2) 
@@ -316,7 +324,10 @@ print (restdays4[1:3,c(1,3,7)])
 #creating a new dataframe for summary of home/away win losses based on number of rest days.
 restdays3<- cast (restdays2, rest ~ LOCATION + W) ; 
 
+#renaming the columns
 colnames(restdays3)<- c( "rest", "AL","AW","HL", "HW") 
+
+#caluclating ratios
 restdays3$ AL.pct <-   round(restdays3$AL*100/(restdays3$AL+restdays3$AW),2) 
 restdays3$ AW.pct <-   round(restdays3$AW*100/(restdays3$AL+restdays3$AW),2)
 restdays3$ HL.pct <-   round(restdays3$HL*100/(restdays3$HL+restdays3$HW),2)
@@ -326,11 +337,8 @@ print (restdays3[1:3,c(1,7,9)])
 
 
 #Testing of rest data
-<<<<<<< HEAD
-t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
-=======
+
 #t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
->>>>>>> 334f80c223b5add4579e9efe4c07028e7197c743
 #chisq.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
 
 
@@ -340,8 +348,40 @@ t.test(x=restdays2$W[restdays2$rest==0], y= restdays2$W[restdays2$rest==1])
 
 ###Findings
 
-TO INCLUDE THE TABLES FROM THE ABOVE CODE
+Table 5: Distribution of number of games per rest days
 
+ Rest Days| Games | Distribution
+----------|-------|---
+    0  | 427 | 23.62
+    1  | 990 | 54.76
+    2  | 254 | 14.05
+    3  |  59 |  3.26
+    4  |  13 |  0.72
+    5  |   3 | 0.17
+    7  |   6 | 0.33
+    8  |  20 | 1.11
+    9  |   3 | 0.17
+    10 |   3 | 0.17
+   1st game of season  |  30|  1.66
+
+The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections.
+
+Table 6: Win Rate split by number of rest days between games
+
+  rest days| number of wins| win percentage
+-|-|-
+    0| 201| 47.07
+    1| 496| 50.10
+    2| 137| 53.94
+
+
+Table 7: Win Rate split by number of rest days between games and location
+
+  rest days| home wins percentage | away wins percentage|
+-|-|-
+    0|   53.54 |44.33 
+    1 | 54.68 |  44.24
+    2  | 59.57 | 46.90
 
 ###Discussion
 
@@ -353,7 +393,7 @@ Based on the above, the analysis shown that the null hypothesis should be reject
 
 ###Further research
 
-To better understand effects of rest and home/away advantage it would be interesting to take into account distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York travelling to play an away gamein New Jersey
+To better understand effects of rest and home/away advantage it would be interesting in future research papers to take into account distances the teams have to travel between the games. For example if a team is travelling from one coast to another- it is likely to affect them more comparing to a team from New York 'travelling' to play an away gamein New Jersey.
 
 ##Effects on accuracy (Justin)
 
