@@ -7,11 +7,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-<<<<<<< HEAD
 knitr::opts_chunk$set(echo=TRUE)
-=======
-knitr::opts_chunk$set(echo = TRUE)
->>>>>>> 91b4c1b9b8689ebb1022b0a84a2b6b48aeaef358
+
 ```
 ##Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
 ##Date submitted: 16/10/2016
@@ -1022,18 +1019,18 @@ ggplot(data = shooting_distance_level, aes(x = shooting_distance_level$Var1, y =
 
 ###Plot Result
   The explanation from the plot above are as follows. The shooter distance ranges and accuracy:   
-  1.  0 to 2 feet: the accuracy varied between **62%** to **68%**  
-  2.  2 to 4 feet: the accuracy rate for this distance range from **61%** to **67%**  
-  3.  4 to 6 feet: the accuracy rate for this distance range from **44%** to **58%**  
-  4.  6 to 8 feet: the accuracy rate for this distance range from **38%** to **51%**  
-  5.  8 to 10 feet: the accuracy rate for this distance range from **35%** to **42%**  
-  6.  10 to 12 feet: the accuracy rate for this distance range from **34%** to **42%**  
-  7.  12 to 14 feet: the accuracy rate for this distance range from **37%** to **47%**  
-  8.  14 to 16 feet: the accuracy rate for this distance range from **33%** to **51%**  
-  9.  16 to 18 feet: the accuracy rate for this distance range from **37%** to **48%**  
-  10. 18 to 24 feet: the accuracy rate for this distance range from **33%** to **43%**  
-  11. 24 to 28 feet: the accuracy rate for this distance range from **18%** to **38%**  
-  12. more than 28 feet: the accuracy varies greater than previous distance range, starting from **0%** (no shots scored from that distance) to **50%**  
+  1.  0 to 2 feet: the accuracy varied between 62% to 68%  
+  2.  2 to 4 feet: the accuracy rate for this distance range from 61% to 67%  
+  3.  4 to 6 feet: the accuracy rate for this distance range from 44% to 58%  
+  4.  6 to 8 feet: the accuracy rate for this distance range from 38% to 51%  
+  5.  8 to 10 feet: the accuracy rate for this distance range from 35% to 42%  
+  6.  10 to 12 feet: the accuracy rate for this distance range from 34% to 42%  
+  7.  12 to 14 feet: the accuracy rate for this distance range from 37% to 47%  
+  8.  14 to 16 feet: the accuracy rate for this distance range from 33% to 51%  
+  9.  16 to 18 feet: the accuracy rate for this distance range from 37% to 48%  
+  10. 18 to 24 feet: the accuracy rate for this distance range from 33% to 43%  
+  11. 24 to 28 feet: the accuracy rate for this distance range from 18% to 38%  
+  12. more than 28 feet: the accuracy varies greater than previous distance range, starting from 0% (no shots scored from that distance) to 50%  
 
   Analysis has also produced a correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:  
   There was strong negative correlation found between the shooting distance and shooting accuracy. The Pearson’s correlation coefficient for the relationship between the variables Shooting Distance and Shot Accuracy was r(446) = -0.87, p < .05, as part of level of significance (p = .05).
@@ -1088,10 +1085,13 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
   
 ##Hot Hand Theory
 ###Introduction
-  The specific analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is aimed to establish whether there are  the hypothesis that a shooter with a hot hand will have shots that are dependent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
+  The analysis aims to investigate whether the effect of the 'hot hand theory' is valid based on the given dataset. The 'hothand theory' states that if the shooter makes his first shot, the probability of making his next shot is higher. 
+  
+  NULL Hypothesis: There is no significant difference between streaks of consequently scored shots and randomly simulated streaks for these players.  
+  
 
 ###Methods
-The steps to approximate this question are as follows:
+The steps to analyse this are are as follows:
   1. Calculate streaks achieved in all games and from all players
   2. Categorize streaks per player and game, focusing on the 3 players with the top 3 performances in terms of points
   3. Extract zeros and keep only streaks above 1
@@ -1159,7 +1159,7 @@ player2_df <- data.frame('streaks' = streak_per_player[[2]])
 player3_df <- data.frame('streaks' = streak_per_player[[3]])
 ```
 
-```{r}
+```{r, echo=FALSE}
 #Showing distribution for each player's streak lengths
 gg1 <- ggplot(data = player1_df, aes(x = streaks)) + geom_bar(fill = 'brown') + labs(title = 'Kyrie Irnving')
 gg2 <- ggplot(data = player2_df, aes(x = streaks)) + geom_bar(fill = 'red') + labs(title = 'Mo Williams')
@@ -1172,7 +1172,7 @@ grid.arrange(gg1, gg2, gg3, ncol = 3)
 
 ###Boxplots
 
-```{r}
+```{r, echo=FALSE}
 #Create a boxplot for each player's streak lengths 
 attach(mtcars)
 par(mfrow=c(1, 3))
@@ -1218,7 +1218,7 @@ IQR(player3_df$streaks)
 
 ### Plots Result
 
-  The distribution of all players is left skewed and all of them (especially Klay Thompson) have some long shooting streaks. In order to prove/disprove the hot hand theory,  the examination of the indipendence of the shots is required. If each shot that a player takes is independent of the next shot, then the player has the same probability of hitting each shot regardless of the previous shot. If each shot that a player takes is dependent of the next shot, then the probability of making the next shot is higher - hot hand. Sampling an independent shooter having the same shooting percentage with the real one and comparing his distribution with real player's distribution gives further insight in the specific aera. 
+  The distribution of all players is left skewed and all of them (especially Klay Thompson) have a few long shooting streaks. In order to prove/disprove the hot hand theory,  the examination of the independence of the shots is required. If each shot that a player takes is independent of the next shot, then the player has the same probability of hitting each shot regardless of the previous shot. If each shot that a player takes is dependent of the next shot, then the probability of making the next shot is higher - hot hand. Sampling an independent shooter having the same shooting percentage with the real one and comparing his distribution with real player's distribution gives further insight in the specific aera. 
 
 ```{r, include=FALSE}
 #Find the shooting percentage for each of the 3 players
@@ -1273,7 +1273,7 @@ grid.arrange(g1, g2, ncol = 2)
 ```
 
 ####Plot Result
-  After running many times the sample, there are several times when the distributions of sample and real shooter are quite similar. As a consequence, it can be concluded that Mo Williams does not have a hot hand.
+  When running the sample, the distributions of sample and real shooter are relatively similar. As a consequence, it can be concluded that Mo Williams does not have a hot hand.
 
 ### Mo Williams
 ```{r, include=FALSE}
