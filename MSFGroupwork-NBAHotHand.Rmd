@@ -7,14 +7,14 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(include = FALSE)
 ```
 ##Report produced by: Justin Leiendecker, Alexander Romanenko, Artmeis Tomadaki-Balomenou, Zijun Wei, Reza Brianca Widodo  
 ##Date submitted: 16/10/2016
 
 ***
 
-#Report structure 
+
 
 ##Introduction
 
@@ -25,17 +25,17 @@ The chosen dataset for this report is a summary of shots made during NBA season 
 ** TO GET UPDATED AS A FINAL STEP**
 
 **1. Team related**
-  a. Home Advantage analysis
-  b. Effect of rest on teams' performance
+  a. Home Advantage analysis  
+  b. Effect of rest on teams' performance  
   
 **2. Player related**
-  a. Effects on Accuracy 
-  b. Shot Clock Pressure
-  c. Fatigue Effect (Quarter Accuracy Rate)  
-  d. Game result impact by field goal attempts
-  e. Defender Proximity Analysis
-  f. Shooting Distance vs Shot Accuracy 
-  g. Hot Hand Theory 
+  a. Effects on Accuracy  
+  b. Shot Clock Pressure  
+  c. Fatigue Effect (Quarter Accuracy Rate)    
+  d. Game result impact by field goal attempts  
+  e. Defender Proximity Analysis  
+  f. Shooting Distance vs Shot Accuracy   
+  g. Hot Hand Theory  
 
 
 ###Dataset Description:  
@@ -64,6 +64,11 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
 
 ###Dataset Strengths  
     
+<<<<<<< HEAD
+=======
+  The dataset comprises of comprehensive observational data to start to work with. In general, the dataset has only a small percentage of missing value (0.19%) so there was not need to remove or assign many data points to default values. Since the column name is not ambiguous it was really helpful to understand the dataset right from the beginning. 
+
+>>>>>>> 6b2c354a4bdb097e3c4f65d733da52df1bac024e
   The dataset comprises of comprehensive observational data which enables efficient analysis without extensive 'clean up' of the data. The dataset only have small percentage of missing value (0.19%), therefore there is no need to remove or assign numerous data points to default values. The fact that initial dataset meant that only a small number of additional columns had to be added (see data clean-up part of the code for details. 
 
 
@@ -77,7 +82,7 @@ Data  contains full set of shot attempts by each team/player during the NBA 2014
 
 ***
 
-##Analysis
+#Analysis
 
 
 ```{r, eval=FALSE, include=FALSE}
@@ -151,7 +156,7 @@ restdays2$DATE<- as.Date(restdays2$DATE)
 
 ```
 
-***
+
 
 ## Home Advantage analysis
 ###Introduction
@@ -167,6 +172,14 @@ Steps to test the hypothesis are as follows:
     3. Extend the analysis to review of the home/away wins on a team level 
     4. Plot the team level data 
     5. Discuss the findings of the analysis
+
+The graph below shows descriptive variables for home/away wins:
+
+```{r, echo=FALSE}
+#plot showing home and away win ratio per team
+ggplot(advdf, aes(x = advdf$WINNER)) + geom_bar(aes()) + ylab("game count") + xlab("winner")
+```
+
 
 
 ```{r, include=FALSE}
@@ -184,8 +197,9 @@ aw <- sum(advdf$WINNER == "AWAY")
 #percentage of home team winning: 
 round(hh / (hh + aw), 4)
 round(aw / (hh + aw), 4)
-
 ```
+
+
 
 ```{r, include=FALSE}
 #preparing a dataframe for analysis of games when a team played at home 
@@ -236,7 +250,7 @@ Win % AWAY  | 47  | 35  | 32  | 41  | 35  | 30  | 44  | 30  | 48  | 39  | 23  | 
 Win % Diff  | 10  | 17  | 16  | 6   | 10  | 12  |-3   | 11  |-9   |-1   |    8|   -1|   12|   13| 8
 
 
-```{r, out.width = '100%', fig.retina = NULL, fig.align = "center"}}
+```{r, echo=FALSE}
 #plot showing home and away win ratio per team
 ggplot(advdf3, aes(x = TEAM)) + geom_point(aes(y = WIN_PCT_HOME, col = "wins at HOME")) + geom_point(aes(y = WIN_PCT_AWAY, col = "wins  AWAY")) + ylab("Win ratio") + xlab("Team Names")
 ```
@@ -256,7 +270,7 @@ The plot shows that out of 30 teams:
 **JUSTING TO SEE IF THERE IS ANYTHING WE CAN INCLUDE HERE**
 
 
-###regression analysis
+###Regression analysis
 
 ```{r, include=FALSE}
 margreg<- lm(FINAL_MARGIN ~ LOCATION, restdays2)
@@ -284,7 +298,7 @@ The result of this research also confirms recent trend of decline in home advant
   
   2. Change in style of play in NBA. The game now is more open with less physical contact, which reduces number of fouls and potential impact of 'notorious home-team bias' by referees (Economist, 2015).
 
-
+***
 
 ##Effect of rest on teams' performance
 
@@ -299,8 +313,28 @@ The steps to calculate this measurement are as follows:
     1. Calculating number of rest days between games for all teams
     2. Calculating ratios for effects of rest days on win/loss
     3. Calculating ratios for effects of rest days on win/loss form home/awayCalculating ratios for effects of rest days on win/loss
-    4. Discuss the findings of the data
-    
+    4. Run a regression analysis
+    5. Discuss the findings of the data
+
+The table below shows descriptive statistics for Rest Days:
+
+Table 5: Distribution of number of games per rest days
+
+ Rest Days| Games | Distribution
+----------|-------|---
+    0  | 427 | 23.62
+    1  | 990 | 54.76
+    2  | 254 | 14.05
+    3  |  59 |  3.26
+    4  |  13 |  0.72
+    5  |   3 | 0.17
+    7  |   6 | 0.33
+    8  |  20 | 1.11
+    9  |   3 | 0.17
+    10 |   3 | 0.17
+   1st game of season  |  30|  1.66
+
+The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections.    
 
 ```{r, include=FALSE}
 
@@ -365,23 +399,7 @@ print (restdays3[1:3,c(1,7,9)])
 
 ###Findings
 
-Table 5: Distribution of number of games per rest days
 
- Rest Days| Games | Distribution
-----------|-------|---
-    0  | 427 | 23.62
-    1  | 990 | 54.76
-    2  | 254 | 14.05
-    3  |  59 |  3.26
-    4  |  13 |  0.72
-    5  |   3 | 0.17
-    7  |   6 | 0.33
-    8  |  20 | 1.11
-    9  |   3 | 0.17
-    10 |   3 | 0.17
-   1st game of season  |  30|  1.66
-
-The distribution of rest days shows that 92% of games are covered by 0,1 or 2 days of rest and therefore further analysis will only focus on these 3 sections.
 
 Table 6: Win Rate split by number of rest days between games
 
@@ -416,6 +434,8 @@ To better understand effects of rest and home/away advantage the future research
 
 ##Effects on accuracy
 
+###Introduction
+
 The potential effects of fatigue and stress on the accuracy of shots are investigated in this part of the analysis.
 
 Fatigue in basketball is a broadly analysed topic in physiological research. Latest literature suggests that elite basketball players cope well with the effects of fatigue so it does not affect their shooting kinematics. This results in no difference for their shot accuracy even if the players are fatigued (Erculj and Supej, 2009). This research paper analyses whether these previous findings can be confirmed for the NBA season 2014-2015.  
@@ -432,7 +452,13 @@ Stress: The Null hypothesis states that there is no significant difference (p < 
 
 ###Methods
 
-In this analysis fatigue was measured as the period of the game, as it can be assumed that the later in the game the higher the fatigue of the players.
+In this analysis fatigue was measured as the period of the game, as it can be assumed that the later in the game the higher the fatigue of the players. The descriptive statistics of the shots per period can be seen below. 
+
+```{r, echo=FALSE}
+bar.period <- ggplot(df) + geom_bar(aes(x = PERIOD))
+bar.period + labs(title = "Number of shots taken per period") + scale_x_discrete(name ="Period", limits=c("1","2","3","4", "5", "6", "7")) + ylab("Number of shots")
+```
+
 
 The steps to test the first hypothesis were as follows:
   1. The overall accuracy for each period was calculated, based on the number of shots made (FGM = 1) and the number of shots taken for the specific period (FGM = 1 & FGM = 0)
@@ -562,7 +588,7 @@ The T-test for regular time and overtime was highly significant, t(383) = 2.77, 
 
 The changes in the overall accuracy per second are shown in the graph below.
 
-```{r}
+```{r, echo=FALSE}
 graph.acc <- ggplot(acc, aes(x = seconds.left, y = accuracy)) + geom_point() + geom_smooth()
 
 graph.acc + labs(title = "Overall Accuracy per second left on shot clock") + xlab("Seconds left on shot clock") + ylab("Overall Accuracy")
@@ -579,7 +605,7 @@ The effects of psychological stress are highly visible as shown in the graph abo
 
 An ad hoc data analysis was undertaken to investigate whether this pattern of stress-inducted accuracy declination can be found as well for "superstar" players. The players were Lebron James, James Harden and Russel Westbrook, chosen because they were the top 3 shooters in the season. Their combined average accuracy per second can be seen in the graphic below. 
 
-```{r}
+```{r, echo=FALSE}
 
 graph2 <- ggplot(NULL) + geom_smooth(data = df.acc.secondsplayers3, aes(x = seconds.left, y = acc.top, color = "Top Players")) + geom_smooth(data = acc, aes(x = seconds.left, y = accuracy, color = "Average"))
 graph2 + labs(title = "Comparison - Accuracy per second on shot clock left for Top Players vs Overall Average") + xlab("Seconds left on shot clock") + ylab("Accuracy")
@@ -597,12 +623,16 @@ Additionally, further reasons that lead to distinction between top players and a
 
 ###Limitations 
 
+
+As there are much more shots taken in periods 1 to 4 than in 5 to 7 the differences in the accuracy have to be treat with caution.
 The shot clock variable had missing values for 5567 shots, equal to 4.34% of all shots on the dataset, limiting the meaningfulness of the findings in the accuracy per second part. 
 
-***
+<<<<<<< HEAD
 
-## Shooting Percentage Analysis
+## Shooting Percentage Analysis (James)
+
 ###Introduction  
+>>>>>>> 6a1c84a12652eedf6027627edee3f70ed439beb1
 
 The aim of this analysis is to examine whether the top scorer of a team can help his team to win the match when he has a more outstanding performance in terms of both number of shooting attempts and accuracy. The Null hypothesis is that there is no difference regarding the likelyhood of winning if the top scorer of a team has more field goal attempts. The second Null hypothesis is there is no difference regarding the likelyhood of winning if the top scorer of a team has a higher shot percentage than on average. As this is such a niche area research a literature review did not reveal sufficient results so this analysis aims to fill this gap.
 
@@ -652,10 +682,9 @@ for (i in 1:nrow(shot.stats)){
 }
 ```
 
-<<<<<<< HEAD
+
 ### Impact of Top Scorers
-=======
->>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
+
 
 ```{r, include=FALSE}
 # Pick out 15 of the best players in that regular season and create a new subset. Analyse how shooting percentage of these players can influence the result of a match.
@@ -689,15 +718,18 @@ anova(model)
 ```
 ###Results
 
-##a. Field Goal Attempts (FGA)
+####a. Field Goal Attempts (FGA)
 
 <<<<<<< HEAD
 There was no correlation found between the result of a match and the number of attempts of the player made in that match. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach level of significance (p = .05). 
-=======
-There was no correlation found between the outcome of the matches in this season and the number of attempts of the players made. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach the level of significance (p = .05). 
->>>>>>> 1824e38efa8c0d5a6ec4a49d8509279897c8a360
+<<<<<<< HEAD
 
-##b.  Field Goal Percentage (FG%)
+There was no correlation found between the outcome of the matches in this season and the number of attempts of the players made. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .794, failing to reach the level of significance (p = .05). 
+=======
+>>>>>>> f989f5f8887c39521a651bb317a805dbc5ade12d
+
+
+####b.  Field Goal Percentage (FG%)
 
 There was no correlation found between the outcome of the matches in this seaon and the field goal percentage of the players. The Pearson’s correlation coefficient for the relationship between the variables W and FGA was r(832) < .01, p = .177, failing to reach the level of significance (p = .05). 
 
@@ -747,21 +779,23 @@ Table xxx: Result for the logistic regression analysis for FGA and FG% of 15 pla
 Table xxx: Result for the anova for FGA and FG% for 15 players.
 
    | |           Df| Deviance| Resid. Df| Resid. Dev
-|-|-|-|-| - 
+-|-|-|-|- 
 |NULL        |     |              | 777   |  188.73
 |FGA         |   1  | 0.0014   |    776  |   188.73
 |FG.percentage | 1 |  7.4664   |    775  |   181.26
 
 An ad hoc data analysis was used as 3 of the 15 players stood out in particular. To examine whether their data result in a better model, another logistic regression analysis was performed with the same dependent and independent variables for three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward.
 
-```{r}
+```{r, echo=FALSE}
 graph01 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FGA, colour = W))
-graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
-
-graph01 + labs(title = "Differences in FGA for games lost/won of the three special players ") + xlab("Player name") + ylab("FGA")
-graph02 + labs(title = "Differences in FG% for games lost/won of the three special players ") + xlab("Player name") + ylab("FG%")
-
+graph01 + labs(title = "Differences in FGA for games lost/won of the three special players") + xlab("Player name") + ylab("FGA")
 ```
+ Graph xx1: Differences in FGA for games lost/won of the three special players.
+```{r, echo=FALSE}
+graph02 <- ggplot(special2) + geom_boxplot(aes(x = player_name, y = FG.percentage, colour = W)) 
+graph02 + labs(title = "Differences in FG% for games lost/won of the three special players") + xlab("Player name") + ylab("FG%")
+```
+Graph xx2: Differences in FG% for games lost/won of the three special players.
 
 The box plots above shows the performances of the three special players in terms of FGA and FG% respectively.
 
@@ -786,17 +820,16 @@ From the correlation tests between the match results and players’ performances
 
 From the logistic regression analysis for FGA and FG%, it was found that FGA did not have any impact on the result of the match. FG% is a significant predictor for the result of match. However, the anova showed that the residual deviances of these two factors were both quite large and thus further investigations must be done in order to improve this model.
 
-There was no correlation found between field goal attempts of top scorers and game results. A possible explanation is that it is easier for the opponents to focus on a certain player on defensive side. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelyhood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This is due to fact that once a player is being efficient on the offensive side, that player can help the team by not only keeping shooting but also creating more opportunities for his teammates. 
+There was no correlation found between field goal attempts of top scorers and outcome of the matches. A possible explanation is that it is easier for the opponent to focus on a certain player on defensive side and then the overall efficiency of the team will start to decrease. Thus, over-using the scoring ability of a leading player is not likely to be a good approach if the team wants to increase the likelyhood of winning a game. Meanwhile, the accuracy of these players has a stronger impact on the outcome of the game. This is due to fact that once a player is being efficient on the offensive side, that player can help the team by not only keeping shooting but also creating more opportunities for his teammates. 
 
-Based on results above, an additional research has been done regarding to the performances of three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. These three players were chosen because their teams are more likely to take the victory when they score more in single game according to the bar plot and t-test. 
+Based on results above, an additional research has been done regarding to the performances of three special players: Russell Westbrook, Kawhi Leonard and Gordon Hayward. These three players were chosen because their teams are more likely to take the victory when they score more in single game according to Graph xx2 and t-test. 
 
-For these three players, the p-values still did not reach the level of significance (p = .05) for FGA. However, all p-values are smaller than 0.05 when their FG%s were tested. Based on these findings, another logistic regression was done with these three players. It was shown that p < .001 and residual deviance from anova dropped by 4.498 which is about 12.3% when FG% was considered. In comparison, the deviance was above 200 when 15 players were tested. 
+For these three players, the p-values still did not reach the level of significance (p = .05) for FGA. However, all p-values are smaller than 0.05 when their FG%s were tested. Based on these findings, another logistic regression was done with these three players. It was shown that p < .05 and residual deviance from anova dropped by 4.498 which is about 12.3% when FG% was considered. In comparison, the deviance was above 180 when 15 players were analysed.
 
-Therefore, these three players are somehow different from others as they can contribute more to the win rates of their teams by their increasing shooting accuracy. There could be many reasons behind this, including their team compositions and the roles of the players. Further research has to be done to if one wants to find out the differences of these players and others.
+Therefore, the analysis on these three players has shown that there is a  difference between them and the others as they can contribute more to the win rates of their teams by their increasing shooting accuracy. There could be various reasons behind this observation, such as their team compositions and the roles of these players. Further research has to be done to in order to find out why the performances of these special players are more decisive on the outcome.
 
 ###Limitations
-
-The data set only contains 904 out of 1230 matches in the entire regular season. So there might be a chance that the highlight performances of certain players are missed out in our analysis. Meanwhile, it would be ideal if the contributions of all players can be analysed in more aspects including number of rebounds and assists. 
+The data set only covers 904 of 1230 matches in the regular season. So there might be a chance that the highlight performances of certain players are missed out in the analysis. Meanwhile, it would be ideal if more sepects of data, such as rebounds and assists, could be analysed. 
 
 ***
 
@@ -843,20 +876,19 @@ library(scales)
 ggplot(data = distance_level, aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
   geom_point(aes(x = distance_level$Var1, y = distance_level$Accuracy)) +
   scale_y_continuous(labels = percent, breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0), limits = c(0, 1)) +
-  scale_x_discrete("Closest Defender Distance", limits = 0:24) +
-  ylab("Shooting Accuracy (%)") +
-  ggtitle("Closest Defender Distance vs Shooting Accuracy")
+  scale_x_discrete("Closest Defender Distance", limits = 0:24) +  
+  ylab("Shooting Accuracy (%)") +   ggtitle("Closest Defender Distance vs Shooting Accuracy")
 ```
 
 ###Plot Result
   The explanation from the plot above are as follows:   
-  1. Defender distance range from 0 to 2 feet, the accuracy varied between **42%** to **50%**  
-  2. Defender distance range from 2 to 4 feet, the accuracy rate for this distance range from **44%** to **49%**  
-  3. Defender distance range from 4 to 6 feet, the accuracy rate for this distance range from **41%** to **46%**
-  4. Defender distance range from 6 to 8 feet, the accuracy rate for this distance range from **37%** to **42%**
-  5. Defender distance range from 8 to 10 feet, the accuracy rate for this distance range from **37%** to **54%**
-  6. Defender distance more than 10 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from **33%** to **60%**.  
-  7. Distance greater than 16 feet, the data varies between **0%** (no shots scored from that distance) to **100%** (certain successfull shot from that distance)  
+  1. Defender distance range from 0 to 2 feet, the accuracy varied between 42% to 50%  
+  2. Defender distance range from 2 to 4 feet, the accuracy rate for this distance range from 44% to 49%  
+  3. Defender distance range from 4 to 6 feet, the accuracy rate for this distance range from 41% to 46%
+  4. Defender distance range from 6 to 8 feet, the accuracy rate for this distance range from 37% to 42%
+  5. Defender distance range from 8 to 10 feet, the accuracy rate for this distance range from 37% to 54%
+  6. Defender distance more than 10 feet up until 16 feet, the accuracy varies greater than previous distance range, starting from 33% to 60%.  
+  7. Distance greater than 16 feet, the data varies between 0% (no shots scored from that distance) to 100% (certain successfull shot from that distance)  
 
 ###Correlation Test
   Next analysis will be calculated from correlation test. If the analysis included **all** of the data points for every distance, the correlation result would be as follows:
@@ -1022,14 +1054,14 @@ cor.test(dfShooting10to20$shootingDistance10to20, dfShooting10to20$shootingAccur
   
 ##Hot Hand Theory
 ###Introduction
-  The analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is based on the hypothesis that a shooter with a hot hand will have shots that are not independent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
+  The analysis aims to show the effect of the 'hot hand theory' on NBA players. The analysis is based on the hypothesis that a shooter with a hot hand will have shots that are dependent of one another. If the shooter makes his first shot, the probability of making his next shot is higher.
 
 ###Methods
 The steps to approximate this question are as follows:
   1. Calculate streaks achieved in all games and from all players
   2. Categorize streaks per player and game, focusing on the 3 players with the top 3 performances in terms of points
   3. Extract zeros and keep only streaks above 1
-  4. Visualise streaks' length distribution - barrplots
+  4. Visualise streaks' length distribution - barplots
   5. Visualise streaks' length via boxplot
   6. Calculate the shooting percentage of the 3 players 
   7. Create a sample independent shooter setting as shooting percentage the real player's shooting percentage
@@ -1037,9 +1069,9 @@ The steps to approximate this question are as follows:
 
 ```{r, include=FALSE}
 
-#From 'FGM' column we have that 1 represents a basket made and 0 represents a basket missed
-#Define the length of a shooting streak to be the number of consecutive baskets made until a miss occurs
-#Create a function that gives us a vector with the number of total streaks(from all players and all games)
+#From 'FGM' column: 1 represents a basket made and 0 represents a basket missed
+#Defining the length of a shooting streak to be the number of consecutive baskets made until a miss occurs
+#Createing a function that gives a vector with the number of total streaks(from all players and all games)
 number_of_streaks <- function(x) {
   x <- c(0, x, 0)
   which_zero <- which(x == 0)
@@ -1051,16 +1083,15 @@ number_of_streaks(df$FGM)
 
 #Summary of total points
 ptssum<- cast(df1, GAME_ID1+ player_id + player_name  ~ PTS); head(ptssum)
-#creating "total points per player, per game" column
+#Creating "total points per player, per game" column
 ptssum$totalpts<- ptssum[,"2"]*2 + ptssum[,"3"]*3
 
 pttsum2<-ptssum[order(ptssum$totalpts,decreasing=TRUE),]
 
-
-#Set a new data frame for the 3 players with best performances(higher points)
+#Setting a new data frame for the 3 players with best performances(higher points)
 best_players_df <- head(pttsum2, 3)
 
-#Create a function that gives us a vector of streaks for a specific player and game
+#Creating a function that gives a vector of streaks for a specific player and game
 player_and_game <- function(x, y) {
    player <- df[df[, 'player_id'] == x & df[,'GAME_ID1'] == y, 'FGM']
    number_of_streaks(as.vector(player))
@@ -1069,7 +1100,7 @@ player_and_game <- function(x, y) {
 #player_and_game('202681', '21400681')
 
 
-#Create a list that gives us the streaks of each player and game (5 best performances)
+#Creating a list that gives the streaks of each player and game (3 best performances)
 streak_per_player <- list()
 j <- 1
 for(i in best_players_df$player_id) {
@@ -1078,7 +1109,7 @@ for(i in best_players_df$player_id) {
 }
 streak_per_player
 
-#Remove 0 from streak_per_player in order to show only the streaks achieved
+#Removing zeros from streak_per_player in order to show only the streaks achieved
 streak_per_player[[1]] <- streak_per_player[[1]][streak_per_player[[1]] != 0]
 for(i in 1:length(streak_per_player)) {
   streak_per_player[[i]] <- streak_per_player[[i]][streak_per_player[[i]] != 0]
@@ -1088,13 +1119,14 @@ streak_per_player
 
 ###Barplots
 ```{r, include=FALSE}
-
-#Create a data frame for the strikes of each one of the 3 players (cannot create a data frame including all of them, because each list has different length)
+#Creating a data frame for the strikes of each one of the 3 players (cannot create a data frame including all of them, because each list has different length)
 player1_df <- data.frame('streaks' = streak_per_player[[1]])
 player2_df <- data.frame('streaks' = streak_per_player[[2]])
 player3_df <- data.frame('streaks' = streak_per_player[[3]])
+```
 
-#Show distribution for each player's streak lengths
+```{r}
+#Showing distribution for each player's streak lengths
 gg1 <- ggplot(data = player1_df, aes(x = streaks)) + geom_bar(fill = 'brown') + labs(title = 'Kyrie Irnving')
 gg2 <- ggplot(data = player2_df, aes(x = streaks)) + geom_bar(fill = 'red') + labs(title = 'Mo Williams')
 gg3 <- ggplot(data = player3_df, aes(x = streaks)) + geom_bar(fill = 'blue') + labs(title = 'Klay Thompson')
@@ -1106,7 +1138,7 @@ grid.arrange(gg1, gg2, gg3, ncol = 3)
 
 ###Boxplots
 
-```{r, include=FALSE}
+```{r}
 #Create a boxplot for each player's streak lengths 
 attach(mtcars)
 par(mfrow=c(1, 3))
@@ -1168,14 +1200,14 @@ shooting_percentage
 ###Kyrie Irving
 ```{r, include=FALSE}
 ###PLAYER 1 VS SAMPLE PLAYER###
-#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
+#Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(974)
 shot_results <- c('made', 'missed')
 simul_shooter <- sample(shot_results, size = length(streak_per_player[[1]]), replace = TRUE, prob = c(shooting_percentage[[1]], 1 - shooting_percentage[[1]]))
 simul_shooter
 
 
-#Set 1 for baskets made and 0 for baskets missed
+#Setting 1 for baskets made and 0 for baskets missed
 simul_shooter <- as.list(simul_shooter)
 for (i in 1:length(simul_shooter)) {
    if (simul_shooter[i] == 'made') {
@@ -1186,18 +1218,20 @@ for (i in 1:length(simul_shooter)) {
 }
 simul_shooter
 
-#Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
+#Using previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
 streaks_of_simulshooter <- number_of_streaks(simul_shooter)
 
-#Create new data frames for the graphs 
+#Creating new data frames for the graphs 
 simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
 realshooter_df <- data.frame('streaks' = streak_per_player[[1]])
 
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
 summary(realshooter_df$streaks)
+```
 
-#Compare barplots of sample shooter and real shooter1
+```{r}
+#Comparing barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar(fill = 'blue') + labs(title = 'sample shooter')
 g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar(fill = 'red') + labs(title = 'Kyrie Irving')
@@ -1205,12 +1239,12 @@ grid.arrange(g1, g2, ncol = 2)
 ```
 
 ####Plot Result
-  After running many times the sample shooter, there are times that the distributions of sample and real shooter are quite similar. As a consequence, it can be concluded that Mo Williams does not have a hot hand.
+  After running many times the sample shooter, there are times that the distributions of sample and real shooter are quite similar. It can be concluded that Mo Williams does not have a hot hand.
 
 ### Mo Williams
 ```{r, include=FALSE}
 ###PLAYER 2 VS SAMPLE PLAYER###
-#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
+#Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(572)
 shot_results <- c('made', 'missed')
 simul_shooter <- sample(shot_results, size = length(streak_per_player[[2]]), replace = TRUE, 
@@ -1218,7 +1252,7 @@ simul_shooter <- sample(shot_results, size = length(streak_per_player[[2]]), rep
 simul_shooter
 
 
-#Set 1 for baskets made and 0 for baskets missed
+#Setting 1 for baskets made and 0 for baskets missed
 simul_shooter <- as.list(simul_shooter)
 for(i in 1:length(simul_shooter)) {
    if(simul_shooter[i] == 'made') simul_shooter[i] <- 1
@@ -1226,18 +1260,20 @@ for(i in 1:length(simul_shooter)) {
 }
 simul_shooter
 
-#Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
+#Using previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
 streaks_of_simulshooter <- number_of_streaks(simul_shooter)
 
-#Create new data frames for the graphs 
+#Creating new data frames for the graphs 
 simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
 realshooter_df <- data.frame('streaks' = streak_per_player[[2]])
 
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
 summary(realshooter_df$streaks)
+```
 
-#Compare barplots of sample shooter and real shooter1
+```{r}
+#Comparing barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar(fill = 'blue') + labs(title = 'sample shooter')
 g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar(fill = 'green') + labs(title = 'Mo Williams')
@@ -1251,7 +1287,7 @@ grid.arrange(g1, g2, ncol = 2)
 ###Klay Thompson
 ```{r, include=FALSE}
 ###PLAYER 3 VS SAMPLE PLAYER###
-#Simulation - create a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
+#Simulation - creating a vector of shots('made', 'missed') for a sample shooter, setting as probability the shooting percentage of the real shooter1 
 set.seed(57)
 shot_results <- c('made', 'missed')
 simul_shooter <- sample(shot_results, size = length(streak_per_player[[3]]), replace = TRUE, 
@@ -1259,7 +1295,7 @@ simul_shooter <- sample(shot_results, size = length(streak_per_player[[3]]), rep
 simul_shooter
 
 
-#Set 1 for baskets made and 0 for baskets missed
+#Setting 1 for baskets made and 0 for baskets missed
 simul_shooter <- as.list(simul_shooter)
 for(i in 1:length(simul_shooter)) {
    if(simul_shooter[i] == 'made') simul_shooter[i] <- 1
@@ -1267,18 +1303,20 @@ for(i in 1:length(simul_shooter)) {
 }
 simul_shooter
 
-#Use previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
+#Using previous function (number_of_streaks) to calculate the streaks made by the sample shooter 
 streaks_of_simulshooter <- number_of_streaks(simul_shooter)
 
-#Create new data frames for the graphs 
+#Creating new data frames for the graphs 
 simulshooter_df <- data.frame('streaks' = streaks_of_simulshooter)
 realshooter_df <- data.frame('streaks' = streak_per_player[[3]])
 
 #Comparisons of data between sample shooter and real shooters
 summary(simulshooter_df$streaks)
 summary(realshooter_df$streaks)
+```
 
-#Compare barplots of sample shooter and real shooter1
+```{r}
+#Comparing barplots of sample shooter and real shooter1
 #If real shooter's streaks diverge significantly from an independent shooter's streaks(sample shooter's streaks), we can conclude tha the real shooter has a 'hot hand'. 
 g1 <- ggplot(data = simulshooter_df, aes(x = streaks )) + geom_bar(fill = 'blue') + labs(title = 'sample shooter')
 g2 <- ggplot(data = realshooter_df, aes(x = streaks)) + geom_bar(fill = 'brown') + labs(title = 'Klay Thompson')
@@ -1287,8 +1325,17 @@ grid.arrange(g1, g2, ncol = 2)
 
 ####Plot Result
 
-  Klay Thompson is an exception making 13 shots in a row. There is no such distribution in the sample, so it could be assumed that he is likely to have a hot hand. Further statistical analysis (logistic regression) should be done in order to reach a conclusion.
+  Klay Thompson is an exception making 13 shots in a row. There is no such distribution in the sample, so it could be assumed that he is likely to have a hot hand. Further statistical analysis - logistic regression - should be done in order to reach a conclusion.
 
+###Discussion
+
+  As the analysis shown, there are some extremely high shot streaks achieved from the players. Kyrie Irnving achieved six shots in a row, Mo Williams 4 shots in a row twice, while Klay Thompson 13 shots in a row. However, to assume that a player has a hot hand, it is required to prove that his continuous shots are dependent one of another. As the vectors of streaks do not contain continuous variables, a linear regression cannot be used. Creating a sample independent shooter with same number of attempts and same shooting percentage as the real's one, is the closest approach to the specific question. In the first two cases, there are several times when the distribution of streaks of the sample independent player is similar to the real shooter's distribution. As the sample shooter's distribution visualises independent shots, it can be concluded that Kyrie Irnving's and Mo Williams' shots are independent one of another and as a result they have not a hot hand. On the other hand, Klay Thompson is likely to have a hot hand, as his shots length distribution diverges significantly from the sample's distribution.   
+ 
+###Limitations
+
+  The dataset is referred to only one season
+ 
+ 
 
 ```{r, include=FALSE}
 #Regression Analysis
